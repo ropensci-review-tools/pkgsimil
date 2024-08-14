@@ -1,9 +1,13 @@
 Package: codetreesim
 Title: Tree Similarity Metrics for R Code
-Version: 0.0.1.001
-Authors@R: 
+Version: 0.0.1.002
+Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-2172-5265"))
+           comment = c(ORCID = "0000-0003-2172-5265")),
+    person("Mateusz", "Pawlik", role = "cph", comment = "Author of original tree-similarity src code"),
+    person("Nikolaus", "Augsten", role = "cph", comment = "Author of original tree-similarity src code"),
+    person("Daniel", "Kocher", role = "cph", comment = "Author of original tree-similarity src code"),
+    person("Thomas", "Huetter", role = "cph", comment = "Author of original tree-similarity src code"))
 Description: Tree similarity metrics for R code.
 License: MIT + file LICENSE
 URL: https://docs.ropensci.org/codetreesim/,
