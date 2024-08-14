@@ -1,6 +1,6 @@
 #pragma once
 
-#include "data_structures/matrix.h"
+#include "tree_similarity/data_structures/matrix.h"
 
 #include <cpp11.hpp>
 
