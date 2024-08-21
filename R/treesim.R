@@ -1,5 +1,5 @@
 #' treesim function'
 #' @export
 treesim <- function () {
-    cpp_test (letters[1:10])
+    cpp_parse_one_file ()
 }

@@ -6,24 +6,16 @@
 #include <R_ext/Visibility.h>
 
 // tree-parser.cpp
-SEXP parse_one_file();
-extern "C" SEXP _pkgsimil_parse_one_file() {
+SEXP cpp_parse_one_file();
+extern "C" SEXP _pkgsimil_cpp_parse_one_file() {
   BEGIN_CPP11
-    return cpp11::as_sexp(parse_one_file());
-  END_CPP11
-}
-// treesim.cpp
-writable::integers cpp_test(const strings flist);
-extern "C" SEXP _pkgsimil_cpp_test(SEXP flist) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(cpp_test(cpp11::as_cpp<cpp11::decay_t<const strings>>(flist)));
+    return cpp11::as_sexp(cpp_parse_one_file());
   END_CPP11
 }
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
-    {"_pkgsimil_cpp_test",       (DL_FUNC) &_pkgsimil_cpp_test,       1},
-    {"_pkgsimil_parse_one_file", (DL_FUNC) &_pkgsimil_parse_one_file, 0},
+    {"_pkgsimil_cpp_parse_one_file", (DL_FUNC) &_pkgsimil_cpp_parse_one_file, 0},
     {NULL, NULL, 0}
 };
 }
