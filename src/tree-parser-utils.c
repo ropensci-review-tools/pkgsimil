@@ -36,19 +36,19 @@ void *loadfile(char *file) {
 void print_bracket (bool open, int col) {
     if (open) {
         if (col == 0) {
-            printf("(");
+            Rprintf("(");
         } else if (col == 1) {
-            printf("\\e[1;33m(\\e[0m");
+            Rprintf("\\e[1;33m(\\e[0m");
         } else if (col == 2) {
-            printf("\\e[1;34m(\\e[0m");
+            Rprintf("\\e[1;34m(\\e[0m");
         }
     } else {
         if (col == 0) {
-            printf(")");
+            Rprintf(")");
         } else if (col == 1) {
-            printf("\\e[1;33m)\\e[0m");
+            Rprintf("\\e[1;33m)\\e[0m");
         } else if (col == 2) {
-            printf("\\e[1;34m)\\e[0m");
+            Rprintf("\\e[1;34m)\\e[0m");
         }
     }
 }
@@ -80,14 +80,12 @@ void print_cursor(const TSTreeCursor *cursor, const char *source_code, bool col,
             uint32_t kBytes = last_byte - first_byte;
             char these_bytes[kBytes];
             memcpy(these_bytes, (source_code + first_byte), kBytes);
-            // printf(" %s ", field_name);
-            // printf("field_name = %s:\t", field_name);
             if (kBytes > 0) {
                 if (strcmp(field_name, "function") == 0 ||
                     strcmp(field_name, "name") == 0) {
-                    printf(" %.*s ", (int)sizeof(these_bytes), these_bytes);
+                    Rprintf(" %.*s ", (int)sizeof(these_bytes), these_bytes);
                 } else {
-                    printf(" %s ", field_name);
+                    Rprintf(" %s ", field_name);
                 }
             }
         }
