@@ -1,4 +1,5 @@
 .ccls-cache
+.ccls-cache/
 .Rproj.user
 .Rhistory
 .RData
