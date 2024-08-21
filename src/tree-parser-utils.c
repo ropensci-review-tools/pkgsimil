@@ -7,8 +7,8 @@ void *loadfile(char *file) {
 
     fp = fopen(file , "rb");
     if (!fp) {
-        perror(file);
-        exit(1);
+        error("File unable to be opened");
+        return(buffer);
     }
 
     fseek(fp , 0L , SEEK_END);
@@ -18,15 +18,15 @@ void *loadfile(char *file) {
     buffer = calloc(1, lSize+1);
     if (!buffer) {
         fclose(fp);
-        fputs("memory alloc failed", stderr);
-        exit(1);
+        error("memory alloc failed");
+        return(buffer);
     }
 
     if (fread(buffer , lSize, 1 , fp) != 1) {
         fclose(fp);
         free(buffer);
-        fputs("read failed", stderr);
-        exit(1);
+        error("read failed");
+        return(buffer);
     }
 
     fclose(fp);
