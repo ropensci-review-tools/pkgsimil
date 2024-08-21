@@ -3,7 +3,10 @@
 using namespace cpp11;
 
 [[cpp11::register]]
-SEXP cpp_parse_one_file() {
+std::string cpp_parse_one_file() {
     Rprintf("Yep\n");
-    return(R_NilValue);
+
+    writable::strings s({"foo", "bar"});
+    std::string out = cpp11::r_string(s[0]);
+    return(out);
 }

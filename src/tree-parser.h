@@ -4,4 +4,4 @@
 
 #include "tree-parser-utils.h"
 
-SEXP parse_one_file();
+std::string parse_one_file();

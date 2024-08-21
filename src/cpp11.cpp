@@ -6,7 +6,7 @@
 #include <R_ext/Visibility.h>
 
 // tree-parser.cpp
-SEXP cpp_parse_one_file();
+std::string cpp_parse_one_file();
 extern "C" SEXP _pkgsimil_cpp_parse_one_file() {
   BEGIN_CPP11
     return cpp11::as_sexp(cpp_parse_one_file());
