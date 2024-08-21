@@ -1,7 +1,8 @@
 #pragma once
 
-#include <cpp11.hpp>
-
 #include "tree-parser-utils.h"
 
-std::string parse_one_file();
+#include <R.h>
+#include <Rinternals.h>
+
+SEXP c_parse_one_file();

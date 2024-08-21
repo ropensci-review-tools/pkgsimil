@@ -9,7 +9,6 @@ tree-sitter-files = tree-sitter/lib/src/lib.o
 tree-sitter-r-files = tree-sitter-r/parser.o tree-sitter-r/scanner.o
 
 lib-files = \
-        cpp11.o \
         tree-parser-utils.o \
         tree-parser.o
 

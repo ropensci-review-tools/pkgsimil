@@ -1,5 +1,5 @@
 #' treesim function'
 #' @export
 treesim <- function () {
-    cpp_parse_one_file ()
+    .Call ("c_parse_one_file")
 }
