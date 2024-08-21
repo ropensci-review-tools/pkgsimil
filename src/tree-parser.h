@@ -2,9 +2,6 @@
 
 #include <cpp11.hpp>
 
-#include <assert.h>
-#include <string.h>
-#include <stdio.h>
-// #include <tree_sitter/api.h>
+#include "tree-parser-utils.h"
 
 SEXP parse_one_file();
