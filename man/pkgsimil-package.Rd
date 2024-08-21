@@ -26,6 +26,7 @@ Other contributors:
   \item Nikolaus Augsten (Author of original tree-similarity src code) [copyright holder]
   \item Daniel Kocher (Author of original tree-similarity src code) [copyright holder]
   \item Thomas Huetter (Author of original tree-similarity src code) [copyright holder]
+  \item Tree-sitter authors (Tree-sitter C library) [copyright holder]
 }
 
 }
