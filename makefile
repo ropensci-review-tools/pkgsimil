@@ -1,5 +1,5 @@
 LFILE = README
-VIGNETTE = codetreesim
+VIGNETTE = pkgsimil
 
 #all: insert knith #open 
 all: init vignette
