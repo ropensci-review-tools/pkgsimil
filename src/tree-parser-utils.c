@@ -32,3 +32,23 @@ void *loadfile(char *file) {
     fclose(fp);
     return(buffer);
 }
+
+void print_bracket (bool open, int col) {
+    if (open) {
+        if (col == 0) {
+            printf("(");
+        } else if (col == 1) {
+            printf("\\e[1;33m(\\e[0m");
+        } else if (col == 2) {
+            printf("\\e[1;34m(\\e[0m");
+        }
+    } else {
+        if (col == 0) {
+            printf(")");
+        } else if (col == 1) {
+            printf("\\e[1;33m)\\e[0m");
+        } else if (col == 2) {
+            printf("\\e[1;34m)\\e[0m");
+        }
+    }
+}
