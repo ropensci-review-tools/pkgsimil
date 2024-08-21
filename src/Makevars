@@ -1,15 +1,19 @@
 PKG_CFLAGS = \
         -I./tree-sitter/lib/include \
-        -I./tree-sitter/lib/src
+        -I./tree-sitter/lib/src \
+        -I./tree-sitter-r/parser.c \
+        -I./tree-sitter-r/scanner.c
 
 tree-sitter-files = tree-sitter/lib/src/lib.o
+
+tree-sitter-r-files = tree-sitter-r/parser.o tree-sitter-r/scanner.o
 
 lib-files = \
         cpp11.o \
         tree-parser-utils.o \
         tree-parser.o
 
-OBJECTS = $(tree-sitter-files) $(lib-files)
+OBJECTS = $(tree-sitter-files) $(tree-sitter-r-files) $(lib-files)
 
 all: $(SHLIB)
 
