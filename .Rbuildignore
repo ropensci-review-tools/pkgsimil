@@ -25,4 +25,6 @@
 ^vignettes/makefile$
 ^windows$
 data-raw/
+src/tree-sitter/lib/.ccls$
+src/tree-sitter/lib/.ccls-cache/
 temp-dict/
