@@ -23,9 +23,14 @@ SEXP c_parse_one_file() {
 
     bool reached_foot = false;
     int brackets[2] = {0, 0};
+
     printf("(");
+    char *SExprString = malloc(sizeof(char));
+    *SExprString = '\0';
+    appendToString(&SExprString, "(");
+
     while (!reached_foot) {
-        print_cursor(&cursor, source_code, brackets);
+        print_cursor(&cursor, source_code, brackets, &SExprString);
         if (ts_tree_cursor_goto_first_child(&cursor)) continue;
         if (ts_tree_cursor_goto_next_sibling(&cursor)) continue;
 
@@ -36,12 +41,12 @@ SEXP c_parse_one_file() {
                 reached_foot = true;
             }
             if (ts_tree_cursor_goto_next_sibling(&cursor)) {
-                // const char *field_name = ts_tree_cursor_current_field_name(&cursor);
                 retracing = false;
             }
         }
     }
     printf(")\n\n");
+    appendToString(&SExprString, ")");
     printf("Bracket counts: [%i, %i]\n", brackets[0], brackets[1]);
 
     // char *string = ts_node_string(root_node);
@@ -55,7 +60,10 @@ SEXP c_parse_one_file() {
 
     SEXP result;
     PROTECT(result = allocVector(STRSXP, 1)); // Allocate space for one string
-    SET_STRING_ELT(result, 0, mkChar("Hello from C!")); // Set the value of the string
+    SET_STRING_ELT(result, 0, mkChar(SExprString));
     UNPROTECT(1); // Unprotect the allocated memory
+
+    free(SExprString);
+
     return result; // Return the SEXP (Symbolic EXPression) object
 }

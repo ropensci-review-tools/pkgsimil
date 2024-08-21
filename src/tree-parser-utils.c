@@ -33,15 +33,30 @@ void *loadfile(char *file) {
     return(buffer);
 }
 
-void print_bracket (bool open) {
+void print_bracket (char **SExprString, bool open) {
     if (open) {
         Rprintf("(");
+        appendToString(SExprString, "(");
     } else {
         Rprintf(")");
+        appendToString(SExprString, ")");
     }
 }
 
-void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brackets) {
+void appendToString(char **str, const char *appendStr) {
+    size_t strLen = strlen(*str);
+    size_t appendLen = strlen(appendStr);
+
+    *str = realloc(*str, strLen + appendLen + 1); // +1 for null terminator
+
+    if (*str == NULL) {
+        error("Failed to allocate memory for string");
+    }
+
+    strcat(*str, appendStr);
+}
+
+void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brackets, char **SExprString) {
     TSNode cursor_node = ts_tree_cursor_current_node(cursor);
     uint32_t n_children = ts_node_child_count(cursor_node);
     const char *field_name = ts_tree_cursor_current_field_name(cursor);
@@ -55,10 +70,10 @@ void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brac
             return;
         }
         if (strcmp(field_name, "open") == 0) {
-            print_bracket(true);
+            print_bracket(SExprString, true);
             brackets[0]++;
         } else if (strcmp(field_name, "close") == 0) {
-            print_bracket(false);
+            print_bracket(SExprString, false);
             brackets[1]++;
         } else {
             // copy source code for that node, noting that the char[] is not
@@ -72,8 +87,10 @@ void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brac
                 if (strcmp(field_name, "function") == 0 ||
                     strcmp(field_name, "name") == 0) {
                     Rprintf(" %.*s ", (int)sizeof(these_bytes), these_bytes);
+                    appendToString(SExprString, these_bytes);
                 } else {
                     Rprintf(" %s ", field_name);
+                    appendToString(SExprString, field_name);
                 }
             }
         }
