@@ -33,27 +33,15 @@ void *loadfile(char *file) {
     return(buffer);
 }
 
-void print_bracket (bool open, int col) {
+void print_bracket (bool open) {
     if (open) {
-        if (col == 0) {
-            Rprintf("(");
-        } else if (col == 1) {
-            Rprintf("\\e[1;33m(\\e[0m");
-        } else if (col == 2) {
-            Rprintf("\\e[1;34m(\\e[0m");
-        }
+        Rprintf("(");
     } else {
-        if (col == 0) {
-            Rprintf(")");
-        } else if (col == 1) {
-            Rprintf("\\e[1;33m)\\e[0m");
-        } else if (col == 2) {
-            Rprintf("\\e[1;34m)\\e[0m");
-        }
+        Rprintf(")");
     }
 }
 
-void print_cursor(const TSTreeCursor *cursor, const char *source_code, bool col, int *brackets) {
+void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brackets) {
     TSNode cursor_node = ts_tree_cursor_current_node(cursor);
     uint32_t n_children = ts_node_child_count(cursor_node);
     const char *field_name = ts_tree_cursor_current_field_name(cursor);
@@ -67,10 +55,10 @@ void print_cursor(const TSTreeCursor *cursor, const char *source_code, bool col,
             return;
         }
         if (strcmp(field_name, "open") == 0) {
-            print_bracket(true, col);
+            print_bracket(true);
             brackets[0]++;
         } else if (strcmp(field_name, "close") == 0) {
-            print_bracket(false, col);
+            print_bracket(false);
             brackets[1]++;
         } else {
             // copy source code for that node, noting that the char[] is not

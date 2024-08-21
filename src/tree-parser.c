@@ -4,7 +4,6 @@
 #include <Rinternals.h>
 
 SEXP c_parse_one_file() {
-    const bool colour = false;
 
     TSParser *parser = ts_parser_new();
     ts_parser_set_language(parser, tree_sitter_r());
@@ -26,7 +25,7 @@ SEXP c_parse_one_file() {
     int brackets[2] = {0, 0};
     printf("(");
     while (!reached_foot) {
-        print_cursor(&cursor, source_code, colour, brackets);
+        print_cursor(&cursor, source_code, brackets);
         if (ts_tree_cursor_goto_first_child(&cursor)) continue;
         if (ts_tree_cursor_goto_next_sibling(&cursor)) continue;
 

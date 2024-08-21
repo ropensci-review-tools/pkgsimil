@@ -13,6 +13,6 @@
 const TSLanguage* tree_sitter_r(void);
 
 void *loadfile(char *file);
-void print_bracket (bool open, int col);
-void print_cursor(const TSTreeCursor *cursor, const char *source_code, bool col, int *brackets);
+void print_bracket (bool open);
+void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brackets);
 void test_parser (bool open);
