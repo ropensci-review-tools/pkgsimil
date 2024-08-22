@@ -58,8 +58,10 @@ jobs:
               'src/tree-sitter/lib/src/tree.c',
               'src/tree-sitter/lib/src/tree_cursor.c',
               'src/tree-sitter/lib/src/tree_cursor.h',
-              'src/tree-sitter/lib/src/unicode.c',
-              'src/tree-sitter/lib/src/wasm_store.c'
+              'src/tree-sitter/lib/src/unicode.h',
+              'src/tree-sitter/lib/src/wasm_store.c',
+              'src/tree-sitter-r/parser.c',
+              'src/tree-sitter-r/scanner.c'
             )
           )
           covr::to_cobertura(cov)
