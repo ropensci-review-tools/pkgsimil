@@ -35,8 +35,10 @@ void *loadfile(char *file) {
 
 void print_bracket (char **SExprString, bool open) {
     if (open) {
+        Rprintf("(");
         appendToString(SExprString, "(");
     } else {
+        Rprintf(")");
         appendToString(SExprString, ")");
     }
 }
@@ -52,6 +54,23 @@ void appendToString(char **str, const char *appendStr) {
     }
 
     strcat(*str, appendStr);
+}
+
+void print_content(char **SExprString, const char *content, bool add_brackets) {
+    if (add_brackets) {
+        // wrap field name in brackets to make an S-expr node:
+        int len = strlen(content) + 3;
+        char *content_ext = malloc(len * sizeof(char));
+        if (content_ext != NULL) {
+            strcpy(content_ext, "(");
+            strcat(content_ext, content);
+            strcat(content_ext, ")");
+            appendToString(SExprString, content_ext);
+            free(content_ext);
+        }
+    } else {
+        appendToString(SExprString, content);
+    }
 }
 
 void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brackets, char **SExprString) {
@@ -85,9 +104,11 @@ void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brac
                 these_bytes[kBytes] = '\0';
                 if (strcmp(field_name, "function") == 0 ||
                     strcmp(field_name, "name") == 0) {
-                    appendToString(SExprString, these_bytes);
+                    Rprintf(" %s ", these_bytes);
+                    print_content(SExprString, these_bytes, true);
                 } else {
-                    appendToString(SExprString, field_name);
+                    Rprintf(" %s ", field_name);
+                    print_content(SExprString, field_name, true);
                 }
             }
         }
