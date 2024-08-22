@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/ropensci-review-tools/pkgsimil",
   "issueTracker": "https://github.com/ropensci-review-tools/pkgsimil/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.0.1.023",
+  "version": "0.1.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -75,12 +75,9 @@
     }
   ],
   "softwareRequirements": {
-    "SystemRequirements": {}
+    "SystemRequirements": null
   },
-  "fileSize": "21201.436KB",
-  "contIntegration": [
-    "https://github.com/ropensci-review-tools/pkgsimil/actions?query=workflow%3AR-CMD-check",
-    "https://app.codecov.io/gh/ropensci-review-tools/pkgsimil"
-  ],
+  "fileSize": "21201.432KB",
+  "contIntegration": ["https://github.com/ropensci-review-tools/pkgsimil/actions?query=workflow%3AR-CMD-check", "https://app.codecov.io/gh/ropensci-review-tools/pkgsimil"],
   "developmentStatus": "https://www.repostatus.org/#active"
 }
