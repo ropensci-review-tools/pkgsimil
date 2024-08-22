@@ -3,7 +3,10 @@
 #include <R.h>
 #include <Rinternals.h>
 
-SEXP c_parse_one_file() {
+SEXP c_parse_one_file(SEXP node_brackets_) {
+
+    node_brackets_ = PROTECT (Rf_coerceVector (node_brackets_, LGLSXP));
+    bool node_brackets = LOGICAL(node_brackets_)[0] == 1;
 
     TSParser *parser = ts_parser_new();
     ts_parser_set_language(parser, tree_sitter_r());
@@ -22,14 +25,13 @@ SEXP c_parse_one_file() {
     TSTreeCursor cursor = ts_tree_cursor_new(root_node);
 
     bool reached_foot = false;
-    int brackets[2] = {0, 0};
 
     char *SExprString = malloc(sizeof(char));
     *SExprString = '\0';
     appendToString(&SExprString, "(");
 
     while (!reached_foot) {
-        print_cursor(&cursor, source_code, brackets, &SExprString);
+        print_cursor(&cursor, source_code, &SExprString, node_brackets);
         if (ts_tree_cursor_goto_first_child(&cursor)) continue;
         if (ts_tree_cursor_goto_next_sibling(&cursor)) continue;
 
@@ -45,7 +47,6 @@ SEXP c_parse_one_file() {
         }
     }
     appendToString(&SExprString, ")");
-    // Rprintf("Bracket counts: [%i, %i]\n", brackets[0], brackets[1]);
 
     // char *string = ts_node_string(root_node);
     // printf("Syntax tree: %s\n", string);
@@ -59,7 +60,7 @@ SEXP c_parse_one_file() {
     SEXP result;
     PROTECT(result = allocVector(STRSXP, 1)); // Allocate space for one string
     SET_STRING_ELT(result, 0, mkChar(SExprString));
-    UNPROTECT(1); // Unprotect the allocated memory
+    UNPROTECT(2); // Unprotect the allocated memory
 
     free(SExprString);
 

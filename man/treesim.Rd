@@ -4,7 +4,10 @@
 \alias{treesim}
 \title{treesim function'}
 \usage{
-treesim()
+treesim(node_brackets = TRUE)
+}
+\arguments{
+\item{node_brackets}{If \code{TRUE} (default), wrap all nodes in S-expression braces.}
 }
 \description{
 treesim function'

@@ -54,8 +54,8 @@ void appendToString(char **str, const char *appendStr) {
     strcat(*str, appendStr);
 }
 
-void print_content(char **SExprString, const char *content, bool add_brackets) {
-    if (add_brackets) {
+void print_content(char **SExprString, const char *content, bool node_brackets) {
+    if (node_brackets) {
         // wrap field name in brackets to make an S-expr node:
         int len = strlen(content) + 3;
         char *content_ext = malloc(len * sizeof(char));
@@ -71,7 +71,7 @@ void print_content(char **SExprString, const char *content, bool add_brackets) {
     }
 }
 
-void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brackets, char **SExprString) {
+void print_cursor(const TSTreeCursor *cursor, const char *source_code, char **SExprString, bool node_brackets) {
     TSNode cursor_node = ts_tree_cursor_current_node(cursor);
     uint32_t n_children = ts_node_child_count(cursor_node);
     const char *field_name = ts_tree_cursor_current_field_name(cursor);
@@ -86,10 +86,8 @@ void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brac
         }
         if (strcmp(field_name, "open") == 0) {
             print_bracket(SExprString, true);
-            brackets[0]++;
         } else if (strcmp(field_name, "close") == 0) {
             print_bracket(SExprString, false);
-            brackets[1]++;
         } else {
             // copy source code for that node, noting that the char[] is not
             // null terminated, so can't use standard printf.
@@ -102,9 +100,9 @@ void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brac
                 these_bytes[kBytes] = '\0';
                 if (strcmp(field_name, "function") == 0 ||
                     strcmp(field_name, "name") == 0) {
-                    print_content(SExprString, these_bytes, true);
+                    print_content(SExprString, these_bytes, node_brackets);
                 } else {
-                    print_content(SExprString, field_name, true);
+                    print_content(SExprString, field_name, node_brackets);
                 }
             }
         }
