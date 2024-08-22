@@ -1,38 +1,5 @@
 #include "tree-parser-utils.h"
 
-void *loadfile(char *file) {
-    FILE *fp;
-    __int32_t lSize;
-    char *buffer;
-
-    fp = fopen(file , "rb");
-    if (!fp) {
-        error("File unable to be opened");
-        return(buffer);
-    }
-
-    fseek(fp , 0L , SEEK_END);
-    lSize = ftell(fp);
-    rewind(fp);
-
-    buffer = calloc(1, lSize+1);
-    if (!buffer) {
-        fclose(fp);
-        error("memory alloc failed");
-        return(buffer);
-    }
-
-    if (fread(buffer , lSize, 1 , fp) != 1) {
-        fclose(fp);
-        free(buffer);
-        error("read failed");
-        return(buffer);
-    }
-
-    fclose(fp);
-    return(buffer);
-}
-
 void print_bracket (char **SExprString, bool open) {
     if (open) {
         appendToString(SExprString, "(");
