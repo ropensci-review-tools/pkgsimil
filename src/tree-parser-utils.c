@@ -35,10 +35,8 @@ void *loadfile(char *file) {
 
 void print_bracket (char **SExprString, bool open) {
     if (open) {
-        Rprintf("(");
         appendToString(SExprString, "(");
     } else {
-        Rprintf(")");
         appendToString(SExprString, ")");
     }
 }
@@ -81,15 +79,14 @@ void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brac
             uint32_t first_byte = ts_node_start_byte(cursor_node);
             uint32_t last_byte = ts_node_end_byte(cursor_node);
             uint32_t kBytes = last_byte - first_byte;
-            char these_bytes[kBytes];
-            memcpy(these_bytes, (source_code + first_byte), kBytes);
             if (kBytes > 0) {
+                char these_bytes[kBytes];
+                memcpy(these_bytes, (source_code + first_byte), kBytes);
+                these_bytes[kBytes] = '\0';
                 if (strcmp(field_name, "function") == 0 ||
                     strcmp(field_name, "name") == 0) {
-                    Rprintf(" %.*s ", (int)sizeof(these_bytes), these_bytes);
                     appendToString(SExprString, these_bytes);
                 } else {
-                    Rprintf(" %s ", field_name);
                     appendToString(SExprString, field_name);
                 }
             }

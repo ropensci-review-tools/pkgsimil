@@ -24,7 +24,6 @@ SEXP c_parse_one_file() {
     bool reached_foot = false;
     int brackets[2] = {0, 0};
 
-    printf("(");
     char *SExprString = malloc(sizeof(char));
     *SExprString = '\0';
     appendToString(&SExprString, "(");
@@ -45,7 +44,6 @@ SEXP c_parse_one_file() {
             }
         }
     }
-    printf(")\n\n");
     appendToString(&SExprString, ")");
     printf("Bracket counts: [%i, %i]\n", brackets[0], brackets[1]);
 
