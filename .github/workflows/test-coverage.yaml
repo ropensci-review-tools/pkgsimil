@@ -36,7 +36,31 @@ jobs:
             quiet = FALSE,
             clean = FALSE,
             install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package"),
-            line_exclusions = list('src/tree-sitter/*')
+            line_exclusions = list(
+              'src/tree-sitter/lib/src/alloc.c',
+              'src/tree-sitter/lib/src/array.h',
+              'src/tree-sitter/lib/src/atomic.h',
+              'src/tree-sitter/lib/src/clock.h',
+              'src/tree-sitter/lib/src/get_changed_ranges.c',
+              'src/tree-sitter/lib/src/language.c',
+              'src/tree-sitter/lib/src/language.h',
+              'src/tree-sitter/lib/src/length.h',
+              'src/tree-sitter/lib/src/lexer.c',
+              'src/tree-sitter/lib/src/node.c',
+              'src/tree-sitter/lib/src/parser.c',
+              'src/tree-sitter/lib/src/point.h',
+              'src/tree-sitter/lib/src/query.c',
+              'src/tree-sitter/lib/src/reduce_action.h',
+              'src/tree-sitter/lib/src/reusable_node.h',
+              'src/tree-sitter/lib/src/stack.c',
+              'src/tree-sitter/lib/src/subtree.c',
+              'src/tree-sitter/lib/src/subtree.h',
+              'src/tree-sitter/lib/src/tree.c',
+              'src/tree-sitter/lib/src/tree_cursor.c',
+              'src/tree-sitter/lib/src/tree_cursor.h',
+              'src/tree-sitter/lib/src/unicode.c',
+              'src/tree-sitter/lib/src/wasm_store.c'
+            )
           )
           covr::to_cobertura(cov)
         shell: Rscript {0}
