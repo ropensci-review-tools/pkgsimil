@@ -45,7 +45,7 @@ SEXP c_parse_one_file() {
         }
     }
     appendToString(&SExprString, ")");
-    printf("Bracket counts: [%i, %i]\n", brackets[0], brackets[1]);
+    // Rprintf("Bracket counts: [%i, %i]\n", brackets[0], brackets[1]);
 
     // char *string = ts_node_string(root_node);
     // printf("Syntax tree: %s\n", string);

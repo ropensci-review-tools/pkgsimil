@@ -35,10 +35,8 @@ void *loadfile(char *file) {
 
 void print_bracket (char **SExprString, bool open) {
     if (open) {
-        Rprintf("(");
         appendToString(SExprString, "(");
     } else {
-        Rprintf(")");
         appendToString(SExprString, ")");
     }
 }
@@ -104,10 +102,8 @@ void print_cursor(const TSTreeCursor *cursor, const char *source_code, int *brac
                 these_bytes[kBytes] = '\0';
                 if (strcmp(field_name, "function") == 0 ||
                     strcmp(field_name, "name") == 0) {
-                    Rprintf(" %s ", these_bytes);
                     print_content(SExprString, these_bytes, true);
                 } else {
-                    Rprintf(" %s ", field_name);
                     print_content(SExprString, field_name, true);
                 }
             }
