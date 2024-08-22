@@ -4,9 +4,11 @@
 \alias{treesim}
 \title{treesim function'}
 \usage{
-treesim(node_brackets = TRUE)
+treesim(source_code = NULL, node_brackets = TRUE)
 }
 \arguments{
+\item{source_code}{Single character element containing source code to be parsed.}
+
 \item{node_brackets}{If \code{TRUE} (default), wrap all nodes in S-expression braces.}
 }
 \description{

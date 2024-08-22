@@ -8,10 +8,10 @@
 */
 
 /* .Call calls */
-extern SEXP c_parse_one_file(SEXP);
+extern SEXP c_parse_one_file(SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"c_parse_one_file", (DL_FUNC) &c_parse_one_file, 1},
+    {"c_parse_one_file", (DL_FUNC) &c_parse_one_file, 2},
     {NULL, NULL, 0}
 };
 
