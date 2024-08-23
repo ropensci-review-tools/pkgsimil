@@ -43,5 +43,5 @@
 #'     paste0 (collapse = "\n")
 #' tree_parse (code, TRUE)
 tree_parse <- function (source_code = NULL, node_brackets = TRUE) {
-    .Call ("c_parse_one_file", as.vector (source_code), as.vector (node_brackets))
+    .Call (c_parse_one_file, as.vector (source_code), as.vector (node_brackets))
 }

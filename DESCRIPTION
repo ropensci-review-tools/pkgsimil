@@ -1,6 +1,6 @@
 Package: pkgsimil
 Title: Similarity Metrics between R Packages
-Version: 0.1.0.004
+Version: 0.1.0.005
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2172-5265")),
@@ -14,6 +14,8 @@ License: MIT + file LICENSE
 URL: https://docs.ropensci.org/pkgsimil/,
     https://github.com/ropensci-review-tools/pkgsimil
 BugReports: https://github.com/ropensci-review-tools/pkgsimil/issues
+LinkingTo:
+    cpp11
 NeedsCompilation: yes
 Encoding: UTF-8
 Language: en-GB
