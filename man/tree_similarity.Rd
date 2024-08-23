@@ -14,7 +14,8 @@ as list or vector of character objects with each element holding one tree.}
 single-core processing.}
 }
 \value{
-Similarity metrics
+A \code{data.frame} with each row containing pairwise similiarity metrics
+between trees.
 }
 \description{
 Tree similarity
