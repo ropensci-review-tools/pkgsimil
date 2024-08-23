@@ -16,7 +16,7 @@ test_that ("tree get", {
 
     expect_error (
         tree <- tree_get ("tools", "utils"),
-        "unused argument"
+        "is.logical\\(exported_only\\) is not TRUE"
     )
 
     pkg_name <- c ("tools", "utils")
@@ -42,4 +42,9 @@ test_that ("tree get", {
     # Trees should be huge:
     n <- vapply (trees, nchar, integer (1L))
     expect_true (all (n > huge_number))
+
+    # Test 'exported_only param:'
+    trees_exp <- tree_get (pkg_name, exported_only = TRUE)
+    expect_equal (length (trees_exp), length (trees))
+    expect_true (all (nchar (trees) > nchar (trees_exp)))
 })

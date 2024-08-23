@@ -5,10 +5,13 @@
 \title{Get a syntax tree for a specified package, including all functions both
 exported and internal.}
 \usage{
-tree_get(pkg_name = NULL)
+tree_get(pkg_name = NULL, exported_only = FALSE)
 }
 \arguments{
 \item{pkg_name}{Name of one or more packages for which trees are to be extracted.}
+
+\item{exported_only}{If \code{TRUE}, build trees only from exported functions;
+otherwise use all functions.}
 }
 \value{
 A character vector of syntax trees, one for each nominated package.
