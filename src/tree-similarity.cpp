@@ -21,7 +21,7 @@ using namespace cpp11;
 // src/ted/apted_tree_index.h), so integer tree sizes are also converted to
 // double here.
 [[cpp11::register]]
-writable::doubles cpp_tree_similarity(strings x) {
+writable::doubles cpp_tree_similarity(strings x, const bool verbose) {
 
     using Label = label::StringLabel;
     using CostModelLD = cost_model::UnitCostModelLD<Label>;
@@ -56,7 +56,7 @@ writable::doubles cpp_tree_similarity(strings x) {
     node::TreeIndexAPTED ti2;
     node::index_tree(ti1, source_tree, ld, ucm);
     node::index_tree(ti2, destination_tree, ld, ucm);
-    const double tree_distance = apted_algorithm.ted(ti1, ti2);
+    const double tree_distance = apted_algorithm.ted(ti1, ti2, verbose);
 
     writable::doubles out(3);
     out [0] = source_tree_size;

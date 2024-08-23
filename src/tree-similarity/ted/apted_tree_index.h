@@ -61,15 +61,15 @@ class APTEDTreeIndex : public TEDAlgorithm<CostModel, TreeIndex> {
 
 public:
   /// Implements ted function from the TEDAlgorithm<CostModel, TreeIndex> class.
-  double ted(const TreeIndex& t1, const TreeIndex& t2);
+  double ted(const TreeIndex& t1, const TreeIndex& t2, const bool verbose);
 
 
 private:
-  data_structures::Matrix<double> compute_opt_strategy_postL(const TreeIndex& t1, const TreeIndex& t2);
+  data_structures::Matrix<double> compute_opt_strategy_postL(const TreeIndex& t1, const TreeIndex& t2, const bool verbose);
   data_structures::Matrix<double> compute_opt_strategy_postR(const TreeIndex& t1, const TreeIndex& t2);
   void ted_init(const TreeIndex& t1, const TreeIndex& t2);
   double gted(const TreeIndex& t1, int t1_current_subtree,
-      const TreeIndex& t2, int t2_current_subtree);
+      const TreeIndex& t2, int t2_current_subtree, const bool verbose, int& count);
   
   double spf1(const TreeIndex& t1, int subtreeRootNode1, const TreeIndex& t2,
       int subtreeRootNode2);

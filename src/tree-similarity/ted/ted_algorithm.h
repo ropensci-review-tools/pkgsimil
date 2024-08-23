@@ -38,7 +38,7 @@ public:
    * \param t2 Destination tree.
    * \return Tree edit distance value.
    */
-  virtual double ted(const TreeIndex& t1, const TreeIndex& t2) = 0;
+  virtual double ted(const TreeIndex& t1, const TreeIndex& t2, const bool verbose) = 0;
   
   /// Returns the number of subproblems encountered during TED computation.
   /**

@@ -4,10 +4,11 @@
 #' as list or vector of character objects with each element holding one tree.
 #' @param num_cores Number of machine cores to use in parallel, defaulting to
 #' single-core processing.
-#' @return A `data.frame` with each row containing pairwise similiarity metrics
+#' @param verbose If `TRUE`, print progress information to screen.
+#' @return A `data.frame` with each row containing pairwise similarity metrics
 #' between trees.
 #' @export
-tree_similarity <- function (trees, num_cores = 1L) {
+tree_similarity <- function (trees, num_cores = 1L, verbose = FALSE) {
     stopifnot (is.numeric (num_cores))
     num_cores <- as.integer (num_cores)
     stopifnot (length (num_cores) == 1L)
@@ -27,13 +28,13 @@ tree_similarity <- function (trees, num_cores = 1L) {
         combs_l <- as.list (data.frame (combs))
         res <- parallel::mclapply (combs_l, function (i) {
             these_trees <- c (trees [i [1]], trees [i [2]])
-            cpp_tree_similarity (these_trees)
+            cpp_tree_similarity (these_trees, verbose = FALSE)
         }, mc.cores = num_cores)
         res <- do.call (rbind, res)
     } else {
         res <- t (pbapply::pbapply (combs, 2, function (i) {
             these_trees <- c (trees [i [1]], trees [i [2]])
-            cpp_tree_similarity (these_trees)
+            cpp_tree_similarity (these_trees, verbose = verbose)
         }))
     }
     dimnames (res) <- NULL

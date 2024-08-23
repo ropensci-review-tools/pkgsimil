@@ -4,7 +4,7 @@
 \alias{tree_similarity}
 \title{Tree similarity}
 \usage{
-tree_similarity(trees, num_cores = 1L)
+tree_similarity(trees, num_cores = 1L, verbose = FALSE)
 }
 \arguments{
 \item{trees}{Input trees as returned from \link{tree_parse} function, either
@@ -12,9 +12,11 @@ as list or vector of character objects with each element holding one tree.}
 
 \item{num_cores}{Number of machine cores to use in parallel, defaulting to
 single-core processing.}
+
+\item{verbose}{If \code{TRUE}, print progress information to screen.}
 }
 \value{
-A \code{data.frame} with each row containing pairwise similiarity metrics
+A \code{data.frame} with each row containing pairwise similarity metrics
 between trees.
 }
 \description{

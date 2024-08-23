@@ -25,27 +25,33 @@
 
 // ---- begin pkgsimil insert ---
 #include <R.h>
+// plus 'verbose' parameter added to definition below
 // ---- begin pkgsimil insert ---
 
 template <typename CostModel, typename TreeIndex>
 double APTEDTreeIndex<CostModel, TreeIndex>::ted(
-    const TreeIndex& t1, const TreeIndex& t2) {
+    const TreeIndex& t1, const TreeIndex& t2, const bool verbose) {
   // Determine the optimal strategy for the distance computation.
   // Use the heuristic from [2, Section 5.3].
   // TODO: Implement compute_opt_strategy_postR.
   // if (ni_1.lchl_ < ni_1.rchl_) {
-    delta_ = compute_opt_strategy_postL(t1, t2);
+    delta_ = compute_opt_strategy_postL(t1, t2, verbose);
   // } else {
   //   delta_ = compute_opt_strategy_postR(ni_1, ni_2);
   // }
   // Initialise structures for distance computation.
   ted_init(t1, t2);
   // Compute the distance.
-  return gted(t1, 0, t2, 0);
+  int count = 0;
+  double res = gted(t1, 0, t2, 0, verbose, count);
+  if (verbose) std::cout << std::endl;
+  return res;  
+
+    
 }
 
 template <typename CostModel, typename TreeIndex>
-data_structures::Matrix<double> APTEDTreeIndex<CostModel, TreeIndex>::compute_opt_strategy_postL(const TreeIndex& t1, const TreeIndex& t2) {
+data_structures::Matrix<double> APTEDTreeIndex<CostModel, TreeIndex>::compute_opt_strategy_postL(const TreeIndex& t1, const TreeIndex& t2, const bool verbose) {
   const int size1 = t1.tree_size_;
   const int size2 = t2.tree_size_;
   data_structures::Matrix<double> strategy(size1, size2);
@@ -118,7 +124,14 @@ data_structures::Matrix<double> APTEDTreeIndex<CostModel, TreeIndex>::compute_op
 
   for(int v = 0; v < size1; ++v) {
     // ---- begin pkgsimil insert ---
-    if (v % 100 == 0) R_CheckUserInterrupt();
+    if (v % 100 == 0) {
+      R_CheckUserInterrupt();
+      if (verbose) {
+        int prog = round (100 * v / size1);
+        std::cout << "\r Computing optimal strategy: " << prog << "%";
+        std::cout.flush();
+      }
+    }
     // ---- end pkgsimil insert ---
     v_in_preL = postL_to_preL_1[v];
 
@@ -309,6 +322,9 @@ data_structures::Matrix<double> APTEDTreeIndex<CostModel, TreeIndex>::compute_op
     }
 
   }
+  // ---- begin pkgsimil insert ---
+  if (verbose) std::cout << "  done" << std::endl;
+  // ---- end pkgsimil insert ---
   
   // std::cout << "strategy[0][0] = " << strategy.read_at(0, 0) << std::endl;
   return strategy;
@@ -364,13 +380,13 @@ void APTEDTreeIndex<CostModel, TreeIndex>::ted_init(const TreeIndex& t1, const T
 template <typename CostModel, typename TreeIndex>
 double APTEDTreeIndex<CostModel, TreeIndex>::gted(const TreeIndex& t1,
     int t1_current_subtree, const TreeIndex& t2,
-    int t2_current_subtree) {
+    int t2_current_subtree, const bool verbose, int& count) {
   const int currentSubtree1 = t1_current_subtree;
   const int currentSubtree2 = t2_current_subtree;
   const int subtreeSize1 = t1.prel_to_size_[currentSubtree1];
   const int subtreeSize2 = t2.prel_to_size_[currentSubtree2];
 
-  // std::cout << "gted(" << currentSubtree1 << "," << currentSubtree2 << ")" << std::endl;
+  // std::cout << "gted(" << currentSubtree1 << "," << currentSubtree2 << ") " << count << std::endl;
 
   double result = 0;
 
@@ -396,9 +412,16 @@ double APTEDTreeIndex<CostModel, TreeIndex>::gted(const TreeIndex& t1,
       int k = ai.size();
       for(int i = 0; i < k; ++i) {
         int child = ai[i];
+        if (count % 100 == 0) {
+          R_CheckUserInterrupt();
+          if (verbose) {
+            std::cout << "\r" << count;
+            std::cout.flush();
+          }
+        }
         if(child != currentPathNode) {
           // t1.set_current_node(child);
-          gted(t1, child, t2, t2_current_subtree);
+          gted(t1, child, t2, t2_current_subtree, verbose, ++count);
         }
       }
       currentPathNode = parent;
@@ -437,9 +460,16 @@ double APTEDTreeIndex<CostModel, TreeIndex>::gted(const TreeIndex& t1,
     int l = ai1.size();
     for(int j = 0; j < l; ++j) {
       int child = ai1[j];
+      if (count % 100 == 0) {
+        R_CheckUserInterrupt();
+        if (verbose) {
+          std::cout << "\r" << count;
+          std::cout.flush();
+        }
+      }
       if(child != currentPathNode) {
         // t2.set_current_node(child);
-        gted(t1, t1_current_subtree, t2, child);
+        gted(t1, t1_current_subtree, t2, child, verbose, ++count);
       }
     }
     currentPathNode = parent;

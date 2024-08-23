@@ -6,10 +6,10 @@
 #include <R_ext/Visibility.h>
 
 // tree-similarity.cpp
-writable::doubles cpp_tree_similarity(strings x);
-extern "C" SEXP _pkgsimil_cpp_tree_similarity(SEXP x) {
+writable::doubles cpp_tree_similarity(strings x, const bool verbose);
+extern "C" SEXP _pkgsimil_cpp_tree_similarity(SEXP x, SEXP verbose) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_tree_similarity(cpp11::as_cpp<cpp11::decay_t<strings>>(x)));
+    return cpp11::as_sexp(cpp_tree_similarity(cpp11::as_cpp<cpp11::decay_t<strings>>(x), cpp11::as_cpp<cpp11::decay_t<const bool>>(verbose)));
   END_CPP11
 }
 
@@ -18,7 +18,7 @@ extern "C" {
 extern SEXP c_parse_one_file(SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_pkgsimil_cpp_tree_similarity", (DL_FUNC) &_pkgsimil_cpp_tree_similarity, 1},
+    {"_pkgsimil_cpp_tree_similarity", (DL_FUNC) &_pkgsimil_cpp_tree_similarity, 2},
     {"c_parse_one_file",              (DL_FUNC) &c_parse_one_file,              2},
     {NULL, NULL, 0}
 };
