@@ -28,6 +28,7 @@ test_that ("tree similarity", {
         expect_true (all (s [, i] > 0))
     }
 
+    testthat::skip_on_os ("windows")
     s2 <- tree_similarity (trees, num_cores = 2L)
     expect_identical (s, s2)
 })

@@ -17,6 +17,11 @@ tree_similarity <- function (trees, num_cores = 1L) {
     stopifnot (length (trees) > 1L)
     combs <- utils::combn (seq_along (trees), m = 2L)
 
+    if (Sys.info () [["sysname"]] == "Windows") {
+        message ("num_cores > 1 is not supported on Windows")
+        num_cores <- 1L
+    }
+
     if (num_cores > 1L) {
 
         combs_l <- as.list (data.frame (combs))
