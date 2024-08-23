@@ -27,4 +27,7 @@ test_that ("tree similarity", {
         expect_type (s [, i], "double")
         expect_true (all (s [, i] > 0))
     }
+
+    s2 <- tree_similarity (trees, num_cores = 2L)
+    expect_identical (s, s2)
 })
