@@ -27,18 +27,18 @@ test_that ("tree get", {
     expect_equal (length (trees), length (pkg_name))
     # Trees should be full of "(" and ")":
     huge_number <- 100000
-    n_br <- t (vapply (trees, function (i) {
+    n_br <- data.frame (t (vapply (trees, function (i) {
         c (
             length (gregexpr ("\\(", i) [[1]]),
             length (gregexpr ("\\)", i) [[1]])
         )
-    }, integer (2L)))
-    n_br_df <- data.frame (n_br)
-    names (n_br_df) <- c ("open", "close")
-    expect_true (all (n_br_df$open > huge_number))
-    expect_true (all (n_br_df$close > huge_number))
+    }, integer (2L))))
+    names (n_br) <- c ("open", "close")
+    expect_true (all (n_br$open > huge_number))
+    expect_true (all (n_br$close > huge_number))
     # Numbers of open and close should balance:
-    expect_true (all (apply (n_br, 1, function (i) i [1] == i [2])))
+    expect_equal (n_br$open [1], n_br$close [1])
+    expect_equal (n_br$open [2], n_br$close [2])
     # Trees should be huge:
     n <- vapply (trees, nchar, integer (1L))
     expect_true (all (n > huge_number))
