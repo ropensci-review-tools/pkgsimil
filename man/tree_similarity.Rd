@@ -4,11 +4,14 @@
 \alias{tree_similarity}
 \title{Tree similarity}
 \usage{
-tree_similarity(trees)
+tree_similarity(trees, num_cores = 1L)
 }
 \arguments{
 \item{trees}{Input trees as returned from \link{tree_parse} function, either
 as list or vector of character objects with each element holding one tree.}
+
+\item{num_cores}{Number of machine cores to use in parallel, defaulting to
+single-core processing.}
 }
 \value{
 Similarity metrics
