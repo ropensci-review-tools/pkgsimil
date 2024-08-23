@@ -22,9 +22,9 @@ tree_get <- function (pkg_name = NULL) {
 
 get_one_tree <- function (pkg_name) {
     # `lsf.str` is for functions only:
-    fn_names <- unclass (lsf.str (envir = asNamespace (pkg_name), all = TRUE))
+    fn_names <- unclass (utils::lsf.str (envir = asNamespace (pkg_name), all = TRUE))
     fn_defs <- lapply (fn_names, function (f) {
-        getFromNamespace (f, pkg_name)
+        utils::getFromNamespace (f, pkg_name)
     })
     names (fn_defs) <- fn_names
 
