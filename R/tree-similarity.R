@@ -23,6 +23,11 @@ tree_similarity <- function (trees, num_cores = 1L, verbose = FALSE) {
         num_cores <- 1L
     }
 
+    pkg_names <- names (trees)
+    if (is.null (pkg_names)) {
+        pkg_names <- seq_along (trees)
+    }
+
     if (num_cores > 1L) {
 
         combs_l <- as.list (data.frame (combs))
@@ -41,8 +46,8 @@ tree_similarity <- function (trees, num_cores = 1L, verbose = FALSE) {
     res <- data.frame (res)
     names (res) <- c ("source_tree_length", "dest_tree_length", "edit_distance")
     res <- cbind (
-        "source_tree_index" = combs [1, ],
-        "dest_tree_index" = combs [2, ],
+        "source_pkg" = pkg_names [combs [1, ]],
+        "dest_pkg" = pkg_names [combs [2, ]],
         res
     )
     length_total <- res$source_tree_length + res$dest_tree_length
