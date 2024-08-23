@@ -39,7 +39,7 @@ tree_similarity <- function (trees, num_cores = 1L) {
         "dest_tree_index" = combs [2, ],
         res
     )
-    length_total <- res1$source_tree_length + res1$dest_tree_length
+    length_total <- res$source_tree_length + res$dest_tree_length
     res$tree_similarity <- (length_total - res$edit_distance) / length_total
 
     return (res)
