@@ -75,9 +75,3 @@ void print_cursor(const TSTreeCursor *cursor, const char *source_code, char **SE
         }
     }
 }
-
-void test_parser (bool open) {
-    TSParser *parser = ts_parser_new();
-
-    ts_parser_set_language(parser, tree_sitter_r());
-}

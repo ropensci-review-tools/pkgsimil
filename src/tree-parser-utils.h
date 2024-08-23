@@ -15,5 +15,4 @@ const TSLanguage* tree_sitter_r(void);
 void print_bracket (char **SExprString, bool open);
 void print_cursor(const TSTreeCursor *cursor, const char *source_code, char **SExprString, bool node_brackets);
 void print_content(char **SExprString, const char *content, bool node_brackets);
-void test_parser (bool open);
 void appendToString(char **str, const char *appendStr);
