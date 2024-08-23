@@ -43,8 +43,18 @@ double APTEDTreeIndex<CostModel, TreeIndex>::ted(
   ted_init(t1, t2);
   // Compute the distance.
   int count = 0;
+  if (verbose) {
+    int size = floor (t1.tree_size_ * t2.tree_size_ / 400);
+    int size_round = 1;
+    while (floor (size / size_round) > 0) size_round = size_round * 10;
+    size_round = size_round / 10;
+    size = size_round * floor (size / size_round);
+
+    std::cout << "Computing approximately " << size << " tree changes." <<
+            std::endl;
+  }
   double res = gted(t1, 0, t2, 0, verbose, count);
-  if (verbose) std::cout << std::endl;
+  if (verbose) std::cout << " done" << std::endl;
   return res;  
 
     
