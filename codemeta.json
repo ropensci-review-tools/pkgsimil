@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/ropensci-review-tools/pkgsimil",
   "issueTracker": "https://github.com/ropensci-review-tools/pkgsimil/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.1.0.017",
+  "version": "0.1.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -75,12 +75,27 @@
     }
   ],
   "softwareRequirements": {
-    "SystemRequirements": {}
+    "1": {
+      "@type": "SoftwareApplication",
+      "identifier": "parallel",
+      "name": "parallel"
+    },
+    "2": {
+      "@type": "SoftwareApplication",
+      "identifier": "pbapply",
+      "name": "pbapply",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=pbapply"
+    },
+    "SystemRequirements": null
   },
-  "fileSize": "21201.432KB",
-  "contIntegration": [
-    "https://github.com/ropensci-review-tools/pkgsimil/actions?query=workflow%3AR-CMD-check",
-    "https://app.codecov.io/gh/ropensci-review-tools/pkgsimil"
-  ],
+  "fileSize": "23945.905KB",
+  "readme": "https://github.com/ropensci-review-tools/pkgsimil/blob/main/README.md",
+  "contIntegration": ["https://github.com/ropensci-review-tools/pkgsimil/actions?query=workflow%3AR-CMD-check", "https://app.codecov.io/gh/ropensci-review-tools/pkgsimil"],
   "developmentStatus": "https://www.repostatus.org/#active"
 }

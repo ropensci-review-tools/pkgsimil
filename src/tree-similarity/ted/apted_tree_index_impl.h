@@ -23,6 +23,10 @@
 
 #pragma once
 
+// ---- begin pkgsimil insert ---
+#include <R.h>
+// ---- begin pkgsimil insert ---
+
 template <typename CostModel, typename TreeIndex>
 double APTEDTreeIndex<CostModel, TreeIndex>::ted(
     const TreeIndex& t1, const TreeIndex& t2) {
@@ -113,6 +117,9 @@ data_structures::Matrix<double> APTEDTreeIndex<CostModel, TreeIndex>::compute_op
   std::stack<std::shared_ptr<std::vector<long long int>>> rowsToReuse_I;
 
   for(int v = 0; v < size1; ++v) {
+    // ---- begin pkgsimil insert ---
+    if (v % 100 == 0) R_CheckUserInterrupt();
+    // ---- end pkgsimil insert ---
     v_in_preL = postL_to_preL_1[v];
 
     is_v_leaf = t1.prel_to_size_[v_in_preL] == 1;
