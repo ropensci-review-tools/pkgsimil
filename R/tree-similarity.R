@@ -44,14 +44,14 @@ tree_similarity <- function (trees, num_cores = 1L, verbose = FALSE) {
     }
     dimnames (res) <- NULL
     res <- data.frame (res)
-    names (res) <- c ("source_tree_length", "dest_tree_length", "edit_distance")
+    names (res) <- c ("source_tree_len", "dest_tree_len", "edit_dist")
     res <- cbind (
         "source_pkg" = pkg_names [combs [1, ]],
         "dest_pkg" = pkg_names [combs [2, ]],
         res
     )
-    length_total <- res$source_tree_length + res$dest_tree_length
-    res$tree_similarity <- (length_total - res$edit_distance) / length_total
+    length_total <- res$source_tree_len + res$dest_tree_len
+    res$tree_similarity <- (length_total - res$edit_dist) / length_total
 
     return (res)
 }

@@ -13,8 +13,8 @@ test_that ("tree similarity", {
     expect_s3_class (s, "data.frame")
     expect_equal (ncol (s), 6L)
     nms <- c (
-        "source_pkg", "dest_pkg", "source_tree_length",
-        "dest_tree_length", "edit_distance", "tree_similarity"
+        "source_pkg", "dest_pkg", "source_tree_len",
+        "dest_tree_len", "edit_dist", "tree_similarity"
     )
     expect_identical (names (s), nms)
 
