@@ -1,19 +1,60 @@
 #include "cpp11.hpp"
 
+#include <iostream>
+
+#include "tree-similarity/node/node.h"
+#include "tree-similarity/label/string_label.h"
+#include "tree-similarity/cost_model/unit_cost_model.h"
+#include "tree-similarity/parser/bracket_notation_parser.h"
+#include "tree-similarity/ted/apted_tree_index.h"
+
 using namespace cpp11;
 
 [[cpp11::register]]
-writable::integers cpp_tree_similarity(strings x) {
-    int n = x.size();
-    if (n < 2) {
+writable::doubles cpp_tree_similarity(strings x) {
+
+    using Label = label::StringLabel;
+    using CostModelLD = cost_model::UnitCostModelLD<Label>;
+    using LabelDictionary = label::LabelDictionary<Label>;
+
+    if (x.size() < 2L) {
         cpp11::stop("tree_similarity requires at least 2 trees\n");
     }
 
-    std::string tree1 = r_string(x[0]);
-    std::string tree2 = r_string(x[1]);
+    std::string source_tree_string = r_string(x[0]);
+    std::string dest_tree_string = r_string(x[1]);
 
-    writable::integers out(n);
-    for (int i = 0; i < n; i++) out[i] = i;
+    parser::BracketNotationParser<Label> bnp;
+
+    if (!bnp.validate_input(source_tree_string)) {
+        cpp11::stop("Incorrect format of source tree. Is the number of opening and closing brackets equal?\n");
+    }
+    const node::Node<Label> source_tree = bnp.parse_single(source_tree_string);
+
+    if (!bnp.validate_input(dest_tree_string)) {
+        cpp11::stop("Incorrect format of destination tree. Is the number of opening and closing brackets equal?\n");
+    }
+    const node::Node<Label> destination_tree = bnp.parse_single(dest_tree_string);
+
+    const double source_tree_size = static_cast<double>(source_tree.get_tree_size());
+    const double dest_tree_size = static_cast<double>(destination_tree.get_tree_size());
+    std::cout << "Size of source tree:" << source_tree_size << std::endl;
+    std::cout << "Size of destination tree:" << dest_tree_size << std::endl;
+
+    LabelDictionary ld;
+    CostModelLD ucm(ld);
+    ted::APTEDTreeIndex<CostModelLD, node::TreeIndexAPTED> apted_algorithm(ucm);
+    node::TreeIndexAPTED ti1;
+    node::TreeIndexAPTED ti2;
+    node::index_tree(ti1, source_tree, ld, ucm);
+    node::index_tree(ti2, destination_tree, ld, ucm);
+    std::cout << "Distance TED:" << apted_algorithm.ted(ti1, ti2) << std::endl;
+    const double tree_distance = apted_algorithm.ted(ti1, ti2);
+
+    writable::doubles out(3);
+    out [0] = source_tree_size;
+    out [1] = dest_tree_size;
+    out [2] = tree_distance;
 
     return out;
 }
