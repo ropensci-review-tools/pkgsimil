@@ -17,7 +17,15 @@ tree_get <- function (pkg_name = NULL) {
     stopifnot (is.character (pkg_name))
     stopifnot (length (pkg_name) > 0L)
 
-    vapply (pkg_name, get_pkg_tree, character (1L))
+    namespace_okay <- vapply (pkg_name, function (i) {
+        !is.null (tryCatch (asNamespace (i), error = function (e) NULL))
+    }, logical (1L))
+    if (any (!namespace_okay)) {
+        pkg_name <- paste0 (pkg_name [which (!namespace_okay)])
+        stop ("pkg_name [", pkg_name, "] is not a package, or is not installed.")
+    }
+
+    vapply (pkg_name, get_one_tree, character (1L))
 }
 
 get_one_tree <- function (pkg_name) {
