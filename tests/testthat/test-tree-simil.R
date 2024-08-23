@@ -11,10 +11,10 @@ test_that ("tree similarity", {
 
     s <- tree_similarity (trees, num_cores = 1L) # Default
     expect_s3_class (s, "data.frame")
-    expect_equal (ncol (s), 5L)
+    expect_equal (ncol (s), 6L)
     nms <- c (
         "source_tree_index", "dest_tree_index", "source_tree_length",
-        "dest_tree_length", "tree_similarity"
+        "dest_tree_length", "edit_distance", "tree_similarity"
     )
     expect_identical (names (s), nms)
 
