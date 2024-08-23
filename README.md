@@ -65,20 +65,20 @@ system.time (
 ```
 
     ##    user  system elapsed 
-    ##   5.542   0.046   5.596
+    ##   5.488   0.030   5.524
 
 ``` r
 print (res)
 ```
 
-    ##   source_tree_index dest_tree_index source_tree_length dest_tree_length
-    ## 1                 1               2               2515             4460
-    ## 2                 1               3               2515              850
-    ## 3                 2               3               4460              850
-    ##   edit_distance tree_similarity
-    ## 1          3316       0.5245878
-    ## 2          1981       0.4112927
-    ## 3          3832       0.2783427
+    ##   source_pkg dest_pkg source_tree_length dest_tree_length edit_distance
+    ## 1    pkgload pkgbuild               2515             4460          3316
+    ## 2    pkgload  geodist               2515              850          1981
+    ## 3   pkgbuild  geodist               4460              850          3832
+    ##   tree_similarity
+    ## 1       0.5245878
+    ## 2       0.4112927
+    ## 3       0.2783427
 
 And as expected, the `pkgload` and `pkgbuild` packages are more similar
 to one another than either is to `geodist`.
