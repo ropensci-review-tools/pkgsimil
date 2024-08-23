@@ -4,10 +4,11 @@
 \alias{tree_similarity}
 \title{Tree similarity}
 \usage{
-tree_similarity(tree)
+tree_similarity(trees)
 }
 \arguments{
-\item{tree}{Input tree as S-expression.}
+\item{trees}{Input trees as returned from \link{tree_parse} function, either
+as list or vector of character objects with each element holding one tree.}
 }
 \value{
 Similarity metrics

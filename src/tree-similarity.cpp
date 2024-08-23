@@ -1,3 +1,8 @@
+// Routine only slightly modified from original "main.cc" in
+// tree-similarity repo src/command_line, and thus:
+// The MIT License (MIT)
+// Copyright (c) 2017 Mateusz Pawlik, Nikolaus Augsten, and Daniel Kocher.
+
 #include "cpp11.hpp"
 
 #include <iostream>
@@ -10,6 +15,11 @@
 
 using namespace cpp11;
 
+// Call main tree-similarity algorithm bundled here from
+// https://github.com/DatabaseGroup/tree-similarity
+// The main "ted" algorithm returns a double (defined in
+// src/ted/apted_tree_index.h), so integer tree sizes are also converted to
+// double here.
 [[cpp11::register]]
 writable::doubles cpp_tree_similarity(strings x) {
 
@@ -38,8 +48,6 @@ writable::doubles cpp_tree_similarity(strings x) {
 
     const double source_tree_size = static_cast<double>(source_tree.get_tree_size());
     const double dest_tree_size = static_cast<double>(destination_tree.get_tree_size());
-    std::cout << "Size of source tree:" << source_tree_size << std::endl;
-    std::cout << "Size of destination tree:" << dest_tree_size << std::endl;
 
     LabelDictionary ld;
     CostModelLD ucm(ld);
@@ -48,7 +56,6 @@ writable::doubles cpp_tree_similarity(strings x) {
     node::TreeIndexAPTED ti2;
     node::index_tree(ti1, source_tree, ld, ucm);
     node::index_tree(ti2, destination_tree, ld, ucm);
-    std::cout << "Distance TED:" << apted_algorithm.ted(ti1, ti2) << std::endl;
     const double tree_distance = apted_algorithm.ted(ti1, ti2);
 
     writable::doubles out(3);
