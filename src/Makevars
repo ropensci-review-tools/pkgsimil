@@ -11,7 +11,7 @@ tree-sitter-r-files = tree-sitter-r/parser.o tree-sitter-r/scanner.o
 lib-files = \
         tree-parser-utils.o \
         tree-parser.o \
-        testcpp.o \
+        tree-similarity.o \
         cpp11.o
 
 OBJECTS = $(tree-sitter-files) $(tree-sitter-r-files) $(lib-files)
