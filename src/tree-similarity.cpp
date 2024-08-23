@@ -3,13 +3,17 @@
 using namespace cpp11;
 
 [[cpp11::register]]
-writable::strings cpp_tree_similarity(strings x) {
+writable::integers cpp_tree_similarity(strings x) {
     int n = x.size();
-    writable::strings out(n);
-    for (int i = 0; i < n; i++) out[i] = "a";
+    if (n < 2) {
+        cpp11::stop("tree_similarity requires at least 2 trees\n");
+    }
 
-    std::string s = r_string(x[0]);
-    Rprintf("%s\n", s.c_str());
+    std::string tree1 = r_string(x[0]);
+    std::string tree2 = r_string(x[1]);
+
+    writable::integers out(n);
+    for (int i = 0; i < n; i++) out[i] = i;
 
     return out;
 }

@@ -6,7 +6,7 @@
 #include <R_ext/Visibility.h>
 
 // tree-similarity.cpp
-writable::strings cpp_tree_similarity(strings x);
+writable::integers cpp_tree_similarity(strings x);
 extern "C" SEXP _pkgsimil_cpp_tree_similarity(SEXP x) {
   BEGIN_CPP11
     return cpp11::as_sexp(cpp_tree_similarity(cpp11::as_cpp<cpp11::decay_t<strings>>(x)));
