@@ -42,12 +42,14 @@ sapply (trees, nchar)
     ##  pkgload pkgbuild  geodist 
     ##    19501    34100     6473
 
+The individual trees are quite large, with generally tens of thousands
+of characters. An example tree looks like this:
+
 ``` r
-substring (trees [1], 1, 80)
+substring (unname (trees) [1], 1, 80)
 ```
 
-    ##                                                                            pkgload 
-    ## "(((function)(parameters)((parameter)(dep_name)(parameter)(dep_ver)(default)(cont"
+    ## [1] "(((function)(parameters)((parameter)(dep_name)(parameter)(dep_ver)(default)(cont"
 
 Note that that code used `exported_only = TRUE` to only return trees
 corresponding to the exported functions of the packages. This generally
@@ -56,29 +58,16 @@ comparisons. The default value of `FALSE` for that parameter should
 generally be used, so that packages are compared in their entirety,
 although that will generally take notably longer to calculate.
 
-The trees can then be compared with the `tree_similarity()` function:
+The trees can be compared with the `tree_similarity()` function:
 
 ``` r
-system.time (
-    res <- tree_similarity (trees)
-)
+tree_similarity (trees)
 ```
 
-    ##    user  system elapsed 
-    ##   5.488   0.030   5.524
-
-``` r
-print (res)
-```
-
-    ##   source_pkg dest_pkg source_tree_length dest_tree_length edit_distance
-    ## 1    pkgload pkgbuild               2515             4460          3316
-    ## 2    pkgload  geodist               2515              850          1981
-    ## 3   pkgbuild  geodist               4460              850          3832
-    ##   tree_similarity
-    ## 1       0.5245878
-    ## 2       0.4112927
-    ## 3       0.2783427
+    ##   source_pkg dest_pkg source_tree_len dest_tree_len edit_dist tree_similarity
+    ## 1    pkgload pkgbuild            2515          4460      3316       0.5245878
+    ## 2    pkgload  geodist            2515           850      1981       0.4112927
+    ## 3   pkgbuild  geodist            4460           850      3832       0.2783427
 
 And as expected, the `pkgload` and `pkgbuild` packages are more similar
 to one another than either is to `geodist`.

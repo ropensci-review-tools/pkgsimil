@@ -50,7 +50,12 @@ trees for two similar packages, [`pkgload`](https://pkgload.r-lib.org) and
 pkgs <- c ("pkgload", "pkgbuild", "geodist")
 trees <- tree_get (pkgs, exported_only = TRUE)
 sapply (trees, nchar)
-substring (trees [1], 1, 80)
+```
+The individual trees are quite large, with generally tens of thousands of
+characters. An example tree looks like this:
+
+```{r tree-substr}
+substring (unname (trees) [1], 1, 80)
 ```
 
 Note that that code used `exported_only = TRUE` to only return trees
@@ -60,13 +65,10 @@ value of `FALSE` for that parameter should generally be used, so that packages
 are compared in their entirety, although that will generally take notably
 longer to calculate.
 
-The trees can then be compared with the `tree_similarity()` function:
+The trees can be compared with the `tree_similarity()` function:
 
 ```{r tree-simil}
-system.time (
-    res <- tree_similarity (trees)
-)
-print (res)
+tree_similarity (trees)
 ```
 
 And as expected, the `pkgload` and `pkgbuild` packages are more similar to one
