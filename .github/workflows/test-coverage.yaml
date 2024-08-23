@@ -61,7 +61,18 @@ jobs:
               'src/tree-sitter/lib/src/unicode.h',
               'src/tree-sitter/lib/src/wasm_store.c',
               'src/tree-sitter-r/parser.c',
-              'src/tree-sitter-r/scanner.c'
+              'src/tree-sitter-r/scanner.c',
+              'src/tree-similarity/cost_model/unit_cost_model_impl.h',
+              'src/tree-similarity/data_structures/matrix.h',
+              'src/tree-similarity/.h',
+              'src/tree-similarity/label/label_dictionary_impl.h',
+              'src/tree-similarity/label/string_label.h',
+              'src/tree-similarity/label/string_label_impl.h',
+              'src/tree-similarity/node/node_impl.h',
+              'src/tree-similarity/node/tree_indexer_impl.h',
+              'src/tree-similarity/parser/bracket_notation_parser.h',
+              'src/tree-similarity/ted/apted_tree_index_impl.h',
+              'src/tree-similarity/ted/ted_algorithm.h'
             )
           )
           covr::to_cobertura(cov)
