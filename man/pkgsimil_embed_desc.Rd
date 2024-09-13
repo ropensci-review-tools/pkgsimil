@@ -10,5 +10,5 @@ pkgsimil_embed_desc(pkg_name = NULL)
 \item{pkg_name}{Name of one or more packages for which trees are to be extracted.}
 }
 \description{
-Calculate distances between embeddings from 'Description' entries  of packages.
+The embeddings are currently retrieved from the Jina AI API.
 }

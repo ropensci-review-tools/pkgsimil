@@ -1,5 +1,6 @@
 #' Calculate distances between embeddings from 'Description' entries  of packages.
 #'
+#' The embeddings are currently retrieved from the Jina AI API.
 #' @inheritParams tree_get
 #' @export
 pkgsimil_embed_desc <- function (pkg_name = NULL) {
