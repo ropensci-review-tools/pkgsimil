@@ -12,6 +12,19 @@ pkgsimil_embed_desc <- function (pkg_name = NULL) {
     embeddings_to_dists (embeddings, descs$pkg_name)
 }
 
+#' Calculate minimal distances between embeddings from function descriptions.
+#'
+#' The embeddings are currently retrieved from the Jina AI API. A distance is
+#' calculated for each function in each package, as the minimal distance to all
+#' functions of all other packages. The distance between two packages is then
+#' the average across all functions of those minimal distances.
+#'
+#' @inheritParams tree_get
+#' @export
+pkgsimil_embed_fns <- function (pkg_name = NULL) {
+
+}
+
 get_pkg_descs <- function (pkg_name) {
     d <- vapply (pkg_name, function (i) {
         res <- utils::packageDescription (pkg = i, fields = "Description")
