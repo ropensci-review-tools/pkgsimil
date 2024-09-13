@@ -13,8 +13,8 @@ pkgsimil_embed_desc <- function (pkg_name = NULL) {
 
 get_pkg_descs <- function (pkg_name) {
     d <- vapply (pkg_name, function (i) {
-        res <- packageDescription (pkg = i, fields = "Description")
-        res <-  gsub ("\\n", "", res)
+        res <- utils::packageDescription (pkg = i, fields = "Description")
+        res <- gsub ("\\n", "", res)
         gsub ("\\s+", " ", res)
     }, character (1L), USE.NAMES = FALSE)
     index <- which (!is.na (d))
@@ -50,7 +50,7 @@ get_embeddings <- function (input) {
 }
 
 embeddings_to_dists <- function (embeddings, nms) {
-    out <- dist (t (embeddings))
+    out <- stats::dist (t (embeddings))
 
     n <- length (nms)
     i <- seq_len (n - 1)
