@@ -3,7 +3,7 @@
 #' The embeddings are currently retrieved from the Jina AI API.
 #' @inheritParams tree_get
 #' @export
-pkgsimil_embed_desc <- function (pkg_name = NULL) {
+pkgsimil_embed_descs <- function (pkg_name = NULL) {
 
     descs <- get_pkg_descs (pkg_name)
     input <- lapply (descs$desc, function (i) list (text = i))
