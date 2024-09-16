@@ -31,7 +31,7 @@ tree_get <- function (pkg_name = NULL, exported_only = FALSE) {
     vapply (pkg_name, function (i) get_one_tree (i, exported_only), character (1L))
 }
 
-get_one_tree <- function (pkg_name, exported_only) {
+get_fn_defs <- function (pkg_name, exported_only) {
     # `lsf.str` is for functions only:
     fn_names <- unclass (
         utils::lsf.str (envir = asNamespace (pkg_name), all = TRUE)
@@ -47,6 +47,13 @@ get_one_tree <- function (pkg_name, exported_only) {
         utils::getFromNamespace (f, pkg_name)
     })
     names (fn_defs) <- fn_names
+
+    return (fn_defs)
+}
+
+get_one_tree <- function (pkg_name, exported_only) {
+
+    fn_defs <- get_fn_defs (pkg_name, exported_only)
 
     trees <- vapply (fn_defs, function (f) {
         f |>
