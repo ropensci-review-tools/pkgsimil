@@ -21,6 +21,28 @@ pkgsimil_embeddings <- function (pkg_name = NULL) {
     dplyr::left_join (embeddings_txt, embeddings_fns, by = c ("from", "to"))
 }
 
+#' Return raw 'LLM' embeddings from package text and function definitions.
+#'
+#' The embeddings are currently retrieved from a local 'ollama' server running
+#' Jina AI embeddings.
+#'
+#' @inheritParams tree_get
+#' @export
+pkgsimil_embeddings_raw <- function (pkg_name = NULL) {
+
+    txt <- lapply (pkg_name, function (p) get_pkg_text (p))
+    embeddings <- lapply (txt, function (i) get_embeddings (i))
+    embeddings_txt <- do.call (cbind, embeddings)
+
+    fns <- vapply (pkg_name, function (p) get_pkg_fns_text (p), character (1L))
+    embeddings <- lapply (fns, function (i) get_embeddings (i, code = TRUE))
+    embeddings_fns <- do.call (cbind, embeddings)
+
+    colnames (embeddings_txt) <- colnames (embeddings_fns) <- pkg_name
+
+    list (txt = embeddings_txt, fns = embeddings_fns)
+}
+
 get_pkg_fns_text <- function (pkg_name = NULL, exported_only = FALSE) {
 
     stopifnot (length (pkg_name) == 1L)
