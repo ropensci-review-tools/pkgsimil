@@ -1,14 +1,39 @@
-#' Calculate distances between embeddings from 'Description' entries  of packages.
+#' Calculate distances between 'LLM' embeddings from package text and function
+#' definitions.
 #'
-#' The embeddings are currently retrieved from the Jina AI API.
+#' The embeddings are currently retrieved from a local 'ollama' server running
+#' Jina AI embeddings.
+#'
 #' @inheritParams tree_get
 #' @export
-pkgsimil_embed_descs <- function (pkg_name = NULL) {
+pkgsimil_embeddings <- function (pkg_name = NULL) {
 
     txt <- lapply (pkg_name, function (p) get_pkg_text (p))
-
     embeddings <- lapply (txt, function (i) get_embeddings (i))
-    embeddings_to_dists (do.call (cbind, embeddings), pkg_name)
+    embeddings_txt <- embeddings_to_dists (do.call (cbind, embeddings), pkg_name)
+    names (embeddings_txt) [3] <- "d_txt"
+
+    fns <- vapply (pkg_name, function (p) get_pkg_fns_text (p), character (1L))
+    embeddings <- lapply (fns, function (i) get_embeddings (i, code = TRUE))
+    embeddings_fns <- embeddings_to_dists (do.call (cbind, embeddings), pkg_name)
+    names (embeddings_fns) [3] <- "d_fns"
+
+    dplyr::left_join (embeddings_txt, embeddings_fns, by = c ("from", "to"))
+}
+
+get_pkg_fns_text <- function (pkg_name = NULL, exported_only = FALSE) {
+
+    stopifnot (length (pkg_name) == 1L)
+
+    fns <- get_fn_defs (pkg_name, exported_only = exported_only)
+    fns <- vapply (seq_along (fns), function (i) {
+        fi <- fns [[i]] |>
+            deparse (width.cutoff = 500L) |>
+            paste0 (collapse = "\n")
+        paste0 (names (fns) [i], " <- ", fi)
+    }, character (1L))
+
+    paste0 (fns, collapse = "\n")
 }
 
 get_Rd_metadata <- utils::getFromNamespace (".Rd_get_metadata", "tools")
@@ -64,16 +89,18 @@ get_fn_descs <- function (pkg_name) {
     ) [index, ]
 }
 
-get_embeddings <- function (input) {
+get_embeddings <- function (input, code = FALSE) {
 
     stopifnot (length (input) == 1L)
 
     u <- "http://localhost:11434/api/embeddings"
 
-    data <- list (
-        model = "jina/jina-embeddings-v2-base-en",
-        prompt = input
+    model <- ifelse (
+        code,
+        "ordis/jina-embeddings-v2-base-code",
+        "jina/jina-embeddings-v2-base-en"
     )
+    data <- list (model = model, prompt = input)
 
     req <- httr2::request (u) |>
         httr2::req_headers ("Content-Type" = "application/json") |>
