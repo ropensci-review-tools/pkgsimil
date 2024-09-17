@@ -1,14 +1,9 @@
 Package: pkgsimil
 Title: Similarity Metrics between R Packages
-Version: 0.1.1.028
+Version: 0.1.1.029
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-2172-5265")),
-    person("Mateusz", "Pawlik", role = "cph", comment = "Author of original tree-similarity src code"),
-    person("Nikolaus", "Augsten", role = "cph", comment = "Author of original tree-similarity src code"),
-    person("Daniel", "Kocher", role = "cph", comment = "Author of original tree-similarity src code"),
-    person("Thomas", "Huetter", role = "cph", comment = "Author of original tree-similarity src code"),
-    person("Tree-sitter authors", role = "cph", comment = "Tree-sitter C library"))
+           comment = c(ORCID = "0000-0003-2172-5265")))
 Description: Similarity metrics between R packages, based on similarity of code and documentation.
 License: MIT + file LICENSE
 URL: https://docs.ropensci.org/pkgsimil/,
@@ -16,12 +11,7 @@ URL: https://docs.ropensci.org/pkgsimil/,
 BugReports: https://github.com/ropensci-review-tools/pkgsimil/issues
 Imports:
     dplyr,
-    httr2,
-    parallel,
-    pbapply
-LinkingTo:
-    cpp11
-NeedsCompilation: yes
+    httr2
 Encoding: UTF-8
 Language: en-GB
 LazyData: true

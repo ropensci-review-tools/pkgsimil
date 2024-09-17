@@ -7,7 +7,13 @@
 pkgsimil_embeddings_raw(pkg_name = NULL)
 }
 \arguments{
-\item{pkg_name}{Name of one or more packages for which trees are to be extracted.}
+\item{pkg_name}{Names of one or more packages for which embedding
+similarities are to be calculated.}
+}
+\value{
+A list of two matrices of embeddings: one for the text descriptions
+of the specified packages, including individual descriptios of all package
+functions, and one for the entire code base.
 }
 \description{
 The embeddings are currently retrieved from a local 'ollama' server running

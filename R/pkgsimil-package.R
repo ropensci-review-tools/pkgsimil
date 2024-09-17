@@ -1,6 +1,5 @@
 #' @keywords internal
 #' @aliases pkgsimil-package
-#' @useDynLib pkgsimil, .registration = TRUE
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage

@@ -20,14 +20,5 @@ Useful links:
 \author{
 \strong{Maintainer}: Mark Padgham \email{mark.padgham@email.com} (\href{https://orcid.org/0000-0003-2172-5265}{ORCID})
 
-Other contributors:
-\itemize{
-  \item Mateusz Pawlik (Author of original tree-similarity src code) [copyright holder]
-  \item Nikolaus Augsten (Author of original tree-similarity src code) [copyright holder]
-  \item Daniel Kocher (Author of original tree-similarity src code) [copyright holder]
-  \item Thomas Huetter (Author of original tree-similarity src code) [copyright holder]
-  \item Tree-sitter authors (Tree-sitter C library) [copyright holder]
-}
-
 }
 \keyword{internal}

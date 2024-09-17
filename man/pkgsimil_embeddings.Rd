@@ -8,7 +8,12 @@ definitions.}
 pkgsimil_embeddings(pkg_name = NULL)
 }
 \arguments{
-\item{pkg_name}{Name of one or more packages for which trees are to be extracted.}
+\item{pkg_name}{Names of one or more packages for which embedding
+similarities are to be calculated.}
+}
+\value{
+A \code{data.frame} of pair-wise similarities between all packages
+specified in \code{pkg_name}.
 }
 \description{
 The embeddings are currently retrieved from a local 'ollama' server running

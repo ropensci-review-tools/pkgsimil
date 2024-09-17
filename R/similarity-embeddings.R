@@ -4,7 +4,10 @@
 #' The embeddings are currently retrieved from a local 'ollama' server running
 #' Jina AI embeddings.
 #'
-#' @inheritParams tree_get
+#' @param pkg_name Names of one or more packages for which embedding
+#' similarities are to be calculated.
+#' @return A `data.frame` of pair-wise similarities between all packages
+#' specified in `pkg_name`.
 #' @export
 pkgsimil_embeddings <- function (pkg_name = NULL) {
 
@@ -26,7 +29,10 @@ pkgsimil_embeddings <- function (pkg_name = NULL) {
 #' The embeddings are currently retrieved from a local 'ollama' server running
 #' Jina AI embeddings.
 #'
-#' @inheritParams tree_get
+#' @inheritParams pkgsimil_embeddings
+#' @return A list of two matrices of embeddings: one for the text descriptions
+#' of the specified packages, including individual descriptios of all package
+#' functions, and one for the entire code base.
 #' @export
 pkgsimil_embeddings_raw <- function (pkg_name = NULL) {
 
@@ -56,6 +62,26 @@ get_pkg_fns_text <- function (pkg_name = NULL, exported_only = FALSE) {
     }, character (1L))
 
     paste0 (fns, collapse = "\n")
+}
+
+get_fn_defs <- function (pkg_name, exported_only) {
+    # `lsf.str` is for functions only:
+    fn_names <- unclass (
+        utils::lsf.str (envir = asNamespace (pkg_name), all = TRUE)
+    )
+    if (exported_only) {
+        suppressPackageStartupMessages (
+            require (pkg_name, character.only = TRUE)
+        )
+        fns_exp <- ls (paste0 ("package:", pkg_name))
+        fn_names <- fn_names [which (fn_names %in% fns_exp)]
+    }
+    fn_defs <- lapply (fn_names, function (f) {
+        utils::getFromNamespace (f, pkg_name)
+    })
+    names (fn_defs) <- fn_names
+
+    return (fn_defs)
 }
 
 get_Rd_metadata <- utils::getFromNamespace (".Rd_get_metadata", "tools")

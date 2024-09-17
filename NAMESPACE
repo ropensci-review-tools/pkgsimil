@@ -2,7 +2,3 @@
 
 export(pkgsimil_embeddings)
 export(pkgsimil_embeddings_raw)
-export(tree_get)
-export(tree_parse)
-export(tree_similarity)
-useDynLib(pkgsimil, .registration = TRUE)
