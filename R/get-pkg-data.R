@@ -31,6 +31,25 @@ get_pkg_text_namespace <- function (pkg_name) {
     paste0 (c (desc_template (pkg_name, desc), unlist (fns)), collapse = "\n ")
 }
 
+get_fn_descs <- function (pkg_name) {
+
+    rd <- tools::Rd_db (package = pkg_name)
+    descs <- vapply (rd, function (i) {
+        d <- get_Rd_metadata (i, "description")
+    }, character (1L))
+    descs <- gsub ("\\\\n", " ", descs)
+    descs <- gsub ("\\n", " ", descs)
+    descs <- gsub ("\\", "", descs, fixed = TRUE)
+    descs <- gsub ("\\", "", descs, fixed = TRUE)
+    descs <- gsub ("\\s+", " ", descs)
+
+    index <- which (!is.na (descs))
+    data.frame (
+        desc = unname (descs),
+        rd_name = names (descs)
+    ) [index, ]
+}
+
 desc_template <- function (pkg_name, desc) {
     c (
         paste0 ("# ", pkg_name, "\n"),
@@ -87,7 +106,7 @@ get_pkg_text_local <- function (path) {
     paste0 (out, collapse = "\n ")
 }
 
-get_pkg_fns_text <- function (pkg_name = NULL, exported_only = FALSE) {
+get_pkg_code <- function (pkg_name = NULL, exported_only = FALSE) {
 
     stopifnot (length (pkg_name) == 1L)
 
@@ -149,23 +168,4 @@ get_fn_defs_local <- function (path) {
     txt <- txt [which (nzchar (txt))]
     txt <- gsub ("^[[:space:]]*", "", txt)
     paste0 (txt, collapse = "\n ")
-}
-
-get_fn_descs <- function (pkg_name) {
-
-    rd <- tools::Rd_db (package = pkg_name)
-    descs <- vapply (rd, function (i) {
-        d <- get_Rd_metadata (i, "description")
-    }, character (1L))
-    descs <- gsub ("\\\\n", " ", descs)
-    descs <- gsub ("\\n", " ", descs)
-    descs <- gsub ("\\", "", descs, fixed = TRUE)
-    descs <- gsub ("\\", "", descs, fixed = TRUE)
-    descs <- gsub ("\\s+", " ", descs)
-
-    index <- which (!is.na (descs))
-    data.frame (
-        desc = unname (descs),
-        rd_name = names (descs)
-    ) [index, ]
 }

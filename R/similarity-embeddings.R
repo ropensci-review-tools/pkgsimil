@@ -19,7 +19,7 @@ pkgsimil_embeddings <- function (packages = NULL) {
     embeddings_txt <- embeddings_to_dists (do.call (cbind, embeddings), packages)
     names (embeddings_txt) [3] <- "d_txt"
 
-    fns <- vapply (pkgs_full, function (p) get_pkg_fns_text (p), character (1L))
+    fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
     embeddings <- lapply (fns, function (i) get_embeddings (i, code = TRUE))
     embeddings_fns <- embeddings_to_dists (do.call (cbind, embeddings), packages)
     names (embeddings_fns) [3] <- "d_fns"
@@ -61,7 +61,7 @@ pkgsimil_embeddings_raw <- function (packages = NULL) {
     embeddings <- lapply (txt, function (i) get_embeddings (i))
     embeddings_txt <- do.call (cbind, embeddings)
 
-    fns <- vapply (pkgs_full, function (p) get_pkg_fns_text (p), character (1L))
+    fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
     embeddings <- lapply (fns, function (i) get_embeddings (i, code = TRUE))
     embeddings_fns <- do.call (cbind, embeddings)
 
