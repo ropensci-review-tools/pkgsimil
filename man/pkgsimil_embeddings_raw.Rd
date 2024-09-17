@@ -4,15 +4,15 @@
 \alias{pkgsimil_embeddings_raw}
 \title{Return raw 'LLM' embeddings from package text and function definitions.}
 \usage{
-pkgsimil_embeddings_raw(pkg_name = NULL)
+pkgsimil_embeddings_raw(packages = NULL)
 }
 \arguments{
-\item{pkg_name}{Names of one or more packages for which embedding
-similarities are to be calculated.}
+\item{packages}{Names of, or paths to,  one or more packages for which
+embedding similarities are to be calculated.}
 }
 \value{
 A list of two matrices of embeddings: one for the text descriptions
-of the specified packages, including individual descriptios of all package
+of the specified packages, including individual descriptions of all package
 functions, and one for the entire code base.
 }
 \description{

@@ -5,15 +5,15 @@
 \title{Calculate distances between 'LLM' embeddings from package text and function
 definitions.}
 \usage{
-pkgsimil_embeddings(pkg_name = NULL)
+pkgsimil_embeddings(packages = NULL)
 }
 \arguments{
-\item{pkg_name}{Names of one or more packages for which embedding
-similarities are to be calculated.}
+\item{packages}{Names of, or paths to,  one or more packages for which
+embedding similarities are to be calculated.}
 }
 \value{
 A \code{data.frame} of pair-wise similarities between all packages
-specified in \code{pkg_name}.
+specified in \code{packages}.
 }
 \description{
 The embeddings are currently retrieved from a local 'ollama' server running

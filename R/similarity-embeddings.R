@@ -4,34 +4,34 @@
 #' The embeddings are currently retrieved from a local 'ollama' server running
 #' Jina AI embeddings.
 #'
-#' @param pkg_name Names of one or more packages for which embedding
-#' similarities are to be calculated.
+#' @param packages Names of, or paths to,  one or more packages for which
+#' embedding similarities are to be calculated.
 #' @return A `data.frame` of pair-wise similarities between all packages
-#' specified in `pkg_name`.
+#' specified in `packages`.
 #' @export
-pkgsimil_embeddings <- function (pkg_name = NULL) {
+pkgsimil_embeddings <- function (packages = NULL) {
 
-    paths <- pkg_name
-    is_installed <- pkg_is_installed (pkg_name)
+    pkgs_full <- packages
+    is_installed <- pkg_is_installed (packages)
     if (any (is_installed) && !all (is_installed)) {
         stop (
-            "pkg_name must either name installed packages, ",
+            "packages must either name installed packages, ",
             "or supply paths to local source packages, but ",
             "not both."
         )
     }
     if (!any (is_installed)) {
-        pkg_name <- basename (paths)
+        packages <- basename (pkgs_full)
     }
 
-    txt <- lapply (paths, function (p) get_pkg_text (p))
+    txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
     embeddings <- lapply (txt, function (i) get_embeddings (i))
-    embeddings_txt <- embeddings_to_dists (do.call (cbind, embeddings), pkg_name)
+    embeddings_txt <- embeddings_to_dists (do.call (cbind, embeddings), packages)
     names (embeddings_txt) [3] <- "d_txt"
 
-    fns <- vapply (paths, function (p) get_pkg_fns_text (p), character (1L))
+    fns <- vapply (pkgs_full, function (p) get_pkg_fns_text (p), character (1L))
     embeddings <- lapply (fns, function (i) get_embeddings (i, code = TRUE))
-    embeddings_fns <- embeddings_to_dists (do.call (cbind, embeddings), pkg_name)
+    embeddings_fns <- embeddings_to_dists (do.call (cbind, embeddings), packages)
     names (embeddings_fns) [3] <- "d_fns"
 
     dplyr::left_join (embeddings_txt, embeddings_fns, by = c ("from", "to"))
@@ -44,20 +44,20 @@ pkgsimil_embeddings <- function (pkg_name = NULL) {
 #'
 #' @inheritParams pkgsimil_embeddings
 #' @return A list of two matrices of embeddings: one for the text descriptions
-#' of the specified packages, including individual descriptios of all package
+#' of the specified packages, including individual descriptions of all package
 #' functions, and one for the entire code base.
 #' @export
-pkgsimil_embeddings_raw <- function (pkg_name = NULL) {
+pkgsimil_embeddings_raw <- function (packages = NULL) {
 
-    txt <- lapply (pkg_name, function (p) get_pkg_text (p))
+    txt <- lapply (packages, function (p) get_pkg_text (p))
     embeddings <- lapply (txt, function (i) get_embeddings (i))
     embeddings_txt <- do.call (cbind, embeddings)
 
-    fns <- vapply (pkg_name, function (p) get_pkg_fns_text (p), character (1L))
+    fns <- vapply (packages, function (p) get_pkg_fns_text (p), character (1L))
     embeddings <- lapply (fns, function (i) get_embeddings (i, code = TRUE))
     embeddings_fns <- do.call (cbind, embeddings)
 
-    colnames (embeddings_txt) <- colnames (embeddings_fns) <- pkg_name
+    colnames (embeddings_txt) <- colnames (embeddings_fns) <- packages
 
     list (txt = embeddings_txt, fns = embeddings_fns)
 }
