@@ -65,6 +65,16 @@ get_fn_defs_local <- function (path) {
 }
 
 get_pkg_text <- function (pkg_name) {
+    if (pkg_is_installed (pkg_name)) {
+        txt <- get_pkg_text_namespace (pkg_name)
+    } else {
+        stop ("Package text from local path not yet implemented")
+    }
+
+    return (txt)
+}
+
+get_pkg_text_namespace <- function (pkg_name) {
 
     stopifnot (length (pkg_name) == 1L)
 

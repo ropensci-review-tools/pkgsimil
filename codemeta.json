@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/ropensci-review-tools/pkgsimil",
   "issueTracker": "https://github.com/ropensci-review-tools/pkgsimil/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.1.1.33",
+  "version": "0.1.1.034",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -97,10 +97,13 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=httr2"
     },
-    "SystemRequirements": null
+    "SystemRequirements": {}
   },
   "fileSize": "39.071KB",
   "readme": "https://github.com/ropensci-review-tools/pkgsimil/blob/main/README.md",
-  "contIntegration": ["https://github.com/ropensci-review-tools/pkgsimil/actions?query=workflow%3AR-CMD-check", "https://app.codecov.io/gh/ropensci-review-tools/pkgsimil"],
+  "contIntegration": [
+    "https://github.com/ropensci-review-tools/pkgsimil/actions?query=workflow%3AR-CMD-check",
+    "https://app.codecov.io/gh/ropensci-review-tools/pkgsimil"
+  ],
   "developmentStatus": "https://www.repostatus.org/#active"
 }
