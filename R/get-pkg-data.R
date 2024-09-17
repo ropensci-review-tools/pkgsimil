@@ -6,18 +6,19 @@ get_pkg_fns_text <- function (pkg_name = NULL, exported_only = FALSE) {
 
     if (pkg_is_installed (pkg_name)) {
         fns <- get_fn_defs_namespace (pkg_name, exported_only = exported_only)
+        fns <- vapply (seq_along (fns), function (i) {
+            fi <- fns [[i]] |>
+                deparse (width.cutoff = 500L) |>
+                paste0 (collapse = "\n")
+            paste0 (names (fns) [i], " <- ", fi)
+        }, character (1L))
+
+        paste0 (fns, collapse = "\n")
     } else {
-        stop ("Function defs from non-installed packages not yet implemented.")
+        fns <- get_fn_defs_local (pkg_name)
     }
 
-    fns <- vapply (seq_along (fns), function (i) {
-        fi <- fns [[i]] |>
-            deparse (width.cutoff = 500L) |>
-            paste0 (collapse = "\n")
-        paste0 (names (fns) [i], " <- ", fi)
-    }, character (1L))
-
-    paste0 (fns, collapse = "\n")
+    return (fns)
 }
 
 pkg_is_installed <- function (pkg_name) {
@@ -43,6 +44,24 @@ get_fn_defs_namespace <- function (pkg_name, exported_only) {
     names (fn_defs) <- fn_names
 
     return (fn_defs)
+}
+
+get_fn_defs_local <- function (path) {
+    path <- fs::path_normal
+    stopifnot (fs::dir_exists (path))
+    path_r <- fs::path (path, "R")
+    stopifnot (fs::dir_exists (path_r))
+
+    files_r <- fs::dir_ls (path_r, regexp = "\\.(r|R)$")
+    txt <- lapply (files_r, brio::read_lines)
+    txt <- unname (do.call (c, txt))
+    index <- grep ("^[[:space:]]*#", txt)
+    if (length (index) > 0L) {
+        txt <- txt [-index]
+    }
+    txt <- txt [which (nzchar (txt))]
+    txt <- gsub ("^[[:space:]]*", "", txt)
+    paste0 (txt, collapse = "\n ")
 }
 
 get_pkg_text <- function (pkg_name) {
