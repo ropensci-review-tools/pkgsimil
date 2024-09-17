@@ -47,7 +47,7 @@ get_fn_defs_namespace <- function (pkg_name, exported_only) {
 }
 
 get_fn_defs_local <- function (path) {
-    path <- fs::path_normal
+    path <- fs::path_norm (path)
     stopifnot (fs::dir_exists (path))
     path_r <- fs::path (path, "R")
     stopifnot (fs::dir_exists (path_r))
@@ -68,7 +68,7 @@ get_pkg_text <- function (pkg_name) {
     if (pkg_is_installed (pkg_name)) {
         txt <- get_pkg_text_namespace (pkg_name)
     } else {
-        stop ("Package text from local path not yet implemented")
+        txt <- get_pkg_text_local (pkg_name)
     }
 
     return (txt)
@@ -82,17 +82,6 @@ get_pkg_text_namespace <- function (pkg_name) {
     desc <- gsub ("\\n", " ", desc)
     desc <- gsub ("\\s+", " ", desc)
 
-    desc <- c (
-        paste0 ("# ", pkg_name, "\n"),
-        "",
-        "## Description",
-        "",
-        desc,
-        "",
-        "## Functions",
-        ""
-    )
-
     fns <- get_fn_descs (pkg_name)
     fns <- lapply (seq_len (nrow (fns)), function (i) {
         c (
@@ -103,7 +92,61 @@ get_pkg_text_namespace <- function (pkg_name) {
         )
     })
 
-    paste0 (c (desc, unlist (fns)), collapse = "\n")
+    paste0 (c (desc_template (pkg_name), unlist (fns)), collapse = "\n ")
+}
+
+desc_template <- function (pkg_name) {
+    c (
+        paste0 ("# ", pkg_name, "\n"),
+        "",
+        "## Description",
+        "",
+        desc,
+        "",
+        "## Functions",
+        ""
+    )
+}
+
+get_pkg_text_local <- function (path) {
+    stopifnot (length (path) == 1L)
+
+    path <- fs::path_norm (path)
+    stopifnot (fs::dir_exists (path))
+
+    desc_file <- fs::path (path, "DESCRIPTION")
+    stopifnot (fs::file_exists (desc_file))
+    desc <- data.frame (read.dcf (desc_file))$Description
+
+    rd_path <- fs::path (path, "man")
+    stopifnot (fs::file_exists (rd_path))
+    rd_files <- fs::dir_ls (rd_path, regex = "\\.Rd")
+    rd <- lapply (rd_files, function (i) {
+        rd <- tools::parse_Rd (i)
+        tags <- vapply (rd, function (j) attr (j, "Rd_tag"), character (1L))
+        index <- which (tags == "\\description")
+        if (length (index) == 0) return ("")
+        rd_desc <- gsub ("\\n$", "", unlist (rd [[index]]))
+        paste (rd_desc, collapse = "")
+    })
+
+    fns <- gsub ("\\.Rd$", "", basename (names (rd)))
+    rd <- unname (unlist (rd))
+    fn_txt <- lapply (seq_len (length (rd)), function (i) {
+        c (
+           paste0 ("### ", fns [i]),
+           "",
+           rd [i],
+           ""
+        )
+    })
+
+    out <- c (
+        desc_template (basename (path)),
+        unlist (fn_txt)
+    )
+
+    paste0 (out, collapse = "\n ")
 }
 
 get_fn_descs <- function (pkg_name) {
