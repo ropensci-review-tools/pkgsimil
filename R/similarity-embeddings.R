@@ -12,17 +12,7 @@
 pkgsimil_embeddings <- function (packages = NULL) {
 
     pkgs_full <- packages
-    is_installed <- pkg_is_installed (packages)
-    if (any (is_installed) && !all (is_installed)) {
-        stop (
-            "packages must either name installed packages, ",
-            "or supply paths to local source packages, but ",
-            "not both."
-        )
-    }
-    if (!any (is_installed)) {
-        packages <- basename (pkgs_full)
-    }
+    packages <- convert_paths_to_pkgs (pkgs_full)
 
     txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
     embeddings <- lapply (txt, function (i) get_embeddings (i))
@@ -35,6 +25,21 @@ pkgsimil_embeddings <- function (packages = NULL) {
     names (embeddings_fns) [3] <- "d_fns"
 
     dplyr::left_join (embeddings_txt, embeddings_fns, by = c ("from", "to"))
+}
+
+convert_paths_to_pkgs <- function (packages) {
+    is_installed <- pkg_is_installed (packages)
+    if (any (is_installed) && !all (is_installed)) {
+        stop (
+            "packages must either name installed packages, ",
+            "or supply paths to local source packages, but ",
+            "not both."
+        )
+    }
+    if (!any (is_installed)) {
+        packages <- basename (packages)
+    }
+    return (packages)
 }
 
 #' Return raw 'LLM' embeddings from package text and function definitions.
