@@ -54,11 +54,14 @@ convert_paths_to_pkgs <- function (packages) {
 #' @export
 pkgsimil_embeddings_raw <- function (packages = NULL) {
 
-    txt <- lapply (packages, function (p) get_pkg_text (p))
+    pkgs_full <- packages
+    packages <- convert_paths_to_pkgs (pkgs_full)
+
+    txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
     embeddings <- lapply (txt, function (i) get_embeddings (i))
     embeddings_txt <- do.call (cbind, embeddings)
 
-    fns <- vapply (packages, function (p) get_pkg_fns_text (p), character (1L))
+    fns <- vapply (pkgs_full, function (p) get_pkg_fns_text (p), character (1L))
     embeddings <- lapply (fns, function (i) get_embeddings (i, code = TRUE))
     embeddings_fns <- do.call (cbind, embeddings)
 
