@@ -11,12 +11,25 @@
 #' @export
 pkgsimil_embeddings <- function (pkg_name = NULL) {
 
-    txt <- lapply (pkg_name, function (p) get_pkg_text (p))
+    paths <- pkg_name
+    is_installed <- pkg_is_installed (pkg_name)
+    if (any (is_installed) && !all (is_installed)) {
+        stop (
+            "pkg_name must either name installed packages, ",
+            "or supply paths to local source packages, but ",
+            "not both."
+        )
+    }
+    if (!any (is_installed)) {
+        pkg_name <- basename (paths)
+    }
+
+    txt <- lapply (paths, function (p) get_pkg_text (p))
     embeddings <- lapply (txt, function (i) get_embeddings (i))
     embeddings_txt <- embeddings_to_dists (do.call (cbind, embeddings), pkg_name)
     names (embeddings_txt) [3] <- "d_txt"
 
-    fns <- vapply (pkg_name, function (p) get_pkg_fns_text (p), character (1L))
+    fns <- vapply (paths, function (p) get_pkg_fns_text (p), character (1L))
     embeddings <- lapply (fns, function (i) get_embeddings (i, code = TRUE))
     embeddings_fns <- embeddings_to_dists (do.call (cbind, embeddings), pkg_name)
     names (embeddings_fns) [3] <- "d_fns"

@@ -13,7 +13,7 @@ get_pkg_fns_text <- function (pkg_name = NULL, exported_only = FALSE) {
             paste0 (names (fns) [i], " <- ", fi)
         }, character (1L))
 
-        paste0 (fns, collapse = "\n")
+        fns <- paste0 (fns, collapse = "\n")
     } else {
         fns <- get_fn_defs_local (pkg_name)
     }
@@ -125,7 +125,9 @@ get_pkg_text_local <- function (path) {
         rd <- tools::parse_Rd (i)
         tags <- vapply (rd, function (j) attr (j, "Rd_tag"), character (1L))
         index <- which (tags == "\\description")
-        if (length (index) == 0) return ("")
+        if (length (index) == 0) {
+            return ("")
+        }
         rd_desc <- gsub ("\\n$", "", unlist (rd [[index]]))
         paste (rd_desc, collapse = "")
     })
@@ -134,10 +136,10 @@ get_pkg_text_local <- function (path) {
     rd <- unname (unlist (rd))
     fn_txt <- lapply (seq_len (length (rd)), function (i) {
         c (
-           paste0 ("### ", fns [i]),
-           "",
-           rd [i],
-           ""
+            paste0 ("### ", fns [i]),
+            "",
+            rd [i],
+            ""
         )
     })
 
