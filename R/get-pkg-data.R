@@ -4,7 +4,12 @@ get_pkg_fns_text <- function (pkg_name = NULL, exported_only = FALSE) {
 
     stopifnot (length (pkg_name) == 1L)
 
-    fns <- get_fn_defs_namespace (pkg_name, exported_only = exported_only)
+    if (pkg_is_installed (pkg_name)) {
+        fns <- get_fn_defs_namespace (pkg_name, exported_only = exported_only)
+    } else {
+        stop ("Function defs from non-installed packages not yet implemented.")
+    }
+
     fns <- vapply (seq_along (fns), function (i) {
         fi <- fns [[i]] |>
             deparse (width.cutoff = 500L) |>
@@ -13,6 +18,11 @@ get_pkg_fns_text <- function (pkg_name = NULL, exported_only = FALSE) {
     }, character (1L))
 
     paste0 (fns, collapse = "\n")
+}
+
+pkg_is_installed <- function (pkg_name) {
+    ip <- data.frame (installed.packages ())
+    pkg_name %in% ip$Package
 }
 
 get_fn_defs_namespace <- function (pkg_name, exported_only) {
