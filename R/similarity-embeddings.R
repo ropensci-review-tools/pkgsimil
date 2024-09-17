@@ -14,13 +14,15 @@ pkgsimil_embeddings <- function (packages = NULL) {
     pkgs_full <- packages
     packages <- convert_paths_to_pkgs (pkgs_full)
 
+    cli::cli_alert_info ("Getting text embeddings ...")
     txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
-    embeddings <- lapply (txt, function (i) get_embeddings (i))
+    embeddings <- pbapply::pblapply (txt, function (i) get_embeddings (i))
     embeddings_txt <- embeddings_to_dists (do.call (cbind, embeddings), packages)
     names (embeddings_txt) [3] <- "d_txt"
 
+    cli::cli_alert_info ("Getting code embeddings ...")
     fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
-    embeddings <- lapply (fns, function (i) get_embeddings (i, code = TRUE))
+    embeddings <- pbapply::pblapply (fns, function (i) get_embeddings (i, code = TRUE))
     embeddings_fns <- embeddings_to_dists (do.call (cbind, embeddings), packages)
     names (embeddings_fns) [3] <- "d_fns"
 
@@ -57,12 +59,14 @@ pkgsimil_embeddings_raw <- function (packages = NULL) {
     pkgs_full <- packages
     packages <- convert_paths_to_pkgs (pkgs_full)
 
+    cli::cli_alert_info ("Getting text embeddings ...")
     txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
-    embeddings <- lapply (txt, function (i) get_embeddings (i))
+    embeddings <- pbapply::pblapply (txt, function (i) get_embeddings (i))
     embeddings_txt <- do.call (cbind, embeddings)
 
+    cli::cli_alert_info ("Getting code embeddings ...")
     fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
-    embeddings <- lapply (fns, function (i) get_embeddings (i, code = TRUE))
+    embeddings <- pbapply::pblapply (fns, function (i) get_embeddings (i, code = TRUE))
     embeddings_fns <- do.call (cbind, embeddings)
 
     colnames (embeddings_txt) <- colnames (embeddings_fns) <- packages
