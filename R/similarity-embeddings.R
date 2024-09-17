@@ -17,16 +17,16 @@ pkgsimil_embeddings <- function (packages = NULL) {
     cli::cli_inform ("Getting text embeddings ...")
     txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
     embeddings <- get_embeddings (txt, code = FALSE)
-    embeddings_txt <- embeddings_to_dists (embeddings, packages)
-    names (embeddings_txt) [3] <- "d_txt"
+    embeddings_text <- embeddings_to_dists (embeddings, packages)
+    names (embeddings_text) [3] <- "d_text"
 
     cli::cli_inform ("Getting code embeddings ...")
     fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
     embeddings <- get_embeddings (txt, code = TRUE)
-    embeddings_fns <- embeddings_to_dists (embeddings, packages)
-    names (embeddings_fns) [3] <- "d_fns"
+    embeddings_code <- embeddings_to_dists (embeddings, packages)
+    names (embeddings_code) [3] <- "d_code"
 
-    dplyr::left_join (embeddings_txt, embeddings_fns, by = c ("from", "to"))
+    dplyr::left_join (embeddings_text, embeddings_code, by = c ("from", "to"))
 }
 
 convert_paths_to_pkgs <- function (packages) {
@@ -61,15 +61,15 @@ pkgsimil_embeddings_raw <- function (packages = NULL) {
 
     cli::cli_inform ("Getting text embeddings ...")
     txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
-    embeddings_txt <- get_embeddings (txt, code = FALSE)
+    embeddings_text <- get_embeddings (txt, code = FALSE)
 
     cli::cli_inform ("Getting code embeddings ...")
     fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
-    embeddings_fns <- get_embeddings (txt, code = TRUE)
+    embeddings_code <- get_embeddings (txt, code = TRUE)
 
-    colnames (embeddings_txt) <- colnames (embeddings_fns) <- packages
+    colnames (embeddings_text) <- colnames (embeddings_code) <- packages
 
-    list (txt = embeddings_txt, fns = embeddings_fns)
+    list (text = embeddings_text, code = embeddings_code)
 }
 
 get_embeddings <- function (txt, code = FALSE) {
