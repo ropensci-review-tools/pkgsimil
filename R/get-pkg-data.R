@@ -77,7 +77,9 @@ get_pkg_text_local <- function (path) {
     stopifnot (fs::file_exists (rd_path))
     rd_files <- fs::dir_ls (rd_path, regex = "\\.Rd")
     rd <- lapply (rd_files, function (i) {
-        rd <- tools::parse_Rd (i)
+        suppressWarnings (
+            rd <- tools::parse_Rd (i)
+        )
         tags <- vapply (rd, function (j) attr (j, "Rd_tag"), character (1L))
         index <- which (tags == "\\description")
         if (length (index) == 0) {
