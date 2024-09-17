@@ -4,7 +4,7 @@ get_pkg_fns_text <- function (pkg_name = NULL, exported_only = FALSE) {
 
     stopifnot (length (pkg_name) == 1L)
 
-    fns <- get_fn_defs (pkg_name, exported_only = exported_only)
+    fns <- get_fn_defs_namespace (pkg_name, exported_only = exported_only)
     fns <- vapply (seq_along (fns), function (i) {
         fi <- fns [[i]] |>
             deparse (width.cutoff = 500L) |>
@@ -15,7 +15,7 @@ get_pkg_fns_text <- function (pkg_name = NULL, exported_only = FALSE) {
     paste0 (fns, collapse = "\n")
 }
 
-get_fn_defs <- function (pkg_name, exported_only) {
+get_fn_defs_namespace <- function (pkg_name, exported_only) {
     # `lsf.str` is for functions only:
     fn_names <- unclass (
         utils::lsf.str (envir = asNamespace (pkg_name), all = TRUE)
