@@ -14,16 +14,16 @@ pkgsimil_embeddings <- function (packages = NULL) {
     pkgs_full <- packages
     packages <- convert_paths_to_pkgs (pkgs_full)
 
-    cli::cli_alert_info ("Getting text embeddings ...")
+    cli::cli_inform ("Getting text embeddings ...")
     txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
-    embeddings <- pbapply::pblapply (txt, function (i) get_embeddings (i))
-    embeddings_txt <- embeddings_to_dists (do.call (cbind, embeddings), packages)
+    embeddings <- get_embeddings (txt, code = FALSE)
+    embeddings_txt <- embeddings_to_dists (embeddings, packages)
     names (embeddings_txt) [3] <- "d_txt"
 
-    cli::cli_alert_info ("Getting code embeddings ...")
+    cli::cli_inform ("Getting code embeddings ...")
     fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
-    embeddings <- pbapply::pblapply (fns, function (i) get_embeddings (i, code = TRUE))
-    embeddings_fns <- embeddings_to_dists (do.call (cbind, embeddings), packages)
+    embeddings <- get_embeddings (txt, code = TRUE)
+    embeddings_fns <- embeddings_to_dists (embeddings, packages)
     names (embeddings_fns) [3] <- "d_fns"
 
     dplyr::left_join (embeddings_txt, embeddings_fns, by = c ("from", "to"))
@@ -59,22 +59,30 @@ pkgsimil_embeddings_raw <- function (packages = NULL) {
     pkgs_full <- packages
     packages <- convert_paths_to_pkgs (pkgs_full)
 
-    cli::cli_alert_info ("Getting text embeddings ...")
+    cli::cli_inform ("Getting text embeddings ...")
     txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
-    embeddings <- pbapply::pblapply (txt, function (i) get_embeddings (i))
-    embeddings_txt <- do.call (cbind, embeddings)
+    embeddings_txt <- get_embeddings (txt, code = FALSE)
 
-    cli::cli_alert_info ("Getting code embeddings ...")
+    cli::cli_inform ("Getting code embeddings ...")
     fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
-    embeddings <- pbapply::pblapply (fns, function (i) get_embeddings (i, code = TRUE))
-    embeddings_fns <- do.call (cbind, embeddings)
+    embeddings_fns <- get_embeddings (txt, code = TRUE)
 
     colnames (embeddings_txt) <- colnames (embeddings_fns) <- packages
 
     list (txt = embeddings_txt, fns = embeddings_fns)
 }
 
-get_embeddings <- function (input, code = FALSE) {
+get_embeddings <- function (txt, code = FALSE) {
+    if (opt_is_quiet ()) {
+        embeddings <- lapply (txt, function (i) get_embeddings_from_ollama (i, code = code))
+    } else {
+        embeddings <- pbapply::pblapply (txt, function (i) get_embeddings_from_ollama (i, code = code))
+    }
+
+    do.call (cbind, embeddings)
+}
+
+get_embeddings_from_ollama <- function (input, code = FALSE) {
 
     stopifnot (length (input) == 1L)
 
