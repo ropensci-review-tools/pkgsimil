@@ -1,6 +1,6 @@
 get_Rd_metadata <- utils::getFromNamespace (".Rd_get_metadata", "tools")
-
 get_pkg_text <- function (pkg_name) {
+
     if (pkg_is_installed (pkg_name)) {
         txt <- get_pkg_text_namespace (pkg_name)
     } else {
@@ -17,6 +17,11 @@ get_pkg_text_namespace <- function (pkg_name) {
     desc <- utils::packageDescription (pkg = pkg_name, fields = "Description")
     desc <- gsub ("\\n", " ", desc)
     desc <- gsub ("\\s+", " ", desc)
+    desc <- c (
+        desc_template (pkg_name, desc),
+        "## Functions",
+        ""
+    )
 
     fns <- get_fn_descs (pkg_name)
     fns <- lapply (seq_len (nrow (fns)), function (i) {
@@ -28,7 +33,7 @@ get_pkg_text_namespace <- function (pkg_name) {
         )
     })
 
-    paste0 (c (desc_template (pkg_name, desc), unlist (fns)), collapse = "\n ")
+    paste0 (c (desc, unlist (fns)), collapse = "\n ")
 }
 
 get_fn_descs <- function (pkg_name) {
@@ -57,8 +62,6 @@ desc_template <- function (pkg_name, desc) {
         "## Description",
         "",
         desc,
-        "",
-        "## Functions",
         ""
     )
 }
@@ -68,6 +71,36 @@ get_pkg_text_local <- function (path) {
 
     path <- fs::path_norm (path)
     stopifnot (fs::dir_exists (path))
+
+    readme_file <- fs::path (path, "README.md")
+    stopifnot (fs::file_exists (readme_file))
+    readme <- brio::read_lines (readme_file)
+    header_end <- grep ("end\\s*\\-+>\\s*$", readme)
+    if (length (header_end) > 0L) {
+        header_end <- max (header_end [which (header_end < floor (length (readme) / 2))])
+        readme <- readme [-(seq_len (header_end))]
+    }
+    chunks <- grep ("^```", readme)
+    if (length (chunks) > 0L) {
+        index <- seq_len (length (chunks) / 2) * 2 - 1
+        index <- cbind (chunks [index], chunks [index + 1])
+        index <- unlist (apply (index, 1, function (i) seq (i [1], i [2])))
+        readme <- readme [-index]
+    }
+    # Chunk output is always spaces followed by "#":"
+    chunk_out <- grep ("^\\s+#", readme)
+    if (length (chunk_out) > 0L) {
+        readme <- readme [-chunk_out]
+    }
+    # Rm any HTML tables, which also includes 'allcontributors' output
+    table_start <- grep ("^<table>", readme)
+    table_end <- grep ("^<\\/table>", readme)
+    if (length (table_start) > 0L && length (table_end) > 0L &&
+        length (table_start) == length (table_end)) {
+        index <- cbind (table_start, table_end)
+        index <- unname (unlist (apply (index, 1, function (i) seq (i [1], i [2]))))
+        readme <- readme [-index]
+    }
 
     desc_file <- fs::path (path, "DESCRIPTION")
     stopifnot (fs::file_exists (desc_file))
@@ -102,6 +135,10 @@ get_pkg_text_local <- function (path) {
 
     out <- c (
         desc_template (basename (path), desc),
+        readme,
+        "",
+        "## Functions",
+        "",
         unlist (fn_txt)
     )
 
