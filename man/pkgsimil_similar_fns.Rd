@@ -11,6 +11,9 @@ pkgsimil_similar_fns(input, embeddings, n = 5L)
 
 \item{embeddings}{A single matrix of embeddings produced from
 \link{pkgsimil_embeddings_raw} with \code{functions_only = TRUE}.}
+
+\item{n}{identify the \code{n} most similar packages in terms of both code and
+text embeddings.}
 }
 \value{
 A character vector of function names in the form

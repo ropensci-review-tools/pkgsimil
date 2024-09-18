@@ -59,6 +59,7 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
 #' Use the embeddings from \link{pkgsimil_embeddings_raw} with `functions_only
 #' = TRUE` to identify functions best matching a given input string.
 #'
+#' @inheritParams pkgsimil_similar_pkgs
 #' @param input A text string.
 #' @param embeddings A single matrix of embeddings produced from
 #' \link{pkgsimil_embeddings_raw} with `functions_only = TRUE`.
