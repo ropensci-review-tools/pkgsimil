@@ -72,39 +72,11 @@ get_pkg_text_local <- function (path) {
     path <- fs::path_norm (path)
     stopifnot (fs::dir_exists (path))
 
-    readme_file <- fs::path (path, "README.md")
-    stopifnot (fs::file_exists (readme_file))
-    readme <- brio::read_lines (readme_file)
-    header_end <- grep ("end\\s*\\-+>\\s*$", readme)
-    if (length (header_end) > 0L) {
-        header_end <- max (header_end [which (header_end < floor (length (readme) / 2))])
-        readme <- readme [-(seq_len (header_end))]
-    }
-    chunks <- grep ("^```", readme)
-    if (length (chunks) > 0L) {
-        index <- seq_len (length (chunks) / 2) * 2 - 1
-        index <- cbind (chunks [index], chunks [index + 1])
-        index <- unlist (apply (index, 1, function (i) seq (i [1], i [2])))
-        readme <- readme [-index]
-    }
-    # Chunk output is always spaces followed by "#":"
-    chunk_out <- grep ("^\\s+#", readme)
-    if (length (chunk_out) > 0L) {
-        readme <- readme [-chunk_out]
-    }
-    # Rm any HTML tables, which also includes 'allcontributors' output
-    table_start <- grep ("^<table>", readme)
-    table_end <- grep ("^<\\/table>", readme)
-    if (length (table_start) > 0L && length (table_end) > 0L &&
-        length (table_start) == length (table_end)) {
-        index <- cbind (table_start, table_end)
-        index <- unname (unlist (apply (index, 1, function (i) seq (i [1], i [2]))))
-        readme <- readme [-index]
-    }
-
     desc_file <- fs::path (path, "DESCRIPTION")
     stopifnot (fs::file_exists (desc_file))
     desc <- data.frame (read.dcf (desc_file))$Description
+
+    readme <- get_pkg_readme (path)
 
     rd_path <- fs::path (path, "man")
     stopifnot (fs::file_exists (rd_path))
@@ -143,6 +115,61 @@ get_pkg_text_local <- function (path) {
     )
 
     paste0 (out, collapse = "\n ")
+}
+
+get_pkg_readme <- function (path) {
+
+    readme_file <- fs::path (path, "README.md")
+    stopifnot (fs::file_exists (readme_file))
+    readme <- brio::read_lines (readme_file)
+
+    header_end <- grep ("end\\s*\\-+>\\s*$", readme)
+    if (length (header_end) > 0L) {
+        header_end <- max (header_end [which (header_end < floor (length (readme) / 2))])
+        readme <- readme [-(seq_len (header_end))]
+    }
+    # Then rm any image links, including badges. These may extend over multiple
+    # lines.
+    readme <- paste (readme, collapse = "\n")
+    ptn <- "\\[\\!\\[[^\\[]*\\]\\([^\\(]*\\)"
+    matches <- regmatches (readme, gregexpr (ptn, readme)) [[1]]
+    if (length (matches) > 1L) {
+        for (m in matches) {
+            readme <- gsub (m, "", readme, fixed = TRUE)
+        }
+    }
+    readme <- strsplit (readme, "\\n") [[1]]
+
+    # Rm code chunk contents:
+    chunks <- grep ("^```", readme)
+    if (length (chunks) > 0L) {
+        index <- seq_len (length (chunks) / 2) * 2 - 1
+        index <- cbind (chunks [index], chunks [index + 1])
+        index <- unlist (apply (index, 1, function (i) seq (i [1], i [2])))
+        readme <- readme [-index]
+    }
+    # Chunk output is always spaces followed by "#":"
+    chunk_out <- grep ("^\\s+#", readme)
+    if (length (chunk_out) > 0L) {
+        readme <- readme [-chunk_out]
+    }
+
+    # Rm any HTML tables, which also includes 'allcontributors' output
+    table_start <- grep ("^<table>", readme)
+    table_end <- grep ("^<\\/table>", readme)
+    if (length (table_start) > 0L && length (table_end) > 0L &&
+        length (table_start) == length (table_end)) {
+        index <- cbind (table_start, table_end)
+        index <- unname (unlist (apply (index, 1, function (i) seq (i [1], i [2]))))
+        readme <- readme [-index]
+    }
+
+    # Finally, condense any sequences of empty lines:
+    index <- which (!nzchar (readme))
+    index <- index [which (c (0, diff (index)) == 1)]
+    if (length (index) > 0) readme <- readme [-(index)]
+
+    return (readme)
 }
 
 get_pkg_code <- function (pkg_name = NULL, exported_only = FALSE) {
