@@ -27,8 +27,11 @@ used to force appropriate interpretation if input type.}
 text embeddings.}
 }
 \value{
-A \code{data.frame} of all packages in the embeddings data and
-corresponding distances.
+If \code{input} is a path to a local package, a list of two character
+vectors naming the \code{n} most similar packages in terms of descriptive textual
+similarity ("text"), and in terms of similarity of code structure ("code").
+If \code{input} is a single text string, a single character vector is returned
+naming the \code{n} most similar packages.
 }
 \description{
 Use the embeddings from \link{pkgsimil_embeddings_raw} to identify most

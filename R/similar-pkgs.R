@@ -10,8 +10,11 @@
 #' used to force appropriate interpretation if input type.
 #' @param n identify the `n` most similar packages in terms of both code and
 #' text embeddings.
-#' @return A `data.frame` of all packages in the embeddings data and
-#' corresponding distances.
+#' @return If `input` is a path to a local package, a list of two character
+#' vectors naming the `n` most similar packages in terms of descriptive textual
+#' similarity ("text"), and in terms of similarity of code structure ("code").
+#' If `input` is a single text string, a single character vector is returned
+#' naming the `n` most similar packages.
 #'
 #' @seealso input_is_code
 #' @export
@@ -21,8 +24,9 @@ pkgsimil_similar_pkgs <- function (input, embeddings, input_is_code = text_is_co
 
     if (fs::dir_exists (input)) {
         res <- similar_pkgs_from_pkg (input, embeddings, n)
+        res <- lapply (res, function (i) i$pkg)
     } else {
-        res <- similar_pkgs_from_text (input, embeddings, input_is_code, n)
+        res <- similar_pkgs_from_text (input, embeddings, input_is_code, n)$pkg
     }
 
     return (res)
