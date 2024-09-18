@@ -23,7 +23,7 @@ get_pkg_text_namespace <- function (pkg_name) {
         ""
     )
 
-    fns <- get_fn_descs (pkg_name)
+    fns <- get_fn_descs_from_ns (pkg_name)
     fns <- lapply (seq_len (nrow (fns)), function (i) {
         c (
             paste0 ("### ", gsub ("\\.Rd$", "", fns$rd_name [i])),
@@ -36,7 +36,7 @@ get_pkg_text_namespace <- function (pkg_name) {
     paste0 (c (desc, unlist (fns)), collapse = "\n ")
 }
 
-get_fn_descs <- function (pkg_name) {
+get_fn_descs_from_ns <- function (pkg_name) {
 
     rd <- tools::Rd_db (package = pkg_name)
     descs <- vapply (rd, function (i) {
