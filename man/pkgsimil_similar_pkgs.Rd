@@ -5,10 +5,11 @@
 \title{Use the embeddings from \link{pkgsimil_embeddings_raw} to identify most
 similar packages to a given local repository.}
 \usage{
-pkgsimil_similar_pkgs(path, embeddings, n = 5L)
+pkgsimil_similar_pkgs(input, embeddings, n = 5L)
 }
 \arguments{
-\item{path}{Path to local repository}
+\item{input}{Either a path to local source code of an R package, or a text
+string.}
 
 \item{embeddings}{Large Language Model embeddings for all rOpenSci packages,
 generated from \link{pkgsimil_embeddings_raw}.}
