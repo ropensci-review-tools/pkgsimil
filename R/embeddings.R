@@ -50,26 +50,81 @@ convert_paths_to_pkgs <- function (packages) {
 #' Jina AI embeddings.
 #'
 #' @inheritParams pkgsimil_embeddings
-#' @return A list of two matrices of embeddings: one for the text descriptions
-#' of the specified packages, including individual descriptions of all package
-#' functions, and one for the entire code base.
+#' @param functions_only If `TRUE`, calculate embeddings for function
+#' descriptions only. This is intended to generate a separate set of embeddings
+#' which can then be used to match plain-text queries of functions, rather than
+#' entire packages.
+#' @return If `!functions_only`, a list of two matrices of embeddings: one for
+#' the text descriptions of the specified packages, including individual
+#' descriptions of all package functions, and one for the entire code base. For
+#' `functions_only`, a single matrix of embeddings for all function
+#' descriptions.
 #' @export
-pkgsimil_embeddings_raw <- function (packages = NULL) {
+pkgsimil_embeddings_raw <- function (packages = NULL, functions_only = FALSE) {
 
     pkgs_full <- packages
     packages <- convert_paths_to_pkgs (pkgs_full)
 
     cli::cli_inform ("Getting text embeddings ...")
     txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
-    embeddings_text <- get_embeddings (txt, code = FALSE)
 
-    cli::cli_inform ("Getting code embeddings ...")
-    fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
-    embeddings_code <- get_embeddings (txt, code = TRUE)
+    if (!functions_only) {
+        embeddings_text <- get_embeddings (txt, code = FALSE)
 
-    colnames (embeddings_text) <- colnames (embeddings_code) <- packages
+        cli::cli_inform ("Getting code embeddings ...")
+        fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
+        embeddings_code <- get_embeddings (txt, code = TRUE)
 
-    list (text = embeddings_text, code = embeddings_code)
+        colnames (embeddings_text) <- colnames (embeddings_code) <- packages
+
+        ret <- list (text = embeddings_text, code = embeddings_code)
+    } else {
+        txt_fns <- get_all_fn_descs (txt)
+        ret <- get_embeddings (txt_fns$desc, code = FALSE)
+    }
+    return (ret)
+}
+
+get_all_fn_descs <- function (txt) {
+    fn_txt <- lapply (txt, function (i) {
+        i_sp <- strsplit (i, "\\n") [[1]]
+        ptn <- "^[[:space:]]*#[[:space:]]"
+        pkg_name <- grep (ptn, i_sp)
+        if (length (pkg_name) > 0L) {
+            pkg_name <- gsub ("[[:space:]]*", "", gsub (ptn, "", i_sp [pkg_name [1]]))
+        } else {
+            pkg_name <- "pkg_has_no_name"
+        }
+
+        pos <- grep ("##\\s+Functions$", i_sp)
+        if (length (pos) == 0) {
+            fn_nms <- fn_desc <- character (0L)
+        } else {
+            # Fn defs are always added at end, so pos has to be last value:
+            pos <- tail (pos, n = 1L)
+
+            fns <- i_sp [seq (pos + 1, length (i_sp))]
+            index <- which (!nzchar (fns) | grepl ("^[[:space:]]+$", fns))
+            if (length (index) > 0L) fns <- fns [-index]
+            index1 <- grep ("^[[:space:]]*###", fns)
+            index2 <- c (index1 [-1] - 1L, length (fns))
+            index <- apply (
+                cbind (index1, index2), 1,
+                function (i) seq (i [1], i [2]),
+                simplify = FALSE
+            )
+            fns <- lapply (index, function (i) fns [i])
+            fn_nms <- vapply (fns, function (i) {
+                gsub ("###|[[:space:]]*", "", i [1])
+            }, character (1L))
+            fn_nms <- paste0 (pkg_name, "::", fn_nms)
+            fn_descs <- vapply (fns, function (i) {
+                gsub ("^[[:space:]]*", "", paste0 (i [-1], collapse = " "))
+            }, character (1L))
+        }
+        data.frame (fn = fn_nms, desc = fn_descs)
+    })
+    do.call (rbind, fn_txt)
 }
 
 get_embeddings <- function (txt, code = FALSE) {

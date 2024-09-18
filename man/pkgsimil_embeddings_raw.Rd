@@ -4,16 +4,23 @@
 \alias{pkgsimil_embeddings_raw}
 \title{Return raw 'LLM' embeddings from package text and function definitions.}
 \usage{
-pkgsimil_embeddings_raw(packages = NULL)
+pkgsimil_embeddings_raw(packages = NULL, functions_only = FALSE)
 }
 \arguments{
 \item{packages}{Names of, or paths to,  one or more packages for which
 embedding similarities are to be calculated.}
+
+\item{functions_only}{If \code{TRUE}, calculate embeddings for function
+descriptions only. This is intended to generate a separate set of embeddings
+which can then be used to match plain-text queries of functions, rather than
+entire packages.}
 }
 \value{
-A list of two matrices of embeddings: one for the text descriptions
-of the specified packages, including individual descriptions of all package
-functions, and one for the entire code base.
+If \code{!functions_only}, a list of two matrices of embeddings: one for
+the text descriptions of the specified packages, including individual
+descriptions of all package functions, and one for the entire code base. For
+\code{functions_only}, a single matrix of embeddings for all function
+descriptions.
 }
 \description{
 The embeddings are currently retrieved from a local 'ollama' server running
