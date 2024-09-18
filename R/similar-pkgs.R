@@ -92,7 +92,7 @@ pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
     colnames (embeddings) [index]
 }
 
-order_ouput <- function (out, what = "text", n) {
+order_output <- function (out, what = "text", n) {
     index <- order (out [[what]])
     out <- out [index [seq_len (n)], c ("pkg", what)]
     rownames (out) <- NULL

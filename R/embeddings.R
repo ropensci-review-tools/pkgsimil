@@ -205,6 +205,6 @@ pkgsimil_dl_embeddings <- function (fns = FALSE) {
     url <- paste0 (url_base, version, "/", file)
 
     destfile <- fs::path (pkgsimil_cache_path (), file)
-    download.file (url, destfile = destfile)
+    utils::download.file (url, destfile = destfile)
     return (destfile)
 }
