@@ -85,14 +85,24 @@ get_pkg_text_local <- function (path) {
         suppressWarnings (
             rd <- tools::parse_Rd (i)
         )
-        tags <- vapply (rd, function (j) attr (j, "Rd_tag"), character (1L))
-        index <- which (tags == "\\description")
+        tags <- vapply (rd, function (j) {
+            gsub ("^\\\\", "", attr (j, "Rd_tag"))
+        }, character (1L))
+        if (any (tags == "docType")) {
+            docType <- as.character (rd [[which (tags == "docType")]] [[1]])
+            if (identical (docType, "package")) {
+                return ("")
+            }
+        }
+
+        index <- which (tags == "description")
         if (length (index) == 0) {
             return ("")
         }
         rd_desc <- gsub ("\\n$", "", unlist (rd [[index]]))
         paste (rd_desc, collapse = "")
     })
+    rd <- rd [vapply (rd, nzchar, logical (1L))]
 
     fns <- gsub ("\\.Rd$", "", basename (names (rd)))
     rd <- unname (unlist (rd))
