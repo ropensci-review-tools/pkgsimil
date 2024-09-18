@@ -23,3 +23,21 @@ text_is_code <- function (txt) {
     nw <- tokenizers::count_words (txt)
     nw / n0 < token_threshold
 }
+
+pkgsimil_cache_path <- function () {
+
+    cache_dir <- Sys.getenv ("PKGSIMIL_CACHE_DIR")
+
+    if (cache_dir == "") {
+        cache_dir <- fs::path_expand (fs::path (
+            rappdirs::user_cache_dir (),
+            "R",
+            "pkgsimil"
+        ))
+        if (!fs::dir_exists (cache_dir)) {
+            fs::dir_create (cache_dir, recurse = TRUE)
+        }
+    }
+
+    return (cache_dir)
+}
