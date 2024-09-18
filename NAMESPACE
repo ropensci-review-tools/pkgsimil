@@ -2,6 +2,7 @@
 
 export(pkgsimil_embedding_dists)
 export(pkgsimil_embeddings_raw)
+export(pkgsimil_load_embeddings)
 export(pkgsimil_similar_fns)
 export(pkgsimil_similar_pkgs)
 export(text_is_code)
