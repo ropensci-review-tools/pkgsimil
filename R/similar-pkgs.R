@@ -20,7 +20,10 @@
 #'
 #' @seealso input_is_code
 #' @export
-pkgsimil_similar_pkgs <- function (input, embeddings, input_is_code = text_is_code (input), n = 5L) {
+pkgsimil_similar_pkgs <- function (input, embeddings = NULL, input_is_code = text_is_code (input), n = 5L) {
+    if (is.null (embeddings)) {
+        embeddings <- pkgsimil_load_embeddings ()
+    }
     stopifnot (is.list (embeddings))
     stopifnot (identical (names (embeddings), c ("text", "code")))
 
@@ -64,11 +67,16 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
 #' @inheritParams pkgsimil_similar_pkgs
 #' @param input A text string.
 #' @param embeddings A single matrix of embeddings produced from
-#' \link{pkgsimil_embeddings_raw} with `functions_only = TRUE`.
+#' \link{pkgsimil_embeddings_raw} with `functions_only = TRUE`. If not
+#' provided, pre-generated embeddings will be downloaded and stored in a local
+#' cache directory.
 #' @return A character vector of function names in the form
 #' "<package>::<function>".
 #' @export
-pkgsimil_similar_fns <- function (input, embeddings, n = 5L) {
+pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
+    if (is.null (embeddings)) {
+        embeddings <- pkgsimil_load_embeddings (fns = TRUE)
+    }
     stopifnot (is.matrix (embeddings))
     stopifnot (is.character (input))
     stopifnot (length (input) == 1L)

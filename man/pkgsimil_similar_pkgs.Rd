@@ -7,7 +7,7 @@ similar packages to a given local repository.}
 \usage{
 pkgsimil_similar_pkgs(
   input,
-  embeddings,
+  embeddings = NULL,
   input_is_code = text_is_code(input),
   n = 5L
 )

@@ -4,13 +4,15 @@
 \alias{pkgsimil_similar_fns}
 \title{Use the embeddings from \link{pkgsimil_embeddings_raw} with \code{functions_only = TRUE} to identify functions best matching a given input string.}
 \usage{
-pkgsimil_similar_fns(input, embeddings, n = 5L)
+pkgsimil_similar_fns(input, embeddings = NULL, n = 5L)
 }
 \arguments{
 \item{input}{A text string.}
 
 \item{embeddings}{A single matrix of embeddings produced from
-\link{pkgsimil_embeddings_raw} with \code{functions_only = TRUE}.}
+\link{pkgsimil_embeddings_raw} with \code{functions_only = TRUE}. If not
+provided, pre-generated embeddings will be downloaded and stored in a local
+cache directory.}
 
 \item{n}{identify the \code{n} most similar packages in terms of both code and
 text embeddings.}
