@@ -10,11 +10,7 @@ Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repost
 # pkgsimil
 
 Similarity metrics between R packages, functions, or any code, based on
-similarity of code, documentation, or both. Currently implements the
-following metrics:
-
-- `pkgsimil_similar_pkgs ()` to measure similarity based on Large
-  Language Model (LLM) embeddings.
+similarity of code, documentation, or both.
 
 If the package has not yet been installed, the following line needs to
 be run:
@@ -28,6 +24,10 @@ The package can then be loaded for us with:
 ``` r
 library (pkgsimil)
 ```
+
+The package measures similarity from Large Language Model (LLM)
+embeddings and requires a locally-running instance of
+[ollama](https://ollama.com), as described in the following sub-section.
 
 ## Setting up the LLM embeddings
 
@@ -54,19 +54,30 @@ The package has two main functions:
 - `pkgsimil_similar_pkgs()` to find similar rOpenSci packages based
   input as either a local path to an entire package, or as a single
   descriptive text string; and
-- `pkgsimil_similar_fns()` to find similar functions in rOpenSci
+- `pkgsimil_similar_fns()` to find similar functions from rOpenSci
   packages based on descriptive text input.
 
-The following code demonstrates how these functions work:
+The following code demonstrates how these functions work, first with two
+demonstrates of finding packages:
 
 ``` r
 input <- "
 Packages for analysing evolutionary trees, with a particular focus
-on visualising inter-relationships among distinct trees. "
+on visualising inter-relationships among distinct trees.
+"
 pkgsimil_similar_pkgs (input)
 ```
 
     ## [1] "phylogram" "phruta"    "treeio"    "rotl"      "occCite"
+
+``` r
+input <- "Extract and analyse data from NASA"
+pkgsimil_similar_pkgs (input)
+```
+
+    ## [1] "nasapower"  "exoplanets" "dataaimsr"  "smapr"      "epair"
+
+And then two demonstrates of finding functions from rOpenSci packages:
 
 ``` r
 input <- "A function to label a set of geographic coordinates"
@@ -76,3 +87,12 @@ pkgsimil_similar_fns (input)
     ## [1] "parzer::parzer-package"           "GSODR::nearest_stations"         
     ## [3] "refsplitr::plot_addresses_points" "quadkeyr::grid_to_polygon"       
     ## [5] "rnoaa::meteo_nearby_stations"
+
+``` r
+input <- "Identify genetic sequences matching a given input fragment"
+pkgsimil_similar_fns (input)
+```
+
+    ## [1] "textreuse::align_local"       "charlatan::SequenceProvider" 
+    ## [3] "beastier::is_alignment"       "phylotaR::mk_txid_in_sq_mtrx"
+    ## [5] "traits::ncbi_byid"

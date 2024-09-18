@@ -20,11 +20,7 @@ Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repost
 # pkgsimil
 
 Similarity metrics between R packages, functions, or any code, based on
-similarity of code, documentation, or both. Currently implements the
-following metrics:
-
-- `pkgsimil_similar_pkgs ()` to measure similarity based on Large Language
-Model (LLM) embeddings.
+similarity of code, documentation, or both.
 
 If the package has not yet been installed, the following line needs to be run:
 
@@ -37,6 +33,10 @@ The package can then be loaded for us with:
 ```{r library}
 library (pkgsimil)
 ```
+
+The package measures similarity from Large Language Model (LLM) embeddings and
+requires a locally-running instance of [ollama](https://ollama.com), as
+described in the following sub-section.
 
 
 ## Setting up the LLM embeddings
@@ -64,19 +64,33 @@ The package has two main functions:
 - `pkgsimil_similar_pkgs()` to find similar rOpenSci packages based input as
 either a local path to an entire package, or as a single descriptive text
 string; and
-- `pkgsimil_similar_fns()` to find similar functions in rOpenSci packages based
+- `pkgsimil_similar_fns()` to find similar functions from rOpenSci packages based
 on descriptive text input.
 
-The following code demonstrates how these functions work:
+The following code demonstrates how these functions work, first with two
+demonstrates of finding packages:
 
-```{r pkgs}
+```{r pkgs1}
 input <- "
 Packages for analysing evolutionary trees, with a particular focus
-on visualising inter-relationships among distinct trees. "
+on visualising inter-relationships among distinct trees.
+"
 pkgsimil_similar_pkgs (input)
 ```
 
-```{r fns}
+```{r pkgs2}
+input <- "Extract and analyse data from NASA"
+pkgsimil_similar_pkgs (input)
+```
+
+
+And then two demonstrates of finding functions from rOpenSci packages:
+
+```{r fns1}
 input <- "A function to label a set of geographic coordinates"
+pkgsimil_similar_fns (input)
+```
+```{r fns2}
+input <- "Identify genetic sequences matching a given input fragment"
 pkgsimil_similar_fns (input)
 ```
