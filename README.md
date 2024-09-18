@@ -68,14 +68,16 @@ on visualising inter-relationships among distinct trees.
 pkgsimil_similar_pkgs (input)
 ```
 
-    ## [1] "phylogram" "phruta"    "treeio"    "rotl"      "occCite"
+    ## [1] "phruta"        "dendroNetwork" "rotl"          "occCite"      
+    ## [5] "phylotaR"
 
 ``` r
-input <- "Extract and analyse data from NASA"
+input <- "Download global-scale spatial data"
 pkgsimil_similar_pkgs (input)
 ```
 
-    ## [1] "nasapower"  "exoplanets" "dataaimsr"  "smapr"      "epair"
+    ## [1] "rnaturalearth"      "rfema"              "rnaturalearthhires"
+    ## [4] "GSODR"              "helminthR"
 
 And then two demonstrates of finding functions from rOpenSci packages:
 
@@ -84,9 +86,9 @@ input <- "A function to label a set of geographic coordinates"
 pkgsimil_similar_fns (input)
 ```
 
-    ## [1] "parzer::parzer-package"           "GSODR::nearest_stations"         
-    ## [3] "refsplitr::plot_addresses_points" "quadkeyr::grid_to_polygon"       
-    ## [5] "rnoaa::meteo_nearby_stations"
+    ## [1] "GSODR::nearest_stations"           "refsplitr::plot_addresses_points" 
+    ## [3] "quadkeyr::grid_to_polygon"         "rnoaa::meteo_nearby_stations"     
+    ## [5] "refsplitr::plot_addresses_country"
 
 ``` r
 input <- "Identify genetic sequences matching a given input fragment"

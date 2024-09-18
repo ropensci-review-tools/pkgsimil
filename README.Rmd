@@ -79,7 +79,7 @@ pkgsimil_similar_pkgs (input)
 ```
 
 ```{r pkgs2}
-input <- "Extract and analyse data from NASA"
+input <- "Download global-scale spatial data"
 pkgsimil_similar_pkgs (input)
 ```
 
