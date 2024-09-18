@@ -38,6 +38,8 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
 
     emb <- pkgsimil_embeddings_raw (input)
 
+    options (op)
+
     nrow <- nrow (emb$text)
     npkgs <- ncol (embeddings$text)
     emb_text <- matrix (emb$text, nrow = nrow, ncol = npkgs)
@@ -51,19 +53,15 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
     out$code <- out$code / max (out$code)
     out$text <- out$text / max (out$text)
 
-    index <- order (out$code)
-    n <- 5L
-    out_code <- out [index [seq_len (n)], c ("pkg", "code")]
-    rownames (out_code) <- NULL
+    list (text = order_output (out, "text"), code = order_output (out, "code"))
+}
 
-    index <- order (out$text)
-    n <- 5L
-    out_text <- out [index [seq_len (n)], c ("pkg", "text")]
-    rownames (out_text) <- NULL
+order_ouput <- function (out, what = "text", n) {
+    index <- order (out [[what]])
+    out <- out [index [seq_len (n)], c ("pkg", what)]
+    rownames (out) <- NULL
 
-    options (op)
-
-    list (text = out_text, code = out_code)
+    return (out)
 }
 
 similar_pkgs_from_text <- function (input, embeddings, input_is_code, n) {
