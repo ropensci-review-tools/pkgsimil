@@ -98,3 +98,10 @@ pkgsimil_similar_fns (input)
     ## [1] "textreuse::align_local"       "charlatan::SequenceProvider" 
     ## [3] "beastier::is_alignment"       "phylotaR::mk_txid_in_sq_mtrx"
     ## [5] "traits::ncbi_byid"
+
+## Prior Art
+
+- The [`utils::RSiteSearch()`
+  function](https://stat.ethz.ch/R-manual/R-devel/library/utils/html/RSiteSearch.html).
+- The [`sos` package](https://github.com/sbgraves237/sos) that queries
+  the “RSiteSearch” database.

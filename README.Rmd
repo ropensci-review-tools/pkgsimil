@@ -94,3 +94,10 @@ pkgsimil_similar_fns (input)
 input <- "Identify genetic sequences matching a given input fragment"
 pkgsimil_similar_fns (input)
 ```
+
+## Prior Art
+
+- The [`utils::RSiteSearch()`
+function](https://stat.ethz.ch/R-manual/R-devel/library/utils/html/RSiteSearch.html).
+- The [`sos` package](https://github.com/sbgraves237/sos) that queries the
+"RSiteSearch" database.
