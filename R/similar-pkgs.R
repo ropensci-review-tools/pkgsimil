@@ -4,7 +4,9 @@
 #' @param input Either a path to local source code of an R package, or a text
 #' string.
 #' @param embeddings Large Language Model embeddings for all rOpenSci packages,
-#' generated from \link{pkgsimil_embeddings_raw}.
+#' generated from \link{pkgsimil_embeddings_raw}. If not provided,
+#' pre-generated embeddings will be downloaded and stored in a local cache
+#' directory.
 #' @param input_is_code A binary flag indicating whether `input` is code or
 #' plain text. Ignored if `input` is path to a local package; otherwise can be
 #' used to force appropriate interpretation if input type.

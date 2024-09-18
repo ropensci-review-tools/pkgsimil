@@ -17,7 +17,9 @@ pkgsimil_similar_pkgs(
 string.}
 
 \item{embeddings}{Large Language Model embeddings for all rOpenSci packages,
-generated from \link{pkgsimil_embeddings_raw}.}
+generated from \link{pkgsimil_embeddings_raw}. If not provided,
+pre-generated embeddings will be downloaded and stored in a local cache
+directory.}
 
 \item{input_is_code}{A binary flag indicating whether \code{input} is code or
 plain text. Ignored if \code{input} is path to a local package; otherwise can be

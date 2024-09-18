@@ -9,7 +9,7 @@
 #' @return A `data.frame` of pair-wise similarities between all packages
 #' specified in `packages`.
 #' @export
-pkgsimil_embeddings <- function (packages = NULL) {
+pkgsimil_embedding_dists <- function (packages = NULL) {
 
     pkgs_full <- packages
     packages <- convert_paths_to_pkgs (pkgs_full)
@@ -49,7 +49,7 @@ convert_paths_to_pkgs <- function (packages) {
 #' The embeddings are currently retrieved from a local 'ollama' server running
 #' Jina AI embeddings.
 #'
-#' @inheritParams pkgsimil_embeddings
+#' @inheritParams pkgsimil_embedding_dists
 #' @param functions_only If `TRUE`, calculate embeddings for function
 #' descriptions only. This is intended to generate a separate set of embeddings
 #' which can then be used to match plain-text queries of functions, rather than
