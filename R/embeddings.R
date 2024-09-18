@@ -101,7 +101,7 @@ get_all_fn_descs <- function (txt) {
             fn_nms <- fn_desc <- character (0L)
         } else {
             # Fn defs are always added at end, so pos has to be last value:
-            pos <- tail (pos, n = 1L)
+            pos <- utils::tail (pos, n = 1L)
 
             fns <- i_sp [seq (pos + 1, length (i_sp))]
             index <- which (!nzchar (fns) | grepl ("^[[:space:]]+$", fns))

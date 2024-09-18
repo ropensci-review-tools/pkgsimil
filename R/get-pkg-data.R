@@ -167,7 +167,7 @@ get_pkg_code <- function (pkg_name = NULL, exported_only = FALSE) {
 }
 
 pkg_is_installed <- function (pkg_name) {
-    ip <- data.frame (installed.packages ())
+    ip <- data.frame (utils::installed.packages ())
     pkg_name %in% ip$Package
 }
 
