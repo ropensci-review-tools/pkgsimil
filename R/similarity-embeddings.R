@@ -73,10 +73,10 @@ pkgsimil_embeddings_raw <- function (packages = NULL) {
 }
 
 get_embeddings <- function (txt, code = FALSE) {
-    if (opt_is_quiet ()) {
-        embeddings <- lapply (txt, function (i) get_embeddings_from_ollama (i, code = code))
-    } else {
+    if (!opt_is_quiet () && length (txt) > 100) {
         embeddings <- pbapply::pblapply (txt, function (i) get_embeddings_from_ollama (i, code = code))
+    } else {
+        embeddings <- lapply (txt, function (i) get_embeddings_from_ollama (i, code = code))
     }
 
     do.call (cbind, embeddings)
