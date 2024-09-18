@@ -5,7 +5,12 @@
 \title{Use the embeddings from \link{pkgsimil_embeddings_raw} to identify most
 similar packages to a given local repository.}
 \usage{
-pkgsimil_similar_pkgs(input, embeddings, n = 5L)
+pkgsimil_similar_pkgs(
+  input,
+  embeddings,
+  input_is_code = text_is_code(input),
+  n = 5L
+)
 }
 \arguments{
 \item{input}{Either a path to local source code of an R package, or a text
@@ -13,6 +18,10 @@ string.}
 
 \item{embeddings}{Large Language Model embeddings for all rOpenSci packages,
 generated from \link{pkgsimil_embeddings_raw}.}
+
+\item{input_is_code}{A binary flag indicating whether \code{input} is code or
+plain text. Ignored if \code{input} is path to a local package; otherwise can be
+used to force appropriate interpretation if input type.}
 
 \item{n}{identify the \code{n} most similar packages in terms of both code and
 text embeddings.}
@@ -24,4 +33,7 @@ corresponding distances.
 \description{
 Use the embeddings from \link{pkgsimil_embeddings_raw} to identify most
 similar packages to a given local repository.
+}
+\seealso{
+input_is_code
 }

@@ -5,17 +5,25 @@
 #' string.
 #' @param embeddings Large Language Model embeddings for all rOpenSci packages,
 #' generated from \link{pkgsimil_embeddings_raw}.
+#' @param input_is_code A binary flag indicating whether `input` is code or
+#' plain text. Ignored if `input` is path to a local package; otherwise can be
+#' used to force appropriate interpretation if input type.
 #' @param n identify the `n` most similar packages in terms of both code and
 #' text embeddings.
 #' @return A `data.frame` of all packages in the embeddings data and
 #' corresponding distances.
+#'
+#' @seealso input_is_code
 #' @export
-pkgsimil_similar_pkgs <- function (input, embeddings, n = 5L) {
+pkgsimil_similar_pkgs <- function (input, embeddings, input_is_code = text_is_code (input), n = 5L) {
     stopifnot (is.list (embeddings))
     stopifnot (identical (names (embeddings), c ("text", "code")))
-    stopifnot (fs::dir_exists (input))
 
-    res <- similar_pkgs_from_pkg (input, embeddings, n)
+    if (fs::dir_exists (input)) {
+        res <- similar_pkgs_from_pkg (input, embeddings, n)
+    } else {
+        res <- similar_pkgs_from_text (input, embeddings, input_is_code, n)
+    }
 
     return (res)
 }
@@ -52,4 +60,27 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
     options (op)
 
     list (text = out_text, code = out_code)
+}
+
+similar_pkgs_from_text <- function (input, embeddings, input_is_code, n) {
+
+    if (input_is_code) {
+        embeddings <- embeddings$code
+    } else {
+        embeddings <- embeddings$text
+    }
+
+    this_emb <- get_embeddings (input, code = input_is_code)
+
+    nrow <- length (this_emb)
+    npkgs <- ncol (embeddings)
+    emb_mat <- matrix (this_emb, nrow = nrow, ncol = npkgs)
+    d <- colMeans (sqrt ((emb_mat - embeddings)^2))
+    d <- data.frame (pkg = names (d), d = unname (d))
+
+    index <- order (d$d)
+    d_n <- d [index [seq_len (n)], ]
+    rownames (d_n) <- NULL
+
+    return (d_n)
 }
