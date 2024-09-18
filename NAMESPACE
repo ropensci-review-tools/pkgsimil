@@ -3,3 +3,4 @@
 export(pkgsimil_embeddings)
 export(pkgsimil_embeddings_raw)
 export(pkgsimil_similar_pkgs)
+export(text_is_code)
