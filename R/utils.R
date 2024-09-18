@@ -15,7 +15,7 @@ opt_is_quiet <- function () {
 #' @export
 text_is_code <- function (txt) {
     stopifnot (length (txt) == 1L)
-    requireNamespace ("tokenizers")
+    requireNamespace ("tokenizers", quietly = TRUE)
 
     token_threshold <- 0.9
 
