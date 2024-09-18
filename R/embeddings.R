@@ -81,6 +81,7 @@ pkgsimil_embeddings_raw <- function (packages = NULL, functions_only = FALSE) {
     } else {
         txt_fns <- get_all_fn_descs (txt)
         ret <- get_embeddings (txt_fns$desc, code = FALSE)
+        colnames (ret) <- txt_fns$fn
     }
     return (ret)
 }
