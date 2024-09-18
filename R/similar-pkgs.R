@@ -56,6 +56,31 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
     list (text = order_output (out, "text"), code = order_output (out, "code"))
 }
 
+#' Use the embeddings from \link{pkgsimil_embeddings_raw} with `functions_only
+#' = TRUE` to identify functions best matching a given input string.
+#'
+#' @param input A text string.
+#' @param embeddings A single matrix of embeddings produced from
+#' \link{pkgsimil_embeddings_raw} with `functions_only = TRUE`.
+#' @return A character vector of function names in the form
+#' "<package>::<function>".
+#' @export
+pkgsimil_similar_fns <- function (input, embeddings, n = 5L) {
+    stopifnot (is.matrix (embeddings))
+    stopifnot (is.character (input))
+    stopifnot (length (input) == 1L)
+
+    op <- options ()
+    options (rlib_message_verbosity = "quiet")
+    emb <- get_embeddings (input)
+    options (op)
+
+    emb_mat <- matrix (emb, nrow = length (emb), ncol = ncol (embeddings))
+    d <- colMeans (sqrt ((emb_mat - embeddings)^2))
+    index <- order (d) [seq_len (n)]
+    colnames (embeddings) [index]
+}
+
 order_ouput <- function (out, what = "text", n) {
     index <- order (out [[what]])
     out <- out [index [seq_len (n)], c ("pkg", what)]
