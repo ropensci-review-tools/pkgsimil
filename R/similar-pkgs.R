@@ -58,7 +58,10 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
     out$code <- out$code / max (out$code)
     out$text <- out$text / max (out$text)
 
-    list (text = order_output (out, "text"), code = order_output (out, "code"))
+    list (
+        text = order_output (out, "text", n),
+        code = order_output (out, "code", n)
+    )
 }
 
 #' Use the embeddings from \link{pkgsimil_embeddings_raw} with `functions_only
