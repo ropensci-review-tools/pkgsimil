@@ -55,3 +55,38 @@ ollama_dl_jina_model <- function (what = "base") {
     out <- system (paste ("ollama pull", jina_model (what), intern = FALSE))
     return (out == 0)
 }
+
+#' Check that ollama is installed with required models, and download if not.
+#'
+#' @export
+ollama_check <- function () {
+    if (!has_ollama ()) {
+        cli::cli_abort (paste0 (
+            "ollama is not installed; please follow installation instructions at ",
+            "https://ollama.com."
+        ))
+    }
+
+    for (mod in jina_required_models) {
+        if (!ollama_has_jina_model (mod)) {
+            cli::cli_warn (paste0 (
+                "ollama model [",
+                jina_model (mod),
+                "] is not installed."
+            ))
+            yn <- readline ("Would you like to download it now (y/n) ? ")
+            if (substring (tolower (yn), 1, 1) == "y") {
+                mod_name <- jina_model (mod)
+                cli::cli_inform ("Okay, downloading [{mod_name}] ...")
+                res <- ollama_dl_jina_model (mod)
+                if (res != 0) {
+                    cli::cli_abort (
+                        "ollama model failed to download. Maybe use 'ollama pull' directly?"
+                    )
+                }
+            }
+        }
+    }
+
+    return (TRUE)
+}
