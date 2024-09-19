@@ -19,7 +19,7 @@ text_is_code <- function (txt) {
 
     token_threshold <- 0.9
 
-    n0 <- length (strsplit (txt, "[[:space:]]") [[1]])
+    n0 <- length (strsplit (txt, "[[:space:]]+") [[1]])
     nw <- tokenizers::count_words (txt)
     nw / n0 < token_threshold
 }
