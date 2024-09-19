@@ -17,7 +17,7 @@ text_is_code <- function (txt) {
     stopifnot (length (txt) == 1L)
     requireNamespace ("tokenizers", quietly = TRUE)
 
-    token_threshold <- 0.9
+    token_threshold <- 0.95
 
     n0 <- length (strsplit (txt, "[[:space:]]+") [[1]])
     nw <- tokenizers::count_words (txt)

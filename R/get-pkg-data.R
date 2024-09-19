@@ -1,4 +1,5 @@
 get_Rd_metadata <- utils::getFromNamespace (".Rd_get_metadata", "tools")
+
 get_pkg_text <- function (pkg_name) {
 
     if (pkg_is_installed (pkg_name)) {
