@@ -2,6 +2,8 @@ expected_embedding_length <- 768
 
 test_that ("embeddings properties", {
 
+    withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
+
     txt <- "test text"
     emb <- with_mock_dir ("embeddings", {
         get_embeddings (txt)

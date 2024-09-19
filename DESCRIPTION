@@ -1,6 +1,6 @@
 Package: pkgsimil
 Title: Similarity Metrics between R Packages
-Version: 0.1.2.020
+Version: 0.1.2.021
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2172-5265")))
@@ -20,7 +20,8 @@ Suggests:
     rappdirs,
     httptest2,
     testthat (>= 3.0.0),
-    tokenizers
+    tokenizers,
+    withr
 Encoding: UTF-8
 Language: en-GB
 LazyData: true

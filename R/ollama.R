@@ -70,6 +70,9 @@ ollama_is_running <- function () {
 #'
 #' @export
 ollama_check <- function () {
+    if (identical (Sys.getenv ("PKGSIMIL_TESTS"), "true")) {
+        return (TRUE)
+    }
     if (!has_ollama ()) {
         cli::cli_abort (paste0 (
             "ollama is not installed. Please follow installation instructions at ",
