@@ -16,4 +16,11 @@ test_that ("get pkg local text", {
     expect_false (grepl ("#\\s*demo", code))
     expect_false (grepl ("##\\s*Functions", code))
     expect_true (grepl ("This function does nothing", code, fixed = TRUE))
+
+    # ---- test utils fns -----
+    # Identified as code because of markdown
+    expect_true (text_is_code (txt))
+    txt <- gsub ("\\n|#+", "", txt)
+    expect_false (text_is_code (txt))
+    expect_true (text_is_code (code))
 })
