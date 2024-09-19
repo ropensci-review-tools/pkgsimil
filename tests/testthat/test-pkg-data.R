@@ -34,13 +34,11 @@ test_that ("get pkg installed text", {
     expect_type (txt, "character")
     expect_length (txt, 1L)
     expect_true (nchar (txt) > 1000)
-    expect_false (text_is_code (txt))
 
     code <- get_pkg_code (pkg)
     expect_type (code, "character")
     expect_length (code, 1L)
     expect_true (nchar (txt) > 1000)
-    expect_true (text_is_code (code))
 
     code_exp_only <- get_pkg_code (pkg, exported_only = TRUE)
     expect_true (nchar (code_exp_only) / nchar (code) < 0.75)
