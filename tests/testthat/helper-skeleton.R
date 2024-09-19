@@ -86,11 +86,22 @@ write_readme <- function (d, pkg_name) {
     rfile <- c (
         paste0 ("# ", pkg_name),
         "",
+        "<!-- badges: start -->",
+        "[![A badge](https://badge.svg)](https://badge-link)",
+        "<!-- badges: end -->",
+        "",
         "This `README.Rmd` file is here to demonstrate some stuff.",
         "",
         "``` r",
         "  x <- 1",
         "```",
+        "",
+        "And it includes a HTML table",
+        "",
+        "<table>",
+        "<td>",
+        "</td>",
+        "</table>",
         "",
         "The end."
     )
