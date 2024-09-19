@@ -1,5 +1,3 @@
-expected_embedding_length <- 768
-
 test_that ("embeddings properties", {
 
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
@@ -10,7 +8,7 @@ test_that ("embeddings properties", {
     })
     expect_type (emb, "double")
     expect_length (dim (emb), 2L)
-    expect_equal (nrow (emb), expected_embedding_length)
+    expect_equal (nrow (emb), expected_embedding_length) # in helper-embeddings.R
     expect_true (min (emb) < 0)
     expect_true (max (emb) > 0)
 })
