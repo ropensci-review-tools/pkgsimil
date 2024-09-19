@@ -13,7 +13,7 @@ has_ollama <- function () {
 }
 
 ollama_models <- function () {
-    stopifnot (has_ollama ())
+    stopifnot (ollama_is_running ())
 
     out <- system ("ollama list", intern = TRUE)
     out <- lapply (out, function (i) {
@@ -43,11 +43,13 @@ jina_model <- function (what = "base") {
     )
 }
 ollama_has_jina_model <- function (what = "base") {
+    stopifnot (ollama_is_running ())
     what <- match.arg (what, jina_required_models)
     jina_model (what) %in% ollama_models ()$name
 }
 
 ollama_dl_jina_model <- function (what = "base") {
+    stopifnot (ollama_is_running ())
     what <- match.arg (what, jina_required_models)
     if (ollama_has_jina_model (what)) {
         return (TRUE)
@@ -56,14 +58,28 @@ ollama_dl_jina_model <- function (what = "base") {
     return (out == 0)
 }
 
+ollama_is_running <- function () {
+    if (!has_ollama ()) {
+        return (FALSE)
+    }
+    chk <- system ("ollama ps", ignore.stdout = TRUE, ignore.stderr = TRUE)
+    return (chk == 0L)
+}
+
 #' Check that ollama is installed with required models, and download if not.
 #'
 #' @export
 ollama_check <- function () {
     if (!has_ollama ()) {
         cli::cli_abort (paste0 (
-            "ollama is not installed; please follow installation instructions at ",
+            "ollama is not installed. Please follow installation instructions at ",
             "https://ollama.com."
+        ))
+    }
+    if (!ollama_is_running ()) {
+        cli::cli_abort (paste0 (
+            "ollama is installed but not running. Please run `ollama serve` from a ",
+            "separate console (not from within R)."
         ))
     }
 
