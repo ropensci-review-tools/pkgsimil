@@ -5,7 +5,7 @@ test_that ("embeddings properties", {
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
 
     txt <- "test text"
-    emb <- with_mock_dir ("embeddings", {
+    emb <- with_mock_dir ("emb_test_text", {
         get_embeddings (txt)
     })
     expect_type (emb, "double")
@@ -13,4 +13,22 @@ test_that ("embeddings properties", {
     expect_equal (nrow (emb), expected_embedding_length)
     expect_true (min (emb) < 0)
     expect_true (max (emb) > 0)
+})
+
+test_that ("embedding_dists fn", {
+
+    withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
+
+    packages <- c ("tools", "utils")
+    ncombs <- ncol (combn (packages, 2L))
+    d <- with_mock_dir ("emb_pkgs", {
+        pkgsimil_embedding_dists (packages)
+    })
+    expect_s3_class (d, "data.frame")
+    expect_equal (ncol (d), 4L)
+    expect_equal (nrow (d), ncombs)
+    expect_identical (names (d), c ("from", "to", "d_text", "d_code"))
+    expect_type (d$d_text, "double")
+    expect_type (d$d_code, "double")
+    expect_true (all (packages %in% c (d$from, d$to)))
 })
