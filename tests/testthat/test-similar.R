@@ -33,3 +33,17 @@ test_that ("similar pkgs package input", {
     out_vec <- unname (unlist (out))
     expect_true (all (out_vec %in% colnames (embeddings$text)))
 })
+
+test_that ("similar fns", {
+
+    withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
+
+    input <- "A test function"
+    n <- 5L
+    out <- with_mock_dir ("sim_fns", {
+        pkgsimil_similar_fns (input, embeddings_fns, n = n)
+    })
+    expect_type (out, "character")
+    expect_length (out, n)
+    expect_true (all (out %in% colnames (embeddings_fns)))
+})
