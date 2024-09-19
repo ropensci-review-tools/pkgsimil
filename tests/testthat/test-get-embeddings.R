@@ -6,6 +6,14 @@ expect_embeddings_matrix <- function (x) {
     expect_true (max (x) > 0)
 }
 
+test_that ("embeddings errors", {
+    packages <- c ("cli", "not_a_package")
+    expect_error (
+        pkgsimil_embedding_dists (packages),
+        "packages must either name installed packages, or supply paths"
+    )
+})
+
 test_that ("embeddings properties", {
 
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
