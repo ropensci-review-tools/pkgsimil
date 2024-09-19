@@ -19,7 +19,7 @@ test_that ("embedding_dists fn", {
 
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
 
-    packages <- c ("tools", "utils")
+    packages <- c ("cli", "fs")
     ncombs <- ncol (combn (packages, 2L))
     d <- with_mock_dir ("emb_pkgs", {
         pkgsimil_embedding_dists (packages)
