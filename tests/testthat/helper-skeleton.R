@@ -32,7 +32,10 @@ write_desc <- function (d, pkg_name) {
         "Encoding: UTF-8"
     )
 
-    writeLines (desc, con = file.path (d, "DESCRIPTION"))
+    fp <- file.path (d, "DESCRIPTION")
+    if (!file.exists (fp)) {
+        writeLines (desc, con = fp)
+    }
 }
 
 write_r_fn <- function (d, pkg_name) {
@@ -51,7 +54,12 @@ write_r_fn <- function (d, pkg_name) {
     if (!file.exists (dr)) {
         dir.create (dr)
     }
-    writeLines (rfile, con = file.path (dr, "test.R"))
+
+
+    fp <- file.path (dr, "test.R")
+    if (!file.exists (fp)) {
+        writeLines (rfile, con = fp)
+    }
 
     rfile <- c (
         "#' @keywords internal",
@@ -66,7 +74,10 @@ write_r_fn <- function (d, pkg_name) {
         "## usethis namespace: end",
         "NULL"
     )
-    writeLines (rfile, con = file.path (dr, paste0 (pkg_name, "-package.R")))
+    fp <- file.path (dr, paste0 (pkg_name, "-package.R"))
+    if (!file.exists (fp)) {
+        writeLines (rfile, con = fp)
+    }
 }
 
 write_readme <- function (d, pkg_name) {
@@ -85,7 +96,10 @@ write_readme <- function (d, pkg_name) {
     )
     # nolint end
 
-    writeLines (rfile, con = file.path (d, "README.md"))
+    fp <- file.path (d, "README.md")
+    if (!file.exists (fp)) {
+        writeLines (rfile, con = fp)
+    }
 }
 
 
@@ -93,14 +107,6 @@ pkgsimil_test_skeleton <- function (base_dir = tempdir (), pkg_name = "demo") {
 
     d <- make_pkg_path (base_dir, pkg_name)
 
-    if (length (list.files (d)) > 0L) {
-        stop (
-            "The path [", d, "] is not empty; ",
-            "can only make a package in an empty directory\n",
-            "  Directory can be cleared with ",
-            "'unlink(<dir>, recursive = TRUE)'"
-        )
-    }
     write_desc (d, pkg_name)
     write_r_fn (d, pkg_name)
     write_readme (d, pkg_name)

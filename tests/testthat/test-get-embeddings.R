@@ -1,3 +1,11 @@
+expect_embeddings_matrix <- function (x) {
+    expect_type (x, "double")
+    expect_length (dim (x), 2L)
+    expect_equal (nrow (x), expected_embedding_length) # in helper-embeddings.R
+    expect_true (min (x) < 0)
+    expect_true (max (x) > 0)
+}
+
 test_that ("embeddings properties", {
 
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
@@ -6,11 +14,7 @@ test_that ("embeddings properties", {
     emb <- with_mock_dir ("emb_test_text", {
         get_embeddings (txt)
     })
-    expect_type (emb, "double")
-    expect_length (dim (emb), 2L)
-    expect_equal (nrow (emb), expected_embedding_length) # in helper-embeddings.R
-    expect_true (min (emb) < 0)
-    expect_true (max (emb) > 0)
+    expect_embeddings_matrix (emb)
 })
 
 test_that ("embedding_dists fn", {
@@ -43,8 +47,14 @@ test_that ("raw embeddings", {
     expect_identical (names (emb), c ("text", "code"))
     is_mat <- vapply (emb, function (i) length (dim (i)) == 2L, logical (1L))
     expect_true (all (is_mat))
-    ncol <- vapply (emb, ncol, integer (1L))
-    expect_true (all (ncol == 1L))
-    nrow <- vapply (emb, nrow, integer (1L))
-    expect_true (all (nrow == expected_embedding_length))
+    expect_embeddings_matrix (emb$text)
+    expect_embeddings_matrix (emb$code)
+
+    d <- pkgsimil_test_skeleton ()
+    roxygen2::roxygenise (d)
+
+    emb_fns <- with_mock_dir ("emb_raw_fns", {
+        pkgsimil_embeddings_raw (d, functions_only = TRUE)
+    })
+    expect_embeddings_matrix (emb_fns)
 })
