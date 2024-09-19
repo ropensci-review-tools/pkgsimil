@@ -129,6 +129,7 @@ get_all_fn_descs <- function (txt) {
 }
 
 get_embeddings <- function (txt, code = FALSE) {
+    ollama_check ()
     if (!opt_is_quiet () && length (txt) > 100) {
         embeddings <- pbapply::pblapply (txt, function (i) get_embeddings_from_ollama (i, code = code))
     } else {
