@@ -50,11 +50,11 @@ test_that ("raw embeddings", {
     expect_embeddings_matrix (emb$text)
     expect_embeddings_matrix (emb$code)
 
-    d <- pkgsimil_test_skeleton ()
-    roxygen2::roxygenise (d)
+    path <- pkgsimil_test_skeleton ()
+    roxygen2::roxygenise (path)
 
     emb_fns <- with_mock_dir ("emb_raw_fns", {
-        pkgsimil_embeddings_raw (d, functions_only = TRUE)
+        pkgsimil_embeddings_raw (path, functions_only = TRUE)
     })
     expect_embeddings_matrix (emb_fns)
 })
