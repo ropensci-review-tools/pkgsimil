@@ -77,12 +77,18 @@ get_pkg_text_local <- function (path) {
     if (!fs::file_exists (desc_file)) {
         return ("")
     }
+    cli::cli_inform (path)
     desc <- data.frame (read.dcf (desc_file))$Description
 
     readme <- get_pkg_readme (path)
+    if (is.null (readme)) {
+        return ("")
+    }
 
     rd_path <- fs::path (path, "man")
-    stopifnot (fs::file_exists (rd_path))
+    if (!fs::file_exists (rd_path)) {
+        return ("")
+    }
     rd_files <- fs::dir_ls (rd_path, regex = "\\.Rd")
     rd <- lapply (rd_files, function (i) {
         suppressWarnings (
@@ -133,7 +139,9 @@ get_pkg_text_local <- function (path) {
 get_pkg_readme <- function (path) {
 
     readme_file <- fs::path (path, "README.md")
-    stopifnot (fs::file_exists (readme_file))
+    if(!fs::file_exists (readme_file)) {
+        return (NULL)
+    }
     readme <- brio::read_lines (readme_file)
 
     header_end <- grep ("end\\s*\\-+>\\s*$", readme)
