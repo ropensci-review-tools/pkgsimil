@@ -74,7 +74,9 @@ get_pkg_text_local <- function (path) {
     stopifnot (fs::dir_exists (path))
 
     desc_file <- fs::path (path, "DESCRIPTION")
-    stopifnot (fs::file_exists (desc_file))
+    if (!fs::file_exists (desc_file)) {
+        return ("")
+    }
     desc <- data.frame (read.dcf (desc_file))$Description
 
     readme <- get_pkg_readme (path)
