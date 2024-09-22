@@ -139,15 +139,18 @@ get_pkg_text_local <- function (path) {
 get_pkg_readme <- function (path) {
 
     readme_file <- fs::path (path, "README.md")
-    if(!fs::file_exists (readme_file)) {
+    if (!fs::file_exists (readme_file)) {
         return (NULL)
     }
     readme <- brio::read_lines (readme_file)
 
     header_end <- grep ("end\\s*\\-+>\\s*$", readme)
     if (length (header_end) > 0L) {
-        header_end <- max (header_end [which (header_end < floor (length (readme) / 2))])
-        readme <- readme [-(seq_len (header_end))]
+        header_end_index <- which (header_end < floor (length (readme) / 2))
+        if (length (header_end_index) > 0L) {
+            header_end <- max (header_end [header_end_index])
+            readme <- readme [-(seq_len (header_end))]
+        }
     }
     # Then rm any image links, including badges. These may extend over multiple
     # lines.
