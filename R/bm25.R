@@ -139,8 +139,9 @@ bm25_idf_internal <- function (txt) {
     ntoks_avg <- mean (ntoks [which (ntoks > 0L)])
 
     tokens_list <- bm25_tokens_list (txt)
+    index <- which (vapply (tokens_list, nrow, integer (1L)) > 0L)
 
-    tokens_idf <- do.call (rbind, lapply (tokens_list, function (i) {
+    tokens_idf <- do.call (rbind, lapply (tokens_list [index], function (i) {
         data.frame (token = unique (i$token), n = 1L)
     })) |>
         dplyr::group_by (token) |>
