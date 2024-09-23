@@ -133,20 +133,35 @@ similar_pkgs_from_text <- function (
         embeddings <- pkgsimil_load_data ("embeddings")
     }
     if (input_is_code) {
-        embeddings <- embeddings$code
+        similarities <- similarity_embeddings (input, embeddings$code, input_is_code = TRUE)
     } else {
-        embeddings <- embeddings$text_with_fns
+        similarities <- similarity_embeddings (input, embeddings, input_is_code = FALSE)
     }
+
+    index <- seq_len (n)
+    return (similarities [index, ])
+}
+
+similarity_embeddings <- function (input, embeddings, input_is_code) {
 
     this_emb <- get_embeddings (input, code = input_is_code)
 
-    dat <- cosine_similarity (this_emb, embeddings)
+    if (is.list (embeddings)) {
 
-    index <- order (dat$simil, decreasing = TRUE)
-    dat_n <- dat [index [seq_len (n)], ]
-    rownames (dat_n) <- NULL
+        dat_with_fns <- cosine_similarity (this_emb, embeddings$text_with_fns)
+        dat_wo_fns <- cosine_similarity (this_emb, embeddings$text_wo_fns)
 
-    return (dat_n)
+        names (dat_wo_fns) [2] <- "simil_wo_fns"
+        names (dat_with_fns) [2] <- "simil_with_fns"
+
+        dat <- dplyr::left_join (dat_with_fns, dat_wo_fns, by = "pkg")
+
+    } else {
+
+        dat <- cosine_similarity (this_emb, embeddings)
+    }
+
+    return (dat)
 }
 
 #' cosine similarity between one input vector and an input matrix with column
@@ -162,5 +177,9 @@ cosine_similarity <- function (this_vec, this_mat) {
     cs_denom <- sqrt (colSums (emb_mat^2) * colSums (this_mat^2))
     cs <- cs_num / cs_denom
 
-    data.frame (pkg = names (cs), simil = unname (cs))
+    index <- order (cs, decreasing = TRUE)
+    res <- data.frame (pkg = names (cs), simil = unname (cs)) [index, ]
+    rownames (res) <- NULL
+
+    return (res)
 }
