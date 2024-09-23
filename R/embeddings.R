@@ -66,15 +66,7 @@ pkgsimil_embeddings_raw <- function (packages = NULL, functions_only = FALSE) {
     packages <- convert_paths_to_pkgs (pkgs_full)
 
     txt_with_fns <- lapply (pkgs_full, function (p) get_pkg_text (p))
-    txt_wo_fns <- lapply (txt_with_fns, function (i) {
-        i_vec <- strsplit (i, "\\n") [[1]]
-        index <- grep ("^\\s*##\\s+Functions", i_vec)
-        if (length (index) > 0L) {
-            index <- seq (max (index), length (i_vec))
-            i_vec <- i_vec [-(index)]
-        }
-        paste0 (i_vec, collapse = "\\n")
-    })
+    txt_wo_fns <- rm_fns_from_pkg_txt (txt_with_fns)
 
     if (!functions_only) {
 
@@ -106,6 +98,19 @@ pkgsimil_embeddings_raw <- function (packages = NULL, functions_only = FALSE) {
     }
 
     return (ret)
+}
+
+rm_fns_from_pkg_txt <- function (txt) {
+
+    lapply (txt, function (i) {
+        i_vec <- strsplit (i, "\\n") [[1]]
+        index <- grep ("^\\s*##\\s+Functions", i_vec)
+        if (length (index) > 0L) {
+            index <- seq (max (index), length (i_vec))
+            i_vec <- i_vec [-(index)]
+        }
+        paste0 (i_vec, collapse = "\\n")
+    })
 }
 
 get_all_fn_descs <- function (txt) {
