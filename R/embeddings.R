@@ -100,6 +100,19 @@ pkgsimil_embeddings_from_pkgs <- function (packages = NULL, functions_only = FAL
     return (ret)
 }
 
+#' Return raw 'LLM' embeddings from a vector of text strings.
+#'
+#' The embeddings are currently retrieved from a local 'ollama' server running
+#' Jina AI embeddings.
+#'
+#' @param input A vector of one or more text strings for which embeddings are
+#' to be extracted.
+#' @export
+pkgsimil_embeddings_from_text <- function (input = NULL) {
+
+    get_embeddings (input, code = FALSE)
+}
+
 rm_fns_from_pkg_txt <- function (txt) {
 
     lapply (txt, function (i) {
