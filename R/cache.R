@@ -19,7 +19,7 @@ pkgsimil_load_data <- function (what = "embeddings", fns = FALSE) {
     }
     fname <- fs::path (pkgsimil_cache_path (), fname)
     if (!fs::file_exists (fname)) {
-        fname <- pkgsimil_dl_data (what = "embeddings", fns = fns)
+        fname <- pkgsimil_dl_data (what = what, fns = fns)
     }
     readRDS (fname)
 }
