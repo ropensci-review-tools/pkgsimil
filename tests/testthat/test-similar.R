@@ -1,3 +1,5 @@
+# 'embeddings' and 'idfs' are generated in helper-embeddings.R
+
 test_that ("similar pkgs text input", {
 
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
@@ -5,11 +7,11 @@ test_that ("similar pkgs text input", {
     input <- "A similar package"
     n <- 5L
     out <- with_mock_dir ("sim_pkgs_txt", {
-        pkgsimil_similar_pkgs (input, embeddings, n = n)
+        pkgsimil_similar_pkgs (input, embeddings = embeddings, idfs = idfs, n = n)
     })
     expect_type (out, "character")
     expect_length (out, n)
-    expect_true (all (out %in% colnames (embeddings$text)))
+    expect_true (all (out %in% colnames (embeddings$text_with_fns)))
 })
 
 test_that ("similar pkgs package input", {
@@ -21,7 +23,7 @@ test_that ("similar pkgs package input", {
 
     n <- 5L
     out <- with_mock_dir ("sim_pkgs_pkg", {
-        pkgsimil_similar_pkgs (path, embeddings, n = n)
+        pkgsimil_similar_pkgs (path, embeddings = embeddings, idfs = idfs, n = n)
     })
     expect_type (out, "list")
     expect_length (out, 2L)
@@ -31,7 +33,7 @@ test_that ("similar pkgs package input", {
     lens <- vapply (out, length, integer (1L))
     expect_true (all (lens == n))
     out_vec <- unname (unlist (out))
-    expect_true (all (out_vec %in% colnames (embeddings$text)))
+    expect_true (all (out_vec %in% colnames (embeddings$text_with_fns)))
 })
 
 test_that ("similar fns", {

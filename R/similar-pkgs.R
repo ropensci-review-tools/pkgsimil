@@ -41,7 +41,7 @@ pkgsimil_similar_pkgs <- function (
     stopifnot (is.list (embeddings))
     stopifnot (identical (names (embeddings), nms_expected))
     stopifnot (is.list (idfs))
-    stopifnot (identical (names (idfs), nms_expected))
+    stopifnot (identical (names (idfs), c ("idfs", "token_lists")))
 
     if (fs::dir_exists (input)) {
         res <- similar_pkgs_from_pkg (input, embeddings, n)
@@ -61,11 +61,11 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
 
     options (op)
 
-    npkgs <- ncol (embeddings$text)
+    npkgs <- ncol (embeddings$text_with_fns)
     nrow <- nrow (emb$text_with_fns)
     emb_text <- matrix (emb$text_with_fns, nrow = nrow, ncol = npkgs)
     emb_code <- matrix (emb$code, nrow = nrow, ncol = npkgs)
-    d_text <- colSums (sqrt ((emb_text - embeddings$text)^2))
+    d_text <- colSums (sqrt ((emb_text - embeddings$text_with_fns)^2))
     d_text <- data.frame (pkg = names (d_text), text = unname (d_text))
     d_code <- colSums (sqrt ((emb_code - embeddings$code)^2))
     d_code <- data.frame (pkg = names (d_code), code = unname (d_code))
@@ -124,7 +124,7 @@ similar_pkgs_from_text <- function (input, embeddings, input_is_code, n) {
     if (input_is_code) {
         embeddings <- embeddings$code
     } else {
-        embeddings <- embeddings$text
+        embeddings <- embeddings$text_with_fns
     }
 
     this_emb <- get_embeddings (input, code = input_is_code)

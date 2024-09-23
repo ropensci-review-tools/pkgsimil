@@ -14,6 +14,9 @@ embedding similarities are to be calculated.}
 descriptions only. This is intended to generate a separate set of embeddings
 which can then be used to match plain-text queries of functions, rather than
 entire packages.}
+
+\item{input}{A vector of either text strings for which embeddings are to be
+calculated, or local paths to directories containing R packages.}
 }
 \value{
 If \code{!functions_only}, a list of two matrices of embeddings: one for

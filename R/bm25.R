@@ -100,7 +100,7 @@ m_bm25_tokens <- memoise::memoise (bm25_tokens_internal)
 #' @inheritParams pkgsimil_bm25
 #' @return A list of `data.frame` objects, one for each input item, and each
 #' including two columns of "token" and "n" holding frequencies for each token.
-#' @noRd
+#' @export
 bm25_tokens_list <- function (txt) {
 
     tokens <- bm25_tokens (txt)
