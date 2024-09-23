@@ -138,6 +138,8 @@ similar_pkgs_from_text <- function (
         similarities <- similarity_embeddings (input, embeddings, input_is_code = FALSE)
     }
 
+    similarities_bm25 <- pkgsimil_bm25 (input)
+
     index <- seq_len (n)
     return (similarities [index, ])
 }
@@ -162,6 +164,12 @@ similarity_embeddings <- function (input, embeddings, input_is_code) {
     }
 
     return (dat)
+}
+
+similarity_bm25 <- function (input, bm25) {
+
+    this_emb <- get_embeddings (input, code = FALSE)
+    b <- pkgsimil_bm25 (input)
 }
 
 #' cosine similarity between one input vector and an input matrix with column

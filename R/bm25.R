@@ -14,7 +14,9 @@
 pkgsimil_bm25 <- function (input, txt = NULL, corpus = "ropensci") {
 
     if (is.null (txt)) {
-        cli::cli_abort ("Not yet implemented")
+        idfs <- pkgsimil_load_data ("idfs", fns = FALSE)
+        tokens_idf <- idfs$idfs
+        tokens_list <- idfs$token_lists
     } else {
         stopifnot (is.list (txt))
         txt_lens <- vapply (txt, length, integer (1L))
@@ -26,7 +28,12 @@ pkgsimil_bm25 <- function (input, txt = NULL, corpus = "ropensci") {
         tokens_idf <- bm25_idf (txt)
     }
 
-    pkgsimil_bm25_from_idf (input, tokens_list, tokens_idf)
+    bm25_with_fns <- pkgsimil_bm25_from_idf (input, tokens_list$with_fns, tokens_idf$with_fns)
+    bm25_wo_fns <- pkgsimil_bm25_from_idf (input, tokens_list$wo_fns, tokens_idf$wo_fns)
+    names (bm25_with_fns) [2] <- "bm25_with_fns"
+    names (bm25_wo_fns) [2] <- "bm25_wo_fns"
+
+    dplyr::left_join (bm25_with_fns, bm25_wo_fns, by = "package")
 }
 
 pkgsimil_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
@@ -59,6 +66,7 @@ pkgsimil_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
         package = basename (names (bm25)),
         bm25 = unname (bm25)
     ) [index, ]
+    rownames (bm25) <- NULL
 
     return (bm25)
 }
