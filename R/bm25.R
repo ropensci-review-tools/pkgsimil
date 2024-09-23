@@ -2,11 +2,40 @@
 #'
 #' See \url{https://en.wikipedia.org/wiki/Okapi_BM25}.
 #'
+#' @param input A single character string to match against the second parameter
+#' of all input documents.
 #' @param txt A list of input documents.
 #' @export
-pkgsimil_bm25 <- function (doc, txt) {
+pkgsimil_bm25 <- function (input, txt) {
 
-    tokens_idf <- m_bm25_idf (txt)
+    tokens_list <- bm25_tokens_list (txt)
+    ntoks_list <- vapply (tokens_list, function (i) sum (i$n), integer (1L))
+    ntoks_avg <- mean (ntoks_list)
+    tokens_idf <- bm25_idf (txt)
+
+    tokens_i <- bm25_tokens_list (input) [[1]]
+    tokens_i <- dplyr::rename (tokens_i, np = n)
+    ntoks_i <- sum (tokens_i$np)
+
+    k <- 1.2
+    b <- 0.75
+
+    bm25 <- vapply (tokens_list, function (i) {
+        len_i <- sum (i$n)
+        toks_i <- dplyr::left_join (tokens_i, i, by = "token") |>
+            dplyr::left_join (tokens_idf, by = "token") |>
+            dplyr::filter (!is.na (n))
+        rhs <- toks_i$n * (k + 1) / (toks_i$n + k * (1 - b + b * len_i / ntoks_avg))
+        toks_i$score <- toks_i$idf * rhs
+        sum (toks_i$score)
+    }, numeric (1L))
+    index <- order (bm25, decreasing = TRUE)
+    bm25 <- data.frame (
+        package = basename (names (bm25)),
+        bm25 = unname (bm25)
+    ) [index, ]
+
+    return (bm25)
 }
 
 #' Convert input list of text documents into lists of tokens.
@@ -78,6 +107,9 @@ bm25_idf <- function (txt) {
 }
 
 bm25_idf_internal <- function (txt) {
+
+    n_docs <- length (txt)
+
     tokens_txt <- bm25_tokens (txt)
 
     ntoks <- vapply (tokens_txt, length, integer (1L))

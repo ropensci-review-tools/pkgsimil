@@ -4,9 +4,12 @@
 \alias{pkgsimil_bm25}
 \title{Calculate the "BM25" = "Best Matching 25" ranking function.}
 \usage{
-pkgsimil_bm25(doc, txt)
+pkgsimil_bm25(input, txt)
 }
 \arguments{
+\item{input}{A single character string to match against the second parameter
+of all input documents.}
+
 \item{txt}{A list of input documents.}
 }
 \description{
