@@ -2,8 +2,8 @@
 % Please edit documentation in R/similar-pkgs.R
 \name{pkgsimil_similar_pkgs}
 \alias{pkgsimil_similar_pkgs}
-\title{Use the embeddings from \link{pkgsimil_embeddings_raw} to identify most
-similar packages to a given local repository.}
+\title{Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} to identify
+most similar packages to a given local repository.}
 \usage{
 pkgsimil_similar_pkgs(
   input,
@@ -18,7 +18,7 @@ pkgsimil_similar_pkgs(
 string.}
 
 \item{embeddings}{Large Language Model embeddings for all rOpenSci packages,
-generated from \link{pkgsimil_embeddings_raw}. If not provided,
+generated from \link{pkgsimil_embeddings_from_pkgs}. If not provided,
 pre-generated embeddings will be downloaded and stored in a local cache
 directory.}
 
@@ -41,8 +41,8 @@ If \code{input} is a single text string, a single character vector is returned
 naming the \code{n} most similar packages.
 }
 \description{
-Use the embeddings from \link{pkgsimil_embeddings_raw} to identify most
-similar packages to a given local repository.
+Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} to identify
+most similar packages to a given local repository.
 }
 \seealso{
 input_is_code

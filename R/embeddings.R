@@ -49,7 +49,6 @@ convert_paths_to_pkgs <- function (packages) {
 #' The embeddings are currently retrieved from a local 'ollama' server running
 #' Jina AI embeddings.
 #'
-#' @inheritParams pkgsimil_embedding_dists
 #' @param packages A vector of local paths to directories containing R packages.
 #' @param functions_only If `TRUE`, calculate embeddings for function
 #' descriptions only. This is intended to generate a separate set of embeddings
@@ -61,7 +60,7 @@ convert_paths_to_pkgs <- function (packages) {
 #' `functions_only`, a single matrix of embeddings for all function
 #' descriptions.
 #' @export
-pkgsimil_embeddings_raw <- function (packages = NULL, functions_only = FALSE) {
+pkgsimil_embeddings_from_pkgs <- function (packages = NULL, functions_only = FALSE) {
 
     pkgs_full <- packages
     packages <- convert_paths_to_pkgs (pkgs_full)

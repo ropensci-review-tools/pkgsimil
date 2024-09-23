@@ -1,10 +1,10 @@
-#' Use the embeddings from \link{pkgsimil_embeddings_raw} to identify most
-#' similar packages to a given local repository.
+#' Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} to identify
+#' most similar packages to a given local repository.
 #'
 #' @param input Either a path to local source code of an R package, or a text
 #' string.
 #' @param embeddings Large Language Model embeddings for all rOpenSci packages,
-#' generated from \link{pkgsimil_embeddings_raw}. If not provided,
+#' generated from \link{pkgsimil_embeddings_from_pkgs}. If not provided,
 #' pre-generated embeddings will be downloaded and stored in a local cache
 #' directory.
 #' @param idfs Inverse Document Frequency tables for all rOpenSci packages,
@@ -57,7 +57,7 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
     op <- options ()
     options (rlib_message_verbosity = "quiet")
 
-    emb <- pkgsimil_embeddings_raw (input)
+    emb <- pkgsimil_embeddings_from_pkgs (input)
 
     options (op)
 
@@ -80,15 +80,16 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
     )
 }
 
-#' Use the embeddings from \link{pkgsimil_embeddings_raw} with `functions_only
-#' = TRUE` to identify functions best matching a given input string.
+#' Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} with
+#' `functions_only = TRUE` to identify functions best matching a given input
+#' string.
 #'
 #' @inheritParams pkgsimil_similar_pkgs
 #' @param input A text string.
 #' @param embeddings A single matrix of embeddings produced from
-#' \link{pkgsimil_embeddings_raw} with `functions_only = TRUE`. If not
-#' provided, pre-generated embeddings will be downloaded and stored in a local
+#' \link{pkgsimil_embeddings_from_pkgs} with `functions_only = TRUE`. If not
 #' cache directory.
+#' provided, pre-generated embeddings will be downloaded and stored in a local
 #' @return A character vector of function names in the form
 #' "<package>::<function>".
 #' @export

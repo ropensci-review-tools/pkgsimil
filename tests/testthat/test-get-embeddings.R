@@ -49,7 +49,7 @@ test_that ("raw embeddings", {
 
     packages <- "rappdirs"
     emb <- with_mock_dir ("emb_raw", {
-        pkgsimil_embeddings_raw (packages)
+        pkgsimil_embeddings_from_pkgs (packages)
     })
     # expect_type (emb, "list")
     # expect_length (emb, 3L)
@@ -64,7 +64,7 @@ test_that ("raw embeddings", {
     roxygen2::roxygenise (path)
 
     emb_fns <- with_mock_dir ("emb_raw_fns", {
-        pkgsimil_embeddings_raw (path, functions_only = TRUE)
+        pkgsimil_embeddings_from_pkgs (path, functions_only = TRUE)
     })
     expect_embeddings_matrix (emb_fns)
 })

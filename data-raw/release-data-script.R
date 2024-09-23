@@ -1,10 +1,10 @@
 library (pkgsimil)
 path <- "/<path>/<to>/<ropensci>/<repos>"
 packages <- fs::dir_ls (path)
-embeddings <- pkgsimil_embeddings_raw (packages)
+embeddings <- pkgsimil_embeddings_from_pkgs (packages)
 
 saveRDS (embeddings, "embeddings.Rds")
-embeddings_fns <- pkgsimil_embeddings_raw (packages, functions_only = TRUE)
+embeddings_fns <- pkgsimil_embeddings_from_pkgs (packages, functions_only = TRUE)
 saveRDS (embeddings_fns, "embeddings-fns.Rds")
 
 txt_with_fns <- lapply (packages, function (p) get_pkg_text (p))

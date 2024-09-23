@@ -2,7 +2,9 @@
 % Please edit documentation in R/similar-pkgs.R
 \name{pkgsimil_similar_fns}
 \alias{pkgsimil_similar_fns}
-\title{Use the embeddings from \link{pkgsimil_embeddings_raw} with \code{functions_only = TRUE} to identify functions best matching a given input string.}
+\title{Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} with
+\code{functions_only = TRUE} to identify functions best matching a given input
+string.}
 \usage{
 pkgsimil_similar_fns(input, embeddings = NULL, n = 5L)
 }
@@ -10,9 +12,9 @@ pkgsimil_similar_fns(input, embeddings = NULL, n = 5L)
 \item{input}{A text string.}
 
 \item{embeddings}{A single matrix of embeddings produced from
-\link{pkgsimil_embeddings_raw} with \code{functions_only = TRUE}. If not
-provided, pre-generated embeddings will be downloaded and stored in a local
-cache directory.}
+\link{pkgsimil_embeddings_from_pkgs} with \code{functions_only = TRUE}. If not
+cache directory.
+provided, pre-generated embeddings will be downloaded and stored in a local}
 
 \item{n}{identify the \code{n} most similar packages in terms of both code and
 text embeddings.}
@@ -22,5 +24,7 @@ A character vector of function names in the form
 "\if{html}{\out{<package>}}::\if{html}{\out{<function>}}".
 }
 \description{
-Use the embeddings from \link{pkgsimil_embeddings_raw} with \code{functions_only = TRUE} to identify functions best matching a given input string.
+Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} with
+\code{functions_only = TRUE} to identify functions best matching a given input
+string.
 }
