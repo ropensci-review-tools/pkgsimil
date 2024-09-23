@@ -4,12 +4,27 @@
 #'
 #' @param input A single character string to match against the second parameter
 #' of all input documents.
-#' @param txt A list of input documents.
+#' @param txt An optional list of input documents. If not specified, data will
+#' be loaded as specified by the `corpus` parameter.
+#' @param corpus If `txt` is not specified, data for nominated corpus will be
+#' downloaded to local cache directory, and BM25 values calculated against
+#' those. Must be one of "ropensci", "ropensci-fns".
+#'
 #' @export
-pkgsimil_bm25 <- function (input, txt) {
+pkgsimil_bm25 <- function (input, txt = NULL, corpus = "ropensci") {
 
-    tokens_list <- bm25_tokens_list (txt)
-    tokens_idf <- bm25_idf (txt)
+    if (is.null (txt)) {
+        cli::cli_abort ("Not yet implemented")
+    } else {
+        stopifnot (is.list (txt))
+        txt_lens <- vapply (txt, length, integer (1L))
+        stopifnot (all (txt_lens == 1L))
+        txt_class <- vapply (txt, class, character (1L))
+        stopifnot (all (txt_class == "character"))
+
+        tokens_list <- bm25_tokens_list (txt)
+        tokens_idf <- bm25_idf (txt)
+    }
 
     pkgsimil_bm25_from_idf (input, tokens_list, tokens_idf)
 }

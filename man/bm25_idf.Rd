@@ -8,7 +8,8 @@ documents.}
 bm25_idf(txt)
 }
 \arguments{
-\item{txt}{A list of input documents.}
+\item{txt}{An optional list of input documents. If not specified, data will
+be loaded as specified by the \code{corpus} parameter.}
 }
 \value{
 A list of \code{data.frame} objects, each containing two columns of
