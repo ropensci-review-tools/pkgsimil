@@ -6,7 +6,7 @@ opt_is_quiet <- function () {
 #'
 #' This is only approximate, and there are even software packages which can
 #' give false negatives and be identified as prose (like rOpenSci's "geonames"
-#' package).
+#' package), and prose which may be wrongly identified as code.
 #'
 #' @param txt Single input text string
 #' @return Logical value indicating whether or not `txt` was identified as

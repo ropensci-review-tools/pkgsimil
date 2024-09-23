@@ -16,6 +16,5 @@ code.
 \description{
 This is only approximate, and there are even software packages which can
 give false negatives and be identified as prose (like rOpenSci's "geonames"
-package). Empirical tests nevertheless suggest that the function has an
-accuracy above 95\%.
+package), and prose which may be wrongly identified as code.
 }
