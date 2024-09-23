@@ -9,14 +9,22 @@
 pkgsimil_bm25 <- function (input, txt) {
 
     tokens_list <- bm25_tokens_list (txt)
+    tokens_idf <- bm25_idf (txt)
+
+    pkgsimil_bm25_from_idf (input, tokens_list, tokens_idf)
+}
+
+pkgsimil_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
+
     ntoks_list <- vapply (tokens_list, function (i) sum (i$n), integer (1L))
     ntoks_avg <- mean (ntoks_list)
-    tokens_idf <- bm25_idf (txt)
 
     tokens_i <- bm25_tokens_list (input) [[1]]
     tokens_i <- dplyr::rename (tokens_i, np = n)
     ntoks_i <- sum (tokens_i$np)
 
+    # Fixed parameters used in the BM25 function. See wikipedia reference above
+    # for these values.
     k <- 1.2
     b <- 0.75
 
