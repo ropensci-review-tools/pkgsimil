@@ -5,21 +5,37 @@
 #' @param fns If `FALSE` (default), load embeddings for all rOpenSci packages;
 #' otherwise load (considerably larger dataset of) embeddings for all
 #' individual functions.
+#' @param what Either "embeddings" to load pre-generated embeddings, or "idfs"
+#' to load pre-generated Inverse Document Frequency weightings.
 #' @export
-pkgsimil_load_embeddings <- function (fns = FALSE) {
-    fname <- ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds")
+pkgsimil_load_data <- function (what = "embeddings", fns = FALSE) {
+
+    what <- match.arg (what, c ("embeddings", "idfs"))
+
+    if (what == "embeddings") {
+        fname <- ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds")
+    } else {
+        file <- ifelse (fns, "bm25-ropensci-fns.Rds", "bm25-ropensci.Rds")
+    }
     fname <- fs::path (pkgsimil_cache_path (), fname)
     if (!fs::file_exists (fname)) {
-        fname <- pkgsimil_dl_embeddings (fns = fns)
+        fname <- pkgsimil_dl_data (what = "embeddings", fns = fns)
     }
     readRDS (fname)
 }
 
-pkgsimil_dl_embeddings <- function (fns = FALSE) {
+pkgsimil_dl_data <- function (what = "embeddings", fns = FALSE) {
+
+    what <- match.arg (what, c ("embeddings", "idfs"))
 
     url_base <- "https://github.com/ropensci-review-tools/pkgsimil/releases/download/"
     version <- "v0.1.2"
-    file <- ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds")
+
+    if (what == "embeddings") {
+        file <- ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds")
+    } else {
+        file <- ifelse (fns, "bm25-ropensci-fns.Rds", "bm25-ropensci.Rds")
+    }
     url <- paste0 (url_base, version, "/", file)
 
     destfile <- fs::path (pkgsimil_cache_path (), file)

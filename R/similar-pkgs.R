@@ -22,7 +22,7 @@
 #' @export
 pkgsimil_similar_pkgs <- function (input, embeddings = NULL, input_is_code = text_is_code (input), n = 5L) {
     if (is.null (embeddings)) {
-        embeddings <- pkgsimil_load_embeddings ()
+        embeddings <- pkgsimil_load_data ("embeddings")
     }
     stopifnot (is.list (embeddings))
     stopifnot (identical (names (embeddings), c ("text", "code")))
@@ -78,7 +78,7 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
 #' @export
 pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
     if (is.null (embeddings)) {
-        embeddings <- pkgsimil_load_embeddings (fns = TRUE)
+        embeddings <- pkgsimil_load_data ("embeddings", fns = TRUE)
     }
     stopifnot (is.matrix (embeddings))
     stopifnot (is.character (input))

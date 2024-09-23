@@ -9,6 +9,6 @@ test_that ("load embeddings", {
     saveRDS (embeddings, file.path (fp, "embeddings.Rds"))
     saveRDS (embeddings_fns, file.path (fp, "embeddings-fns.Rds"))
 
-    expect_identical (embeddings, pkgsimil_load_embeddings ())
-    expect_identical (embeddings_fns, pkgsimil_load_embeddings (fns = TRUE))
+    expect_identical (embeddings, pkgsimil_load_data ("embeddings"))
+    expect_identical (embeddings_fns, pkgsimil_load_data ("embeddings", fns = TRUE))
 })
