@@ -7,16 +7,12 @@
 pkgsimil_embeddings_raw(packages = NULL, functions_only = FALSE)
 }
 \arguments{
-\item{packages}{Names of, or paths to,  one or more packages for which
-embedding similarities are to be calculated.}
+\item{packages}{A vector of local paths to directories containing R packages.}
 
 \item{functions_only}{If \code{TRUE}, calculate embeddings for function
 descriptions only. This is intended to generate a separate set of embeddings
 which can then be used to match plain-text queries of functions, rather than
 entire packages.}
-
-\item{input}{A vector of either text strings for which embeddings are to be
-calculated, or local paths to directories containing R packages.}
 }
 \value{
 If \code{!functions_only}, a list of two matrices of embeddings: one for
