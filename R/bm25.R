@@ -6,15 +6,20 @@
 #' of all input documents.
 #' @param txt An optional list of input documents. If not specified, data will
 #' be loaded as specified by the `corpus` parameter.
+#' @param idfs Optional list of Inverse Document Frequency weightings generated
+#' by the \link{bm25_idf} function. If not specified, values for the rOpenSci
+#' corpus will be automatically downloaded and used.
 #' @param corpus If `txt` is not specified, data for nominated corpus will be
 #' downloaded to local cache directory, and BM25 values calculated against
 #' those. Must be one of "ropensci", "ropensci-fns".
 #'
 #' @export
-pkgsimil_bm25 <- function (input, txt = NULL, corpus = "ropensci") {
+pkgsimil_bm25 <- function (input, txt = NULL, idfs = NULL, corpus = "ropensci") {
 
     if (is.null (txt)) {
-        idfs <- pkgsimil_load_data ("idfs", fns = FALSE)
+        if (is.null (idfs)) {
+            idfs <- pkgsimil_load_data ("idfs", fns = FALSE)
+        }
         tokens_idf <- idfs$idfs
         tokens_list <- idfs$token_lists
     } else {

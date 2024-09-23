@@ -4,7 +4,7 @@
 \alias{pkgsimil_bm25}
 \title{Calculate the "BM25" = "Best Matching 25" ranking function.}
 \usage{
-pkgsimil_bm25(input, txt = NULL, corpus = "ropensci")
+pkgsimil_bm25(input, txt = NULL, idfs = NULL, corpus = "ropensci")
 }
 \arguments{
 \item{input}{A single character string to match against the second parameter
@@ -12,6 +12,10 @@ of all input documents.}
 
 \item{txt}{An optional list of input documents. If not specified, data will
 be loaded as specified by the \code{corpus} parameter.}
+
+\item{idfs}{Optional list of Inverse Document Frequency weightings generated
+by the \link{bm25_idf} function. If not specified, values for the rOpenSci
+corpus will be automatically downloaded and used.}
 
 \item{corpus}{If \code{txt} is not specified, data for nominated corpus will be
 downloaded to local cache directory, and BM25 values calculated against
