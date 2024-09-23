@@ -76,12 +76,12 @@ bm25_idf <- function (txt) {
 }
 
 bm25_idf_internal <- function (txt) {
-    tokens_txt <- m_bm25_tokens (txt)
+    tokens_txt <- bm25_tokens (txt)
 
     ntoks <- vapply (tokens_txt, length, integer (1L))
     ntoks_avg <- mean (ntoks [which (ntoks > 0L)])
 
-    tokens_list <- m_bm25_tokens_list (tokens_txt)
+    tokens_list <- bm25_tokens_list (tokens_txt)
 
     tokens_idf <- do.call (rbind, lapply (tokens_list, function (i) {
         data.frame (token = unique (i$token), n = 1L)
