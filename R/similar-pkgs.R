@@ -53,7 +53,7 @@ pkgsimil_similar_pkgs <- function (
             idfs = idfs,
             input_is_code = input_is_code,
             n = n
-        )$package
+        )
     }
 
     return (res)
@@ -148,9 +148,11 @@ similar_pkgs_from_text <- function (
     similarities_bm25 <- pkgsimil_bm25 (input = input, idfs = idfs)
 
     similarities <- dplyr::left_join (similarities, similarities_bm25, by = "package")
+    similarities [is.na (similarities)] <- 0
 
     index <- seq_len (n)
-    return (similarities [index, ])
+
+    return (pkgsimil_rerank (similarities) [index])
 }
 
 similarity_embeddings <- function (input, embeddings, input_is_code) {
