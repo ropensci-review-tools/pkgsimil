@@ -16,6 +16,11 @@ pkgsimil_bm25 <- function (doc, txt) {
 #' @noRd
 bm25_tokens <- function (txt) {
 
+    m_bm25_tokens (txt)
+}
+
+bm25_tokens_internal <- function (txt) {
+
     tokens <- tokenizers::tokenize_words (
         txt,
         lowercase = TRUE,
@@ -34,7 +39,7 @@ bm25_tokens <- function (txt) {
     return (tokens)
 }
 
-m_bm25_tokens <- memoise::memoise (bm25_tokens)
+m_bm25_tokens <- memoise::memoise (bm25_tokens_internal)
 
 #' Convert input list of raw tokens to a list of tokens and corresponding
 #' frequencies.
@@ -44,6 +49,11 @@ m_bm25_tokens <- memoise::memoise (bm25_tokens)
 #' @noRd
 bm25_tokens_list <- function (tokens) {
 
+    m_bm25_tokens_list (tokens)
+}
+
+bm25_tokens_list_internal <- function (tokens) {
+
     lapply (tokens, function (i) {
         data.frame (token = i) |>
             dplyr::group_by (token) |>
@@ -51,7 +61,7 @@ bm25_tokens_list <- function (tokens) {
     })
 }
 
-m_bm25_tokens_list <- memoise::memoise (bm25_tokens_list)
+m_bm25_tokens_list <- memoise::memoise (bm25_tokens_list_internal)
 
 #' Calculate inverse document frequencies for all tokens across a list of
 #' documents.
@@ -62,7 +72,7 @@ m_bm25_tokens_list <- memoise::memoise (bm25_tokens_list)
 #' @export
 bm25_idf <- function (txt) {
 
-    memoise::memoise (bm25_idf_internal)
+    m_bm25_idf (txt)
 }
 
 bm25_idf_internal <- function (txt) {
@@ -83,3 +93,5 @@ bm25_idf_internal <- function (txt) {
 
     return (tokens_idf)
 }
+
+m_bm25_idf <- memoise::memoise (bm25_idf_internal)
