@@ -120,8 +120,18 @@ order_output <- function (out, what = "text", n) {
     return (out)
 }
 
-similar_pkgs_from_text <- function (input, embeddings, input_is_code, n) {
+similar_pkgs_from_text <- function (
+    input,
+    embeddings = NULL,
+    input_is_code = text_is_code (input),
+    n = 5L) {
 
+    stopifnot (is.character (input))
+    stopifnot (length (input) == 1L)
+
+    if (is.null (embeddings)) {
+        embeddings <- pkgsimil_load_data ("embeddings")
+    }
     if (input_is_code) {
         embeddings <- embeddings$code
     } else {
@@ -130,15 +140,27 @@ similar_pkgs_from_text <- function (input, embeddings, input_is_code, n) {
 
     this_emb <- get_embeddings (input, code = input_is_code)
 
-    nrow <- length (this_emb)
-    npkgs <- ncol (embeddings)
-    emb_mat <- matrix (this_emb, nrow = nrow, ncol = npkgs)
-    d <- colMeans (sqrt ((emb_mat - embeddings)^2))
-    d <- data.frame (pkg = names (d), d = unname (d))
+    dat <- cosine_similarity (this_emb, embeddings)
 
-    index <- order (d$d)
-    d_n <- d [index [seq_len (n)], ]
-    rownames (d_n) <- NULL
+    index <- order (dat$simil, decreasing = TRUE)
+    dat_n <- dat [index [seq_len (n)], ]
+    rownames (dat_n) <- NULL
 
-    return (d_n)
+    return (dat_n)
+}
+
+#' cosine similarity between one input vector and an input matrix with column
+#' names.
+#' @noRd
+cosine_similarity <- function (this_vec, this_mat) {
+
+    nrow <- length (this_vec)
+    ncol <- ncol (this_mat)
+    emb_mat <- matrix (this_vec, nrow = nrow, ncol = ncol)
+
+    cs_num <- colSums (emb_mat * this_mat)
+    cs_denom <- sqrt (colSums (emb_mat^2) * colSums (this_mat^2))
+    cs <- cs_num / cs_denom
+
+    data.frame (pkg = names (cs), simil = unname (cs))
 }
