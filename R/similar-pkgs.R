@@ -7,6 +7,9 @@
 #' generated from \link{pkgsimil_embeddings_raw}. If not provided,
 #' pre-generated embeddings will be downloaded and stored in a local cache
 #' directory.
+#' @param idfs Inverse Document Frequency tables for all rOpenSci packages,
+#' generated from \link{bm25_idf}. If not provided, pre-generated IDF tables
+#' will be downloaded and stored in a local cache directory.
 #' @param input_is_code A binary flag indicating whether `input` is code or
 #' plain text. Ignored if `input` is path to a local package; otherwise can be
 #' used to force appropriate interpretation if input type.
@@ -20,12 +23,25 @@
 #'
 #' @seealso input_is_code
 #' @export
-pkgsimil_similar_pkgs <- function (input, embeddings = NULL, input_is_code = text_is_code (input), n = 5L) {
+pkgsimil_similar_pkgs <- function (
+    input,
+    embeddings = NULL,
+    idfs = NULL,
+    input_is_code = text_is_code (input),
+    n = 5L) {
+
     if (is.null (embeddings)) {
         embeddings <- pkgsimil_load_data ("embeddings")
     }
+    if (is.null (idfs)) {
+        idfs <- pkgsimil_load_data ("idfs")
+    }
+
+    nms_expected <- c ("text_with_fns", "text_wo_fns", "code")
     stopifnot (is.list (embeddings))
-    stopifnot (identical (names (embeddings), c ("text", "code")))
+    stopifnot (identical (names (embeddings), nms_expected))
+    stopifnot (is.list (idfs))
+    stopifnot (identical (names (idfs), nms_expected))
 
     if (fs::dir_exists (input)) {
         res <- similar_pkgs_from_pkg (input, embeddings, n)

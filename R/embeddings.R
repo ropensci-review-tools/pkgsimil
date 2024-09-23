@@ -50,6 +50,8 @@ convert_paths_to_pkgs <- function (packages) {
 #' Jina AI embeddings.
 #'
 #' @inheritParams pkgsimil_embedding_dists
+#' @param input A vector of either text strings for which embeddings are to be
+#' calculated, or local paths to directories containing R packages.
 #' @param functions_only If `TRUE`, calculate embeddings for function
 #' descriptions only. This is intended to generate a separate set of embeddings
 #' which can then be used to match plain-text queries of functions, rather than
