@@ -45,9 +45,9 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
 
     options (op)
 
-    nrow <- nrow (emb$text)
     npkgs <- ncol (embeddings$text)
-    emb_text <- matrix (emb$text, nrow = nrow, ncol = npkgs)
+    nrow <- nrow (emb$text_with_fns)
+    emb_text <- matrix (emb$text_with_fns, nrow = nrow, ncol = npkgs)
     emb_code <- matrix (emb$code, nrow = nrow, ncol = npkgs)
     d_text <- colSums (sqrt ((emb_text - embeddings$text)^2))
     d_text <- data.frame (pkg = names (d_text), text = unname (d_text))

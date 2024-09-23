@@ -14,13 +14,13 @@ pkgsimil_embedding_dists <- function (packages = NULL) {
     pkgs_full <- packages
     packages <- convert_paths_to_pkgs (pkgs_full)
 
-    cli::cli_inform ("Getting text embeddings ...")
+    cli::cli_inform ("Generating text embeddings ...")
     txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
     embeddings <- get_embeddings (txt, code = FALSE)
     embeddings_text <- embeddings_to_dists (embeddings, packages)
     names (embeddings_text) [3] <- "d_text"
 
-    cli::cli_inform ("Getting code embeddings ...")
+    cli::cli_inform ("Generating code embeddings ...")
     fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
     embeddings <- get_embeddings (txt, code = TRUE)
     embeddings_code <- embeddings_to_dists (embeddings, packages)
@@ -65,24 +65,46 @@ pkgsimil_embeddings_raw <- function (packages = NULL, functions_only = FALSE) {
     pkgs_full <- packages
     packages <- convert_paths_to_pkgs (pkgs_full)
 
-    cli::cli_inform ("Getting text embeddings ...")
-    txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
+    txt_with_fns <- lapply (pkgs_full, function (p) get_pkg_text (p))
+    txt_wo_fns <- lapply (txt_with_fns, function (i) {
+        i_vec <- strsplit (i, "\\n") [[1]]
+        index <- grep ("^\\s*##\\s+Functions", i_vec)
+        if (length (index) > 0L) {
+            index <- seq (max (index), length (i_vec))
+            i_vec <- i_vec [-(index)]
+        }
+        paste0 (i_vec, collapse = "\\n")
+    })
 
     if (!functions_only) {
-        embeddings_text <- get_embeddings (txt, code = FALSE)
 
-        cli::cli_inform ("Getting code embeddings ...")
-        fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
-        embeddings_code <- get_embeddings (txt, code = TRUE)
+        cli::cli_inform ("Generating text embeddings [1 / 2] ...")
+        embeddings_text_with_fns <- get_embeddings (txt_with_fns, code = FALSE)
+        cli::cli_inform ("Generating text embeddings [2 / 2] ...")
+        embeddings_text_wo_fns <- get_embeddings (txt_wo_fns, code = FALSE)
 
-        colnames (embeddings_text) <- colnames (embeddings_code) <- packages
+        cli::cli_inform ("Generating code embeddings ...")
+        code <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
+        embeddings_code <- get_embeddings (code, code = TRUE)
 
-        ret <- list (text = embeddings_text, code = embeddings_code)
+        colnames (embeddings_text_with_fns) <-
+            colnames (embeddings_text_wo_fns) <-
+            colnames (embeddings_code) <- packages
+
+        ret <- list (
+            text_with_fns = embeddings_text_with_fns,
+            text_wo_fns = embeddings_text_wo_fns,
+            code = embeddings_code
+        )
+
     } else {
-        txt_fns <- get_all_fn_descs (txt)
+
+        cli::cli_inform ("Generating text embeddings for function descriptions ...")
+        txt_fns <- get_all_fn_descs (txt_with_fns)
         ret <- get_embeddings (txt_fns$desc, code = FALSE)
         colnames (ret) <- txt_fns$fn
     }
+
     return (ret)
 }
 
