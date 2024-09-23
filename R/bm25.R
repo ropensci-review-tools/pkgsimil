@@ -47,7 +47,9 @@ m_bm25_tokens <- memoise::memoise (bm25_tokens_internal)
 #' @return A list of `data.frame` objects, one for each input item, and each
 #' including two columns of "token" and "n" holding frequencies for each token.
 #' @noRd
-bm25_tokens_list <- function (tokens) {
+bm25_tokens_list <- function (txt) {
+
+    tokens <- bm25_tokens (txt)
 
     m_bm25_tokens_list (tokens)
 }
@@ -81,7 +83,7 @@ bm25_idf_internal <- function (txt) {
     ntoks <- vapply (tokens_txt, length, integer (1L))
     ntoks_avg <- mean (ntoks [which (ntoks > 0L)])
 
-    tokens_list <- bm25_tokens_list (tokens_txt)
+    tokens_list <- bm25_tokens_list (txt)
 
     tokens_idf <- do.call (rbind, lapply (tokens_list, function (i) {
         data.frame (token = unique (i$token), n = 1L)
