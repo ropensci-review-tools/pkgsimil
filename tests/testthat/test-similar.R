@@ -1,11 +1,12 @@
-# 'embeddings' and 'idfs' are generated in helper-embeddings.R
-
 test_that ("similar pkgs text input", {
 
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
 
     input <- "A similar package"
     n <- 5L
+    embeddings <- get_test_embeddings (npkgs = 10, nfns = 10, embedding_len = 768)
+    txt <- c ("a not so very similar package", "a test package", "a function to test")
+    idfs <- get_test_idfs (txt)
     out <- with_mock_dir ("sim_pkgs_txt", {
         pkgsimil_similar_pkgs (input, embeddings = embeddings, idfs = idfs, n = n)
     })
@@ -22,6 +23,9 @@ test_that ("similar pkgs package input", {
     roxygen2::roxygenise (path)
 
     n <- 5L
+    embeddings <- get_test_embeddings (npkgs = 10, nfns = 10, embedding_len = 768)
+    txt <- c ("a not so very similar package", "a test package", "a function to test")
+    idfs <- get_test_idfs (txt)
     out <- with_mock_dir ("sim_pkgs_pkg", {
         pkgsimil_similar_pkgs (path, embeddings = embeddings, idfs = idfs, n = n)
     })
@@ -39,6 +43,8 @@ test_that ("similar pkgs package input", {
 test_that ("similar fns", {
 
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
+
+    embeddings_fns <- get_test_embeddings_fns (nfns = 10, embedding_len = 768)
 
     input <- "A test function"
     n <- 5L
