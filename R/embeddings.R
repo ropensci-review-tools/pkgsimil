@@ -169,6 +169,11 @@ get_all_fn_descs <- function (txt) {
 }
 
 get_embeddings <- function (txt, code = FALSE) {
+    m_get_embeddings_intern (txt, code)
+}
+
+get_embeddings_intern <- function (txt, code = FALSE) {
+
     ollama_check ()
     if (!opt_is_quiet () && length (txt) > 100) {
         embeddings <- pbapply::pblapply (txt, function (i) get_embeddings_from_ollama (i, code = code))
@@ -178,6 +183,8 @@ get_embeddings <- function (txt, code = FALSE) {
 
     do.call (cbind, embeddings)
 }
+
+m_get_embeddings_intern <- memoise::memoise (get_embeddings_intern)
 
 get_embeddings_from_ollama <- function (input, code = FALSE) {
 
