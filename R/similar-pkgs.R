@@ -45,7 +45,7 @@ pkgsimil_similar_pkgs <- function (
 
     if (fs::dir_exists (input)) {
         res <- similar_pkgs_from_pkg (input, embeddings, n)
-        res <- lapply (res, function (i) i$pkg)
+        res <- lapply (res, function (i) i$package)
     } else {
         res <- similar_pkgs_from_text (
             input = input,
@@ -53,7 +53,7 @@ pkgsimil_similar_pkgs <- function (
             idfs = idfs,
             input_is_code = input_is_code,
             n = n
-        )$pkg
+        )$package
     }
 
     return (res)
@@ -72,11 +72,11 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
     emb_text <- matrix (emb$text_with_fns, nrow = nrow, ncol = npkgs)
     emb_code <- matrix (emb$code, nrow = nrow, ncol = npkgs)
     d_text <- colSums (sqrt ((emb_text - embeddings$text_with_fns)^2))
-    d_text <- data.frame (pkg = names (d_text), text = unname (d_text))
+    d_text <- data.frame (package = names (d_text), text = unname (d_text))
     d_code <- colSums (sqrt ((emb_code - embeddings$code)^2))
-    d_code <- data.frame (pkg = names (d_code), code = unname (d_code))
+    d_code <- data.frame (package = names (d_code), code = unname (d_code))
 
-    out <- dplyr::left_join (d_text, d_code, by = "pkg")
+    out <- dplyr::left_join (d_text, d_code, by = "package")
     out$code <- out$code / max (out$code)
     out$text <- out$text / max (out$text)
 
@@ -120,7 +120,7 @@ pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
 
 order_output <- function (out, what = "text", n) {
     index <- order (out [[what]])
-    out <- out [index [seq_len (n)], c ("pkg", what)]
+    out <- out [index [seq_len (n)], c ("package", what)]
     rownames (out) <- NULL
 
     return (out)
@@ -145,7 +145,9 @@ similar_pkgs_from_text <- function (
         similarities <- similarity_embeddings (input, embeddings, input_is_code = FALSE)
     }
 
-    similarities_bm25 <- pkgsimil_bm25 (input, idfs = idfs)
+    similarities_bm25 <- pkgsimil_bm25 (input = input, idfs = idfs)
+
+    similarities <- dplyr::left_join (similarities, similarities_bm25, by = "package")
 
     index <- seq_len (n)
     return (similarities [index, ])
@@ -163,7 +165,7 @@ similarity_embeddings <- function (input, embeddings, input_is_code) {
         names (dat_wo_fns) [2] <- "simil_wo_fns"
         names (dat_with_fns) [2] <- "simil_with_fns"
 
-        dat <- dplyr::left_join (dat_with_fns, dat_wo_fns, by = "pkg")
+        dat <- dplyr::left_join (dat_with_fns, dat_wo_fns, by = "package")
 
     } else {
 
@@ -193,7 +195,7 @@ cosine_similarity <- function (this_vec, this_mat) {
     cs <- cs_num / cs_denom
 
     index <- order (cs, decreasing = TRUE)
-    res <- data.frame (pkg = names (cs), simil = unname (cs)) [index, ]
+    res <- data.frame (package = names (cs), simil = unname (cs)) [index, ]
     rownames (res) <- NULL
 
     return (res)
