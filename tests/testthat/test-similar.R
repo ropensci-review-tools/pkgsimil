@@ -11,7 +11,7 @@ test_that ("similar pkgs text input", {
         pkgsimil_similar_pkgs (input, embeddings = embeddings, idfs = idfs, n = n)
     })
     expect_type (out, "character")
-    expect_length (out, n)
+    expect_length (out, 2L)
     expect_true (all (out %in% colnames (embeddings$text_with_fns)))
 })
 

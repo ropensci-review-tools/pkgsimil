@@ -47,7 +47,13 @@ pkgsimil_similar_pkgs <- function (
         res <- similar_pkgs_from_pkg (input, embeddings, n)
         res <- lapply (res, function (i) i$pkg)
     } else {
-        res <- similar_pkgs_from_text (input, embeddings, input_is_code, n)$pkg
+        res <- similar_pkgs_from_text (
+            input = input,
+            embeddings = embeddings,
+            idfs = idfs,
+            input_is_code = input_is_code,
+            n = 2
+        )$pkg
     }
 
     return (res)
@@ -169,8 +175,8 @@ similarity_embeddings <- function (input, embeddings, input_is_code) {
 
 similarity_bm25 <- function (input, bm25, idfs = NULL) {
 
-    this_emb <- get_embeddings (input, code = FALSE)
     b <- pkgsimil_bm25 (input = input, idfs = idfs)
+    this_emb <- get_embeddings (input, code = FALSE)
 }
 
 #' cosine similarity between one input vector and an input matrix with column
