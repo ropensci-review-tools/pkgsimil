@@ -47,7 +47,7 @@ test_that ("raw embeddings", {
 
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
 
-    packages <- "cli"
+    packages <- "rappdirs"
     emb <- with_mock_dir ("emb_raw", {
         pkgsimil_embeddings_raw (packages)
     })
