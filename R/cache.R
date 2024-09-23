@@ -15,7 +15,7 @@ pkgsimil_load_data <- function (what = "embeddings", fns = FALSE) {
     if (what == "embeddings") {
         fname <- ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds")
     } else {
-        file <- ifelse (fns, "bm25-ropensci-fns.Rds", "bm25-ropensci.Rds")
+        fname <- ifelse (fns, "bm25-ropensci-fns.Rds", "bm25-ropensci.Rds")
     }
     fname <- fs::path (pkgsimil_cache_path (), fname)
     if (!fs::file_exists (fname)) {
