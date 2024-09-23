@@ -31,6 +31,8 @@ pkgsimil_bm25 <- function (input, txt = NULL, corpus = "ropensci") {
 
 pkgsimil_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
 
+    n <- NULL # suppress no visible binding note
+
     ntoks_list <- vapply (tokens_list, function (i) sum (i$n), integer (1L))
     ntoks_avg <- mean (ntoks_list)
 
@@ -108,6 +110,8 @@ bm25_tokens_list <- function (txt) {
 
 bm25_tokens_list_internal <- function (tokens) {
 
+    token <- NULL # suppress no visible binding note
+
     lapply (tokens, function (i) {
         data.frame (token = i) |>
             dplyr::group_by (token) |>
@@ -130,6 +134,8 @@ bm25_idf <- function (txt) {
 }
 
 bm25_idf_internal <- function (txt) {
+
+    token <- NULL # suppress no visible binding note
 
     n_docs <- length (txt)
 
