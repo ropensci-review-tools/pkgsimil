@@ -34,14 +34,14 @@ pkgsimil_similar_pkgs <- function (
         embeddings <- pkgsimil_load_data ("embeddings")
     }
     if (is.null (idfs)) {
-        # idfs <- pkgsimil_load_data ("idfs")
+        idfs <- pkgsimil_load_data ("idfs")
     }
 
     nms_expected <- c ("text_with_fns", "text_wo_fns", "code")
     stopifnot (is.list (embeddings))
     stopifnot (identical (names (embeddings), nms_expected))
-    # stopifnot (is.list (idfs))
-    # stopifnot (identical (names (idfs), c ("idfs", "token_lists")))
+    stopifnot (is.list (idfs))
+    stopifnot (identical (names (idfs), c ("idfs", "token_lists")))
 
     if (fs::dir_exists (input)) {
         res <- similar_pkgs_from_pkg (input, embeddings, n)
@@ -52,7 +52,7 @@ pkgsimil_similar_pkgs <- function (
             embeddings = embeddings,
             idfs = idfs,
             input_is_code = input_is_code,
-            n = 2
+            n = n
         )$pkg
     }
 
