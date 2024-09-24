@@ -23,12 +23,11 @@
 #'
 #' @seealso input_is_code
 #' @export
-pkgsimil_similar_pkgs <- function (
-    input,
-    embeddings = NULL,
-    idfs = NULL,
-    input_is_code = text_is_code (input),
-    n = 5L) {
+pkgsimil_similar_pkgs <- function (input,
+                                   embeddings = NULL,
+                                   idfs = NULL,
+                                   input_is_code = text_is_code (input),
+                                   n = 5L) {
 
     if (is.null (embeddings)) {
         embeddings <- pkgsimil_load_data ("embeddings")
@@ -104,6 +103,7 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
 #' "<package>::<function>".
 #' @export
 pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
+
     if (is.null (embeddings)) {
         embeddings <- pkgsimil_load_data ("embeddings", fns = TRUE)
     }
@@ -123,6 +123,7 @@ pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
 }
 
 order_output <- function (out, what = "text", n) {
+
     index <- order (out [[what]])
     out <- out [index [seq_len (n)], c ("package", what)]
     rownames (out) <- NULL
@@ -130,12 +131,11 @@ order_output <- function (out, what = "text", n) {
     return (out)
 }
 
-similar_pkgs_from_text <- function (
-    input,
-    embeddings = NULL,
-    idfs = NULL,
-    input_is_code = text_is_code (input),
-    n = 5L) {
+similar_pkgs_from_text <- function (input,
+                                    embeddings = NULL,
+                                    idfs = NULL,
+                                    input_is_code = text_is_code (input),
+                                    n = 5L) {
 
     stopifnot (is.character (input))
     stopifnot (length (input) == 1L)
