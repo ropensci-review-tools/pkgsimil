@@ -43,10 +43,13 @@ pkgsimil_similar_pkgs <- function (
     stopifnot (is.list (idfs))
     stopifnot (identical (names (idfs), c ("idfs", "token_lists")))
 
-    if (fs::dir_exists (input)) {
+    if (input_is_dir (input)) {
+
         res <- similar_pkgs_from_pkg (input, embeddings, n)
         res <- lapply (res, function (i) i$package)
+
     } else {
+
         res <- similar_pkgs_from_text (
             input = input,
             embeddings = embeddings,

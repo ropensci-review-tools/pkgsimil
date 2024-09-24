@@ -22,6 +22,20 @@ text_is_code <- function (txt) {
     nw / n0 < token_threshold
 }
 
+#' Check whether 'input' parameter is a directory or not.
+#'
+#' This is necessary because `fs::dir_exists()` errors if the string passed is
+#' too long.
+#' @noRd
+input_is_dir <- function (input) {
+
+    chk <- tryCatch (
+        fs::dir_exists (input),
+        error = function (e) NULL
+    )
+    ifelse (is.null (chk), FALSE, chk)
+}
+
 # Function to estimate the `token_threshold` above of 0.98, from running over
 # all rOpenSci packages.
 # get_threshold <- function (paths) {
