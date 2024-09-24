@@ -8,12 +8,47 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+knitr::opts_chunk$set (
+    collapse = TRUE,
+    comment = "#>"
 )
 ```
 
+The "pksimil" package uses Large Language Models (LLMs) to assess relationships
+between R packages. Software which relies on LLMs commonly accesses them
+through Application Programming Interfaces (APIs) provided by external
+organisations such as [mistral.ai](https://mistral.ai),
+[jina.ai](https://jina.ai), or a host of alternative providers.
+Inputs, generally in text form, are sent to the external service which then
+responds in some specified form, such as one or more suggested text
+completions.
+
+Accessing LLMs through APIs has several notable drawbacks, notably including:
+
+- There is no guarantee that the API will continue to be available, or that
+processes used to generate responses will remain stable and reproducible.
+- Most APIs cost money. These costs must generally be borne by the users of
+software.
+- Data submitted to such APIs is generally used by the organizations providing
+them to train and refine their own models, so privacy-protecting use is
+generally not possible.
+
+In spite of those drawbacks, building software around external APIs offers the
+two key advantages of:
+
+- Being easier to develop, as the external API will generally take care of much
+of the processing that might otherwise have to be written and executed locally;
+and
+- Being able to access the latest and biggest and fastest models which are
+generally only available in the form of external APIs.
+
+The "pkgsimil" package interfaces with LLMs exclusively through a local server
+provided by [the "ollama" software](https://ollama.com). ollama is very simple
+to use, and includes a simple download (or "pull") command to download
+open-sourced model weightings. The "pkgsimil" package has a dedicated
+`ollama_check()` function which will download the required models for you, and
+start your local "ollama" server.`
+
 ```{r setup}
-library(pkgsimil)
+library (pkgsimil)
 ```
