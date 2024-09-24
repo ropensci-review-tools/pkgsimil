@@ -68,6 +68,7 @@ desc_template <- function (pkg_name, desc) {
 }
 
 get_pkg_text_local <- function (path) {
+
     stopifnot (length (path) == 1L)
 
     path <- fs::path_norm (path)
@@ -75,6 +76,9 @@ get_pkg_text_local <- function (path) {
     is_tarball <- fs::path_ext (path) == "gz"
     if (is_tarball) {
         path <- tarball_to_path (path)
+        on.exit ({
+            fs::dir_delete (path)
+        })
     }
 
     stopifnot (fs::dir_exists (path))
@@ -137,10 +141,6 @@ get_pkg_text_local <- function (path) {
         "",
         unlist (fn_txt)
     )
-
-    if (is_tarball) {
-        fs::dir_delete (path)
-    }
 
     paste0 (out, collapse = "\n ")
 }
