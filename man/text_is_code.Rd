@@ -18,3 +18,9 @@ This is only approximate, and there are even software packages which can
 give false negatives and be identified as prose (like rOpenSci's "geonames"
 package), and prose which may be wrongly identified as code.
 }
+\examples{
+txt <- "Some text without any code"
+text_is_code (txt)
+txt <- "this_is_code <- function (x) { x }"
+text_is_code (txt)
+}

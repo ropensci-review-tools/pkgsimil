@@ -114,6 +114,12 @@ pkgsimil_embeddings_from_pkgs <- function (packages = NULL,
 #' @return A matrix of embeddings, one column for each `input` item, and a
 #' fixed number of rows defined by the embedding length of the language models.
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' input <- "Download open spatial data from NASA"
+#' emb <- pkgsimil_embeddings_from_text (input = input)
+#' }
 pkgsimil_embeddings_from_text <- function (input = NULL) {
 
     get_embeddings (input, code = FALSE)

@@ -13,3 +13,8 @@ before returning.
 \description{
 Check that ollama is installed with required models, and download if not.
 }
+\examples{
+\dontrun{
+chk <- ollama_check ()
+}
+}

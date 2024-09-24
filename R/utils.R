@@ -12,6 +12,12 @@ opt_is_quiet <- function () {
 #' @return Logical value indicating whether or not `txt` was identified as
 #' code.
 #' @export
+#'
+#' @examples
+#' txt <- "Some text without any code"
+#' text_is_code (txt)
+#' txt <- "this_is_code <- function (x) { x }"
+#' text_is_code (txt)
 text_is_code <- function (txt) {
     stopifnot (length (txt) == 1L)
 

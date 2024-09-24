@@ -74,6 +74,11 @@ ollama_is_running <- function () {
 #'
 #' @return TRUE if everything works okay, otherwise the function will error
 #' before returning.
+#'
+#' @examples
+#' \dontrun{
+#' chk <- ollama_check ()
+#' }
 #' @export
 ollama_check <- function () {
     if (identical (Sys.getenv ("PKGSIMIL_TESTS"), "true")) {

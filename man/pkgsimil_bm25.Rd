@@ -28,3 +28,12 @@ from whole packages both with and without function descriptions.
 \description{
 See \url{https://en.wikipedia.org/wiki/Okapi_BM25}.
 }
+\examples{
+\dontrun{
+input <- "Download open spatial data from NASA"
+bm25 <- pkgsimil_bm25 (input)
+# Or pre-load document-frequency weightings:
+idfs <- pkgsimil_load_data ("idfs", fns = FALSE)
+bm25 <- pkgsimil_bm25 (input, idfs = idfs)
+}
+}

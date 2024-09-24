@@ -17,6 +17,15 @@
 #' from whole packages both with and without function descriptions.
 #'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' input <- "Download open spatial data from NASA"
+#' bm25 <- pkgsimil_bm25 (input)
+#' # Or pre-load document-frequency weightings:
+#' idfs <- pkgsimil_load_data ("idfs", fns = FALSE)
+#' bm25 <- pkgsimil_bm25 (input, idfs = idfs)
+#' }
 pkgsimil_bm25 <- function (input, txt = NULL,
                            idfs = NULL, corpus = "ropensci") {
 

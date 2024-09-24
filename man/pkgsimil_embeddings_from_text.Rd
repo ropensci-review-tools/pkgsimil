@@ -18,3 +18,9 @@ fixed number of rows defined by the embedding length of the language models.
 The embeddings are currently retrieved from a local 'ollama' server running
 Jina AI embeddings.
 }
+\examples{
+\dontrun{
+input <- "Download open spatial data from NASA"
+emb <- pkgsimil_embeddings_from_text (input = input)
+}
+}
