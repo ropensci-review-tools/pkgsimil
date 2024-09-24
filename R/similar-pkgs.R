@@ -167,6 +167,14 @@ similar_pkgs_from_text <- function (input,
     similarities [is.na (similarities)] <- 0
 
     index <- seq_len (n)
+    rm_fn_data <- !input_mentions_functions (input)
 
-    return (pkgsimil_rerank (similarities) [index])
+    return (pkgsimil_rerank (similarities, rm_fn_data) [index])
+}
+
+input_mentions_functions <- function (input) {
+
+    stopifnot (length (input) == 1L)
+
+    grepl ("\\sfunction\\s", input, ignore.case = TRUE)
 }
