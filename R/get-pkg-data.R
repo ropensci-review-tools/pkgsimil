@@ -255,9 +255,20 @@ get_fn_defs_namespace <- function (pkg_name, exported_only) {
 
 get_fn_defs_local <- function (path) {
     path <- fs::path_norm (path)
+
+    is_tarball <- fs::path_ext (path) == "gz"
+    if (is_tarball) {
+        path <- tarball_to_path (path)
+        on.exit ({
+            fs::dir_delete (path)
+        })
+    }
+
     stopifnot (fs::dir_exists (path))
     path_r <- fs::path (path, "R")
-    stopifnot (fs::dir_exists (path_r))
+    if (!fs::dir_exists (path_r)) {
+        return ("")
+    }
 
     files_r <- fs::dir_ls (path_r, regexp = "\\.(r|R)$")
     txt <- lapply (files_r, brio::read_lines)
