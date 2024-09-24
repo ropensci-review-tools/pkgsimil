@@ -1,4 +1,6 @@
 library (pkgsimil)
+ollama_check ()
+
 path <- "/<path>/<to>/<ropensci>/<repos>"
 packages <- fs::dir_ls (path)
 embeddings <- pkgsimil_embeddings_from_pkgs (packages)
