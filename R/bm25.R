@@ -13,6 +13,9 @@
 #' downloaded to local cache directory, and BM25 values calculated against
 #' those. Must be one of "ropensci", "ropensci-fns".
 #'
+#' @return A `data.frame` of package names and 'BM25' measures against text
+#' from whole packages both with and without function descriptions.
+#'
 #' @export
 pkgsimil_bm25 <- function (input, txt = NULL,
                            idfs = NULL, corpus = "ropensci") {

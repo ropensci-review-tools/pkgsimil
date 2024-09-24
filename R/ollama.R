@@ -72,6 +72,8 @@ ollama_is_running <- function () {
 
 #' Check that ollama is installed with required models, and download if not.
 #'
+#' @return TRUE if everything works okay, otherwise the function will error
+#' before returning.
 #' @export
 ollama_check <- function () {
     if (identical (Sys.getenv ("PKGSIMIL_TESTS"), "true")) {

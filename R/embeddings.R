@@ -111,6 +111,8 @@ pkgsimil_embeddings_from_pkgs <- function (packages = NULL,
 #'
 #' @param input A vector of one or more text strings for which embeddings are
 #' to be extracted.
+#' @return A matrix of embeddings, one column for each `input` item, and a
+#' fixed number of rows defined by the embedding length of the language models.
 #' @export
 pkgsimil_embeddings_from_text <- function (input = NULL) {
 

@@ -21,6 +21,10 @@ corpus will be automatically downloaded and used.}
 downloaded to local cache directory, and BM25 values calculated against
 those. Must be one of "ropensci", "ropensci-fns".}
 }
+\value{
+A \code{data.frame} of package names and 'BM25' measures against text
+from whole packages both with and without function descriptions.
+}
 \description{
 See \url{https://en.wikipedia.org/wiki/Okapi_BM25}.
 }

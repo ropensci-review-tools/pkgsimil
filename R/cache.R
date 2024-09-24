@@ -7,6 +7,7 @@
 #' individual functions.
 #' @param what Either "embeddings" to load pre-generated embeddings, or "idfs"
 #' to load pre-generated Inverse Document Frequency weightings.
+#' @return The loaded `data.frame`.
 #' @export
 pkgsimil_load_data <- function (what = "embeddings", fns = FALSE) {
 

@@ -10,6 +10,10 @@ pkgsimil_embeddings_from_text(input = NULL)
 \item{input}{A vector of one or more text strings for which embeddings are
 to be extracted.}
 }
+\value{
+A matrix of embeddings, one column for each \code{input} item, and a
+fixed number of rows defined by the embedding length of the language models.
+}
 \description{
 The embeddings are currently retrieved from a local 'ollama' server running
 Jina AI embeddings.

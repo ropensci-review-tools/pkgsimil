@@ -6,6 +6,10 @@
 \usage{
 ollama_check()
 }
+\value{
+TRUE if everything works okay, otherwise the function will error
+before returning.
+}
 \description{
 Check that ollama is installed with required models, and download if not.
 }
