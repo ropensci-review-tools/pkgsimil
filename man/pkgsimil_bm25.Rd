@@ -14,8 +14,8 @@ of all input documents.}
 be loaded as specified by the \code{corpus} parameter.}
 
 \item{idfs}{Optional list of Inverse Document Frequency weightings generated
-by the \link{bm25_idf} function. If not specified, values for the rOpenSci
-corpus will be automatically downloaded and used.}
+by the internal \code{bm25_idf} function. If not specified, values for the
+rOpenSci corpus will be automatically downloaded and used.}
 
 \item{corpus}{If \code{txt} is not specified, data for nominated corpus will be
 downloaded to local cache directory, and BM25 values calculated against

@@ -8,8 +8,8 @@
 #' pre-generated embeddings will be downloaded and stored in a local cache
 #' directory.
 #' @param idfs Inverse Document Frequency tables for all rOpenSci packages,
-#' generated from \link{bm25_idf}. If not provided, pre-generated IDF tables
-#' will be downloaded and stored in a local cache directory.
+#' generated from \link{pkgsimil_bm25}. If not provided, pre-generated IDF
+#' tables will be downloaded and stored in a local cache directory.
 #' @param input_is_code A binary flag indicating whether `input` is code or
 #' plain text. Ignored if `input` is path to a local package; otherwise can be
 #' used to force appropriate interpretation if input type.
@@ -63,6 +63,7 @@ pkgsimil_similar_pkgs <- function (
 }
 
 similar_pkgs_from_pkg <- function (input, embeddings, n) {
+
     op <- options ()
     options (rlib_message_verbosity = "quiet")
 

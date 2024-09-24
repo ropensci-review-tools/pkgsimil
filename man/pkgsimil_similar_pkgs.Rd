@@ -23,8 +23,8 @@ pre-generated embeddings will be downloaded and stored in a local cache
 directory.}
 
 \item{idfs}{Inverse Document Frequency tables for all rOpenSci packages,
-generated from \link{bm25_idf}. If not provided, pre-generated IDF tables
-will be downloaded and stored in a local cache directory.}
+generated from \link{pkgsimil_bm25}. If not provided, pre-generated IDF
+tables will be downloaded and stored in a local cache directory.}
 
 \item{input_is_code}{A binary flag indicating whether \code{input} is code or
 plain text. Ignored if \code{input} is path to a local package; otherwise can be

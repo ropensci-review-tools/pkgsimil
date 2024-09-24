@@ -7,8 +7,8 @@
 #' @param txt An optional list of input documents. If not specified, data will
 #' be loaded as specified by the `corpus` parameter.
 #' @param idfs Optional list of Inverse Document Frequency weightings generated
-#' by the \link{bm25_idf} function. If not specified, values for the rOpenSci
-#' corpus will be automatically downloaded and used.
+#' by the internal `bm25_idf` function. If not specified, values for the
+#' rOpenSci corpus will be automatically downloaded and used.
 #' @param corpus If `txt` is not specified, data for nominated corpus will be
 #' downloaded to local cache directory, and BM25 values calculated against
 #' those. Must be one of "ropensci", "ropensci-fns".
@@ -125,7 +125,7 @@ m_bm25_tokens <- memoise::memoise (bm25_tokens_internal)
 #' @inheritParams pkgsimil_bm25
 #' @return A list of `data.frame` objects, one for each input item, and each
 #' including two columns of "token" and "n" holding frequencies for each token.
-#' @export
+#' @noRd
 bm25_tokens_list <- function (txt) {
 
     tokens <- bm25_tokens (txt)
@@ -152,7 +152,7 @@ m_bm25_tokens_list <- memoise::memoise (bm25_tokens_list_internal)
 #' @inheritParams pkgsimil_bm25
 #' @return A list of `data.frame` objects, each containing two columns of
 #' "tokens" and "idf" for inverse document frequencies for each token.
-#' @export
+#' @noRd
 bm25_idf <- function (txt) {
 
     m_bm25_idf (txt)

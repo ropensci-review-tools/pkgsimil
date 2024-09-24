@@ -23,7 +23,7 @@ pkgsimil_rerank <- function (s) {
 
     # Weight rankings without function definitions higher than those with.
     # Relative weighting are `wt_factor ^ 2`.
-    wt_factor <- 0.75
+    wt_factor <- 0.5
     cols_with <- grep ("with", colnames (rank_matrix))
     cols_wo <- grep ("wo", colnames (rank_matrix))
     rank_matrix [, cols_with] <- rank_matrix [, cols_with] * wt_factor
