@@ -21,6 +21,14 @@ pkgsimil_rerank <- function (s) {
     rank_matrix <- as.matrix (s [, new_cols])
     rank_matrix <- 1 / (k + rank_matrix)
 
+    # Weight rankings without function definitions higher than those with.
+    # Relative weighting are `wt_factor ^ 2`.
+    wt_factor <- 0.75
+    cols_with <- grep ("with", colnames (rank_matrix))
+    cols_wo <- grep ("wo", colnames (rank_matrix))
+    rank_matrix [, cols_with] <- rank_matrix [, cols_with] * wt_factor
+    rank_matrix [, cols_wo] <- rank_matrix [, cols_wo] / wt_factor
+
     rank_scores <- rowSums (rank_matrix)
 
     s$package [order (rank_scores, decreasing = TRUE)]
