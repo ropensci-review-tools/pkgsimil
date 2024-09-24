@@ -14,7 +14,6 @@ get_test_embeddings <- function (npkgs, nfns, embedding_len, seed = 1L) {
     n <- npkgs * embedding_len
 
     pkg_nms <- vapply (seq_len (npkgs), function (i) mknm (), character (1L))
-    fn_nms <- vapply (seq_len (nfns), function (i) mknm (), character (1L))
 
     emb_code <- matrix (runif (n), nrow = embedding_len, ncol = npkgs)
     emb_txt2 <- matrix (runif (n), nrow = embedding_len, ncol = npkgs)
@@ -42,7 +41,10 @@ get_test_idfs <- function (txt, seed = 1L) {
     set.seed (seed)
     pkg_nms <- vapply (seq_along (txt), function (i) mknm (), character (1L))
 
-    token_lists <- list (with_fns = bm25_tokens_list (txt), wo_fns = bm25_tokens_list (txt))
+    token_lists <- list (
+        with_fns = bm25_tokens_list (txt),
+        wo_fns = bm25_tokens_list (txt)
+    )
     names (token_lists$with_fns) <- names (token_lists$wo_fns) <- pkg_nms
     idf_data <- list (with_fns = bm25_idf (txt), wo_fns = bm25_idf (txt))
     list (idfs = idf_data, token_lists = token_lists)

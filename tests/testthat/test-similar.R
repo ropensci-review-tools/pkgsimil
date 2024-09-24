@@ -4,11 +4,24 @@ test_that ("similar pkgs text input", {
 
     input <- "A similar package"
     n <- 5L
-    embeddings <- get_test_embeddings (npkgs = 10, nfns = 10, embedding_len = 768)
-    txt <- c ("a not so very similar package", "a test package", "a function to test")
+    embeddings <- get_test_embeddings (
+        npkgs = 10,
+        nfns = 10,
+        embedding_len = 768
+    )
+    txt <- c (
+        "a not so very similar package",
+        "a test package",
+        "a function to test"
+    )
     idfs <- get_test_idfs (txt)
     out <- with_mock_dir ("sim_pkgs_txt", {
-        pkgsimil_similar_pkgs (input, embeddings = embeddings, idfs = idfs, n = n)
+        pkgsimil_similar_pkgs (
+            input,
+            embeddings = embeddings,
+            idfs = idfs,
+            n = n
+        )
     })
     expect_type (out, "character")
     expect_length (out, 5L)
@@ -23,11 +36,24 @@ test_that ("similar pkgs package input", {
     roxygen2::roxygenise (path)
 
     n <- 5L
-    embeddings <- get_test_embeddings (npkgs = 10, nfns = 10, embedding_len = 768)
-    txt <- c ("a not so very similar package", "a test package", "a function to test")
+    embeddings <- get_test_embeddings (
+        npkgs = 10,
+        nfns = 10,
+        embedding_len = 768
+    )
+    txt <- c (
+        "a not so very similar package",
+        "a test package",
+        "a function to test"
+    )
     idfs <- get_test_idfs (txt)
     out <- with_mock_dir ("sim_pkgs_pkg", {
-        pkgsimil_similar_pkgs (path, embeddings = embeddings, idfs = idfs, n = n)
+        pkgsimil_similar_pkgs (
+            path,
+            embeddings = embeddings,
+            idfs = idfs,
+            n = n
+        )
     })
     expect_type (out, "list")
     expect_length (out, 2L)
