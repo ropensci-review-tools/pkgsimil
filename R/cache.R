@@ -44,3 +44,21 @@ pkgsimil_dl_data <- function (what = "embeddings", fns = FALSE) {
     utils::download.file (url, destfile = destfile)
     return (destfile)
 }
+
+pkgsimil_cache_path <- function () {
+
+    cache_dir <- Sys.getenv ("PKGSIMIL_CACHE_DIR")
+
+    if (cache_dir == "") {
+        cache_dir <- fs::path_expand (fs::path (
+            rappdirs::user_cache_dir (),
+            "R",
+            "pkgsimil"
+        ))
+        if (!fs::dir_exists (cache_dir)) {
+            fs::dir_create (cache_dir, recurse = TRUE)
+        }
+    }
+
+    return (cache_dir)
+}
