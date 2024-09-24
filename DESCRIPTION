@@ -23,10 +23,13 @@ Suggests:
     httptest2,
     roxygen2,
     testthat (>= 3.0.0),
-    withr
+    withr,
+    knitr,
+    rmarkdown
 Depends: R (>= 3.5.0)
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Config/testthat/edition: 3
+VignetteBuilder: knitr
