@@ -1,34 +1,3 @@
-#' Calculate distances between 'LLM' embeddings from package text and function
-#' definitions.
-#'
-#' The embeddings are currently retrieved from a local 'ollama' server running
-#' Jina AI embeddings.
-#'
-#' @param packages Names of, or paths to,  one or more packages for which
-#' embedding similarities are to be calculated.
-#' @return A `data.frame` of pair-wise similarities between all packages
-#' specified in `packages`.
-#' @export
-pkgsimil_embedding_dists <- function (packages = NULL) {
-
-    pkgs_full <- packages
-    packages <- convert_paths_to_pkgs (pkgs_full)
-
-    cli::cli_inform ("Generating text embeddings ...")
-    txt <- lapply (pkgs_full, function (p) get_pkg_text (p))
-    embeddings <- get_embeddings (txt, code = FALSE)
-    embeddings_text <- embeddings_to_dists (embeddings, packages)
-    names (embeddings_text) [3] <- "d_text"
-
-    cli::cli_inform ("Generating code embeddings ...")
-    fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
-    embeddings <- get_embeddings (fns, code = TRUE)
-    embeddings_code <- embeddings_to_dists (embeddings, packages)
-    names (embeddings_code) [3] <- "d_code"
-
-    dplyr::left_join (embeddings_text, embeddings_code, by = c ("from", "to"))
-}
-
 convert_paths_to_pkgs <- function (packages) {
     is_installed <- pkg_is_installed (packages)
     if (any (is_installed) && !all (is_installed)) {
@@ -227,23 +196,4 @@ get_embeddings_from_ollama <- function (input, code = FALSE) {
 
     embeddings <- httr2::resp_body_json (resp, simplifyVector = FALSE)
     unlist (embeddings$embedding)
-}
-
-embeddings_to_dists <- function (embeddings, nms) {
-    out <- stats::dist (t (embeddings))
-
-    n <- length (nms)
-    i <- seq_len (n - 1)
-    j <- i + 1
-    i <- rep (i, each = n - 1)
-    j <- rep (j, times = n - 1)
-    index <- which (j > i)
-    i <- i [index]
-    j <- j [index]
-
-    data.frame (
-        from = nms [i],
-        to = nms [j],
-        d = as.vector (out)
-    )
 }

@@ -6,14 +6,6 @@ expect_embeddings_matrix <- function (x) {
     expect_true (max (x) > 0)
 }
 
-test_that ("embeddings errors", {
-    packages <- c ("cli", "not_a_package")
-    expect_error (
-        pkgsimil_embedding_dists (packages),
-        "packages must either name installed packages, or supply paths"
-    )
-})
-
 test_that ("embeddings properties", {
 
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
@@ -23,24 +15,6 @@ test_that ("embeddings properties", {
         get_embeddings (txt)
     })
     expect_embeddings_matrix (emb)
-})
-
-test_that ("embedding_dists fn", {
-
-    withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
-
-    packages <- c ("cli", "fs")
-    ncombs <- ncol (combn (packages, 2L))
-    d <- with_mock_dir ("emb_pkgs", {
-        pkgsimil_embedding_dists (packages)
-    })
-    expect_s3_class (d, "data.frame")
-    expect_equal (ncol (d), 4L)
-    expect_equal (nrow (d), ncombs)
-    expect_identical (names (d), c ("from", "to", "d_text", "d_code"))
-    expect_type (d$d_text, "double")
-    expect_type (d$d_code, "double")
-    expect_true (all (packages %in% c (d$from, d$to)))
 })
 
 test_that ("raw embeddings", {
