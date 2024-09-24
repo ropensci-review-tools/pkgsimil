@@ -25,3 +25,13 @@ descriptions.
 The embeddings are currently retrieved from a local 'ollama' server running
 Jina AI embeddings.
 }
+\examples{
+\dontrun{
+packages <- c ("cli", "fs")
+emb_fns <- pkgsimil_embeddings_from_pkgs (packages, functions_only = TRUE)
+colnames (emb_fns) # All functions of the two packages
+emb_pkg <- pkgsimil_embeddings_from_pkgs (packages, functions_only = FALSE)
+names (emb_pkg) # text_with_fns, text_wo_fns, code
+colnames (emb_pkg$text_with_fns) # cli, fs
+}
+}

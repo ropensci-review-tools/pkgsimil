@@ -29,6 +29,16 @@ convert_paths_to_pkgs <- function (packages) {
 #' `functions_only`, a single matrix of embeddings for all function
 #' descriptions.
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' packages <- c ("cli", "fs")
+#' emb_fns <- pkgsimil_embeddings_from_pkgs (packages, functions_only = TRUE)
+#' colnames (emb_fns) # All functions of the two packages
+#' emb_pkg <- pkgsimil_embeddings_from_pkgs (packages, functions_only = FALSE)
+#' names (emb_pkg) # text_with_fns, text_wo_fns, code
+#' colnames (emb_pkg$text_with_fns) # cli, fs
+#' }
 pkgsimil_embeddings_from_pkgs <- function (packages = NULL,
                                            functions_only = FALSE) {
 

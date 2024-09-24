@@ -9,6 +9,14 @@
 #' to load pre-generated Inverse Document Frequency weightings.
 #' @return The loaded `data.frame`.
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' embeddings <- pkgsimil_load_data ("embeddings")
+#' embeddings_fns <- pkgsimil_load_data ("embeddings", fns = TRUE)
+#' idfs <- pkgsimil_load_data ("idfs")
+#' idfs_fns <- pkgsimil_load_data ("idfs", fns = TRUE)
+#' }
 pkgsimil_load_data <- function (what = "embeddings", fns = FALSE) {
 
     what <- match.arg (what, c ("embeddings", "idfs"))

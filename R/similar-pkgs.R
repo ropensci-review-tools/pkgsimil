@@ -23,6 +23,12 @@
 #'
 #' @seealso input_is_code
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' input <- "Download open spatial data from NASA"
+#' pkgsimil_similar_pkgs (input)
+#' }
 pkgsimil_similar_pkgs <- function (input,
                                    embeddings = NULL,
                                    idfs = NULL,
@@ -101,7 +107,14 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
 #' provided, pre-generated embeddings will be downloaded and stored in a local
 #' @return A character vector of function names in the form
 #' "<package>::<function>".
+#'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' input <- "Process raster satellite images"
+#' pkgsimil_similar_fns (input)
+#' }
 pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
 
     if (is.null (embeddings)) {

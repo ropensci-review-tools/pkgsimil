@@ -28,3 +28,9 @@ Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} with
 \code{functions_only = TRUE} to identify functions best matching a given input
 string.
 }
+\examples{
+\dontrun{
+input <- "Process raster satellite images"
+pkgsimil_similar_fns (input)
+}
+}

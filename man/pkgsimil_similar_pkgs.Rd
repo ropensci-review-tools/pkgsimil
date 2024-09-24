@@ -44,6 +44,12 @@ naming the \code{n} most similar packages.
 Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} to identify
 most similar packages to a given local repository.
 }
+\examples{
+\dontrun{
+input <- "Download open spatial data from NASA"
+pkgsimil_similar_pkgs (input)
+}
+}
 \seealso{
 input_is_code
 }
