@@ -49,7 +49,13 @@ pkgsimil_embeddings_from_pkgs <- function (packages = NULL,
         packages <- gsub ("\\_.*$", "", packages)
     }
 
-    txt_with_fns <- lapply (pkgs_full, function (p) get_pkg_text (p))
+    if (!opt_is_quiet () && length (packages) > 100) {
+        cli::cli_inform ("Extracting package text ...")
+        txt_with_fns <- pbapply::pblapply (pkgs_full, function (p) get_pkg_text (p))
+    } else {
+        txt_with_fns <- lapply (pkgs_full, function (p) get_pkg_text (p))
+    }
+
     txt_wo_fns <- rm_fns_from_pkg_txt (txt_with_fns)
 
     if (!functions_only) {
@@ -60,8 +66,17 @@ pkgsimil_embeddings_from_pkgs <- function (packages = NULL,
         embeddings_text_wo_fns <- get_embeddings (txt_wo_fns, code = FALSE)
 
         cli::cli_inform ("Generating code embeddings ...")
-        code <-
-            vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
+        if (!opt_is_quiet () && length (packages) > 100) {
+            cli::cli_inform ("Extracting package code ...")
+            code <- pbapply::pblapply (pkgs_full, function (p) get_pkg_code (p))
+            code <- unlist (code)
+        } else {
+            code <- vapply (
+                pkgs_full,
+                function (p) get_pkg_code (p),
+                character (1L)
+            )
+        }
         embeddings_code <- get_embeddings (code, code = TRUE)
 
         colnames (embeddings_text_with_fns) <-
