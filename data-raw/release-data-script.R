@@ -4,13 +4,20 @@ packages <- fs::dir_ls (path)
 embeddings <- pkgsimil_embeddings_from_pkgs (packages)
 
 saveRDS (embeddings, "embeddings.Rds")
-embeddings_fns <- pkgsimil_embeddings_from_pkgs (packages, functions_only = TRUE)
+embeddings_fns <-
+    pkgsimil_embeddings_from_pkgs (packages, functions_only = TRUE)
 saveRDS (embeddings_fns, "embeddings-fns.Rds")
 
 txt_with_fns <- lapply (packages, function (p) get_pkg_text (p))
 txt_wo_fns <- rm_fns_from_pkg_txt (txt_with_fns)
-idfs <- list (with_fns = bm25_idf (txt_with_fns), wo_fns = bm25_idf (txt_wo_fns))
-token_lists <- list (with_fns = bm25_tokens_list (txt_with_fns), wo_fns = bm25_tokens_list (txt_wo_fns))
+idfs <- list (
+    with_fns = bm25_idf (txt_with_fns),
+    wo_fns = bm25_idf (txt_wo_fns)
+)
+token_lists <- list (
+    with_fns = bm25_tokens_list (txt_with_fns),
+    wo_fns = bm25_tokens_list (txt_wo_fns)
+)
 bm25_data <- list (idfs = idfs, token_lists = token_lists)
 saveRDS (bm25_data, "bm25-ropensci.Rds")
 
