@@ -71,6 +71,12 @@ get_pkg_text_local <- function (path) {
     stopifnot (length (path) == 1L)
 
     path <- fs::path_norm (path)
+
+    is_tarball <- fs::path_ext (path) == "gz"
+    if (is_tarball) {
+        path <- tarball_to_path (path)
+    }
+
     stopifnot (fs::dir_exists (path))
 
     desc_file <- fs::path (path, "DESCRIPTION")
@@ -80,9 +86,9 @@ get_pkg_text_local <- function (path) {
     desc <- data.frame (read.dcf (desc_file))$Description
 
     readme <- get_pkg_readme (path)
-    if (is.null (readme)) {
-        return ("")
-    }
+    # if (is.null (readme)) {
+    #     return ("")
+    # }
 
     rd_path <- fs::path (path, "man")
     if (!fs::file_exists (rd_path)) {
@@ -131,6 +137,10 @@ get_pkg_text_local <- function (path) {
         "",
         unlist (fn_txt)
     )
+
+    if (is_tarball) {
+        fs::dir_delete (path)
+    }
 
     paste0 (out, collapse = "\n ")
 }
@@ -259,4 +269,21 @@ get_fn_defs_local <- function (path) {
     txt <- txt [which (nzchar (txt))]
     txt <- gsub ("^[[:space:]]*", "", txt)
     paste0 (txt, collapse = "\n ")
+}
+
+tarball_to_path <- function (path) {
+
+    stopifnot (fs::path_ext (path) == "gz")
+
+    tempdir <- fs::path (fs::path_temp (), "tarballs")
+    if (!fs::dir_exists (tempdir)) {
+        fs::dir_create (tempdir, recurse = TRUE)
+    }
+    path2 <- fs::path (tempdir, basename (path))
+    fs::file_copy (path, path2)
+    base_dir <- fs::path (tempdir, gsub ("\\.tar\\.gz$", "", basename (path)))
+    untar (path2, exdir = tempdir)
+    fs::file_delete (path2)
+
+    fs::dir_ls (tempdir)
 }
