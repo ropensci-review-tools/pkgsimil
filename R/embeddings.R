@@ -44,6 +44,10 @@ pkgsimil_embeddings_from_pkgs <- function (packages = NULL,
 
     pkgs_full <- packages
     packages <- convert_paths_to_pkgs (pkgs_full)
+    if (all (grepl ("\\.tar\\.gz$", packages))) {
+        packages <- gsub ("\\.tar\\.gz$", "", basename (packages))
+        packages <- gsub ("\\_.*$", "", packages)
+    }
 
     txt_with_fns <- lapply (pkgs_full, function (p) get_pkg_text (p))
     txt_wo_fns <- rm_fns_from_pkg_txt (txt_with_fns)
