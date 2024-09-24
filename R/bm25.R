@@ -14,7 +14,8 @@
 #' those. Must be one of "ropensci", "ropensci-fns".
 #'
 #' @export
-pkgsimil_bm25 <- function (input, txt = NULL, idfs = NULL, corpus = "ropensci") {
+pkgsimil_bm25 <- function (input, txt = NULL,
+                           idfs = NULL, corpus = "ropensci") {
 
     if (is.null (txt)) {
         if (is.null (idfs)) {
@@ -33,8 +34,16 @@ pkgsimil_bm25 <- function (input, txt = NULL, idfs = NULL, corpus = "ropensci") 
         tokens_idf <- bm25_idf (txt)
     }
 
-    bm25_with_fns <- pkgsimil_bm25_from_idf (input, tokens_list$with_fns, tokens_idf$with_fns)
-    bm25_wo_fns <- pkgsimil_bm25_from_idf (input, tokens_list$wo_fns, tokens_idf$wo_fns)
+    bm25_with_fns <- pkgsimil_bm25_from_idf (
+        input,
+        tokens_list$with_fns,
+        tokens_idf$with_fns
+    )
+    bm25_wo_fns <- pkgsimil_bm25_from_idf (
+        input,
+        tokens_list$wo_fns,
+        tokens_idf$wo_fns
+    )
     names (bm25_with_fns) [2] <- "bm25_with_fns"
     names (bm25_wo_fns) [2] <- "bm25_wo_fns"
 
@@ -50,7 +59,6 @@ pkgsimil_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
 
     tokens_i <- bm25_tokens_list (input) [[1]]
     tokens_i <- dplyr::rename (tokens_i, np = n)
-    ntoks_i <- sum (tokens_i$np)
 
     # Fixed parameters used in the BM25 function. See wikipedia reference above
     # for these values.
@@ -62,8 +70,9 @@ pkgsimil_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
         toks_i <- dplyr::left_join (tokens_i, i, by = "token") |>
             dplyr::left_join (tokens_idf, by = "token") |>
             dplyr::filter (!is.na (n))
-        rhs <- toks_i$n * (k + 1) / (toks_i$n + k * (1 - b + b * len_i / ntoks_avg))
-        toks_i$score <- toks_i$idf * rhs
+        numer <- toks_i$n * (k + 1)
+        denom <- (toks_i$n + k * (1 - b + b * len_i / ntoks_avg))
+        toks_i$score <- toks_i$idf * numer / denom
         sum (toks_i$score)
     }, numeric (1L))
     index <- order (bm25, decreasing = TRUE)
@@ -154,9 +163,6 @@ bm25_idf_internal <- function (txt) {
 
     tokens_txt <- bm25_tokens (txt)
 
-    ntoks <- vapply (tokens_txt, length, integer (1L))
-    ntoks_avg <- mean (ntoks [which (ntoks > 0L)])
-
     tokens_list <- bm25_tokens_list (txt)
     index <- which (vapply (tokens_list, nrow, integer (1L)) > 0L)
 
@@ -165,7 +171,8 @@ bm25_idf_internal <- function (txt) {
     })) |>
         dplyr::group_by (token) |>
         dplyr::summarise (n = dplyr::n ())
-    tokens_idf$idf <- log ((n_docs - tokens_idf$n + 0.5) / (tokens_idf$n + 0.5) + 1)
+    tokens_idf$idf <-
+        log ((n_docs - tokens_idf$n + 0.5) / (tokens_idf$n + 0.5) + 1)
     tokens_idf$n <- NULL
 
     return (tokens_idf)

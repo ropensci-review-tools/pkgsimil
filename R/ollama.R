@@ -7,7 +7,11 @@ is_windows <- function () {
 has_ollama <- function () {
     lib_name <- "ollama"
     cmd <- ifelse (is_windows (), "where", "which")
-    result <- system (paste (cmd, lib_name), ignore.stdout = TRUE, ignore.stderr = TRUE)
+    result <- system (
+        paste (cmd, lib_name),
+        ignore.stdout = TRUE,
+        ignore.stderr = TRUE
+    )
 
     return (result == 0)
 }
@@ -75,14 +79,14 @@ ollama_check <- function () {
     }
     if (!has_ollama ()) {
         cli::cli_abort (paste0 (
-            "ollama is not installed. Please follow installation instructions at ",
-            "https://ollama.com."
+            "ollama is not installed. Please follow ",
+            "installation instructions at https://ollama.com."
         ))
     }
     if (!ollama_is_running ()) {
         cli::cli_abort (paste0 (
-            "ollama is installed but not running. Please run `ollama serve` from a ",
-            "separate console (not from within R)."
+            "ollama is installed but not running. Please run `ollama serve` ",
+            "from a separate console (not from within R)."
         ))
     }
 
@@ -95,13 +99,14 @@ ollama_check <- function () {
             ))
             yn <- readline ("Would you like to download it now (y/n) ? ")
             if (substring (tolower (yn), 1, 1) == "y") {
-                mod_name <- jina_model (mod)
+                mod_name <- jina_model (mod) # nolint
                 cli::cli_inform ("Okay, downloading [{mod_name}] ...")
                 res <- ollama_dl_jina_model (mod)
                 if (res != 0) {
-                    cli::cli_abort (
-                        "ollama model failed to download. Maybe use 'ollama pull' directly?"
-                    )
+                    cli::cli_abort (paste0 (
+                        "ollama model failed to download. ",
+                        "Maybe use 'ollama pull' directly?"
+                    ))
                 }
             }
         }

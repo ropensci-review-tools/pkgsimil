@@ -140,14 +140,26 @@ similar_pkgs_from_text <- function (
         embeddings <- pkgsimil_load_data ("embeddings")
     }
     if (input_is_code) {
-        similarities <- similarity_embeddings (input, embeddings$code, input_is_code = TRUE)
+        similarities <- similarity_embeddings (
+            input,
+            embeddings$code,
+            input_is_code = TRUE
+        )
     } else {
-        similarities <- similarity_embeddings (input, embeddings, input_is_code = FALSE)
+        similarities <- similarity_embeddings (
+            input,
+            embeddings,
+            input_is_code = FALSE
+        )
     }
 
     similarities_bm25 <- pkgsimil_bm25 (input = input, idfs = idfs)
 
-    similarities <- dplyr::left_join (similarities, similarities_bm25, by = "package")
+    similarities <- dplyr::left_join (
+        similarities,
+        similarities_bm25,
+        by = "package"
+    )
     similarities [is.na (similarities)] <- 0
 
     index <- seq_len (n)

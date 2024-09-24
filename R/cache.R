@@ -28,7 +28,8 @@ pkgsimil_dl_data <- function (what = "embeddings", fns = FALSE) {
 
     what <- match.arg (what, c ("embeddings", "idfs"))
 
-    url_base <- "https://github.com/ropensci-review-tools/pkgsimil/releases/download/"
+    url_base <-
+        "https://github.com/ropensci-review-tools/pkgsimil/releases/download/"
     version <- "v0.1.2"
 
     if (what == "embeddings") {

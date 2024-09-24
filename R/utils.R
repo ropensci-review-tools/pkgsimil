@@ -44,17 +44,40 @@ pkgsimil_cache_path <- function () {
 # all rOpenSci packages.
 # get_threshold <- function (paths) {
 #     txt <- vapply (paths, get_pkg_text, character (1L))
-#     n0 <- vapply (txt, function (i) length (strsplit (i, "[[:space:]]+") [[1]]), integer (1L), USE.NAMES = FALSE)
-#     n1 <- vapply (txt, tokenizers::count_words, integer (1L), USE.NAMES = FALSE)
+#     n0 <- vapply (
+#         txt,
+#         function (i) {
+#             length (strsplit (i, "[[:space:]]+") [[1]])
+#         },
+#         integer (1L),
+#         USE.NAMES = FALSE
+#     )
+#     n1 <- vapply (
+#         txt,
+#         tokenizers::count_words,
+#         integer (1L),
+#         USE.NAMES = FALSE
+#     )
 #     tok2word1 <- n1 / n0
 #
 #     code <- vapply (paths, get_pkg_code, character (1L))
-#     n2 <- vapply (code, function (i) length (strsplit (i, "[[:space:]]+") [[1]]), integer (1L), USE.NAMES = FALSE)
-#     n3 <- vapply (code, tokenizers::count_words, integer (1L), USE.NAMES = FALSE)
+#     n2 <- vapply (
+#         code,
+#         function (i) length (strsplit (i, "[[:space:]]+") [[1]]),
+#         integer (1L),
+#         USE.NAMES = FALSE
+#     )
+#     n3 <- vapply (
+#         code,
+#         tokenizers::count_words,
+#         integer (1L),
+#         USE.NAMES = FALSE
+#     )
 #     tok2word2 <- n3 / n2
 #
 #     prop_correct <- function (threshold, tok2word1, tok2word2) {
-#         n_correct <- length (which (tok2word1 > threshold)) + length (which (tok2word2 < threshold))
+#         n_correct <- length (which (tok2word1 > threshold)) +
+#             length (which (tok2word2 < threshold))
 #         n <- 2 * length (tok2word1)
 #         1 - n_correct / n
 #     }

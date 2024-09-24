@@ -1,4 +1,4 @@
-get_Rd_metadata <- utils::getFromNamespace (".Rd_get_metadata", "tools")
+get_Rd_metadata <- utils::getFromNamespace (".Rd_get_metadata", "tools") # nolint
 
 get_pkg_text <- function (pkg_name) {
 
@@ -41,7 +41,7 @@ get_fn_descs_from_ns <- function (pkg_name) {
 
     rd <- tools::Rd_db (package = pkg_name)
     descs <- vapply (rd, function (i) {
-        d <- get_Rd_metadata (i, "description")
+        get_Rd_metadata (i, "description")
     }, character (1L))
     descs <- gsub ("\\\\n", " ", descs)
     descs <- gsub ("\\n", " ", descs)
@@ -97,7 +97,7 @@ get_pkg_text_local <- function (path) {
             gsub ("^\\\\", "", attr (j, "Rd_tag"))
         }, character (1L))
         if (any (tags == "docType")) {
-            docType <- as.character (rd [[which (tags == "docType")]] [[1]])
+            docType <- as.character (rd [[which (tags == "docType")]] [[1]]) # nolint
             if (identical (docType, "package")) {
                 return ("")
             }
@@ -183,7 +183,9 @@ get_pkg_readme <- function (path) {
     if (length (table_start) > 0L && length (table_end) > 0L &&
         length (table_start) == length (table_end)) {
         index <- cbind (table_start, table_end)
-        index <- unname (unlist (apply (index, 1, function (i) seq (i [1], i [2]))))
+        index <- unname (unlist (
+            apply (index, 1, function (i) seq (i [1], i [2]))
+        ))
         readme <- readme [-index]
     }
 

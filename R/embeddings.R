@@ -22,7 +22,7 @@ pkgsimil_embedding_dists <- function (packages = NULL) {
 
     cli::cli_inform ("Generating code embeddings ...")
     fns <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
-    embeddings <- get_embeddings (txt, code = TRUE)
+    embeddings <- get_embeddings (fns, code = TRUE)
     embeddings_code <- embeddings_to_dists (embeddings, packages)
     names (embeddings_code) [3] <- "d_code"
 
@@ -60,7 +60,8 @@ convert_paths_to_pkgs <- function (packages) {
 #' `functions_only`, a single matrix of embeddings for all function
 #' descriptions.
 #' @export
-pkgsimil_embeddings_from_pkgs <- function (packages = NULL, functions_only = FALSE) {
+pkgsimil_embeddings_from_pkgs <- function (packages = NULL,
+                                           functions_only = FALSE) {
 
     pkgs_full <- packages
     packages <- convert_paths_to_pkgs (pkgs_full)
@@ -76,7 +77,8 @@ pkgsimil_embeddings_from_pkgs <- function (packages = NULL, functions_only = FAL
         embeddings_text_wo_fns <- get_embeddings (txt_wo_fns, code = FALSE)
 
         cli::cli_inform ("Generating code embeddings ...")
-        code <- vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
+        code <-
+            vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
         embeddings_code <- get_embeddings (code, code = TRUE)
 
         colnames (embeddings_text_with_fns) <-
@@ -91,7 +93,9 @@ pkgsimil_embeddings_from_pkgs <- function (packages = NULL, functions_only = FAL
 
     } else {
 
-        cli::cli_inform ("Generating text embeddings for function descriptions ...")
+        cli::cli_inform (
+            "Generating text embeddings for function descriptions ..."
+        )
         txt_fns <- get_all_fn_descs (txt_with_fns)
         ret <- get_embeddings (txt_fns$desc, code = FALSE)
         colnames (ret) <- txt_fns$fn
@@ -132,14 +136,15 @@ get_all_fn_descs <- function (txt) {
         ptn <- "^[[:space:]]*#[[:space:]]"
         pkg_name <- grep (ptn, i_sp)
         if (length (pkg_name) > 0L) {
-            pkg_name <- gsub ("[[:space:]]*", "", gsub (ptn, "", i_sp [pkg_name [1]]))
+            pkg_name <- gsub (ptn, "", i_sp [pkg_name [1]])
+            pkg_name <- gsub ("[[:space:]]*", "", pkg_name)
         } else {
             pkg_name <- "pkg_has_no_name"
         }
 
         pos <- grep ("##\\s+Functions$", i_sp)
         if (length (pos) == 0) {
-            fn_nms <- fn_desc <- character (0L)
+            fn_nms <- fn_descs <- character (0L)
         } else {
             # Fn defs are always added at end, so pos has to be last value:
             pos <- utils::tail (pos, n = 1L)
@@ -176,9 +181,15 @@ get_embeddings_intern <- function (txt, code = FALSE) {
 
     ollama_check ()
     if (!opt_is_quiet () && length (txt) > 100) {
-        embeddings <- pbapply::pblapply (txt, function (i) get_embeddings_from_ollama (i, code = code))
+        embeddings <- pbapply::pblapply (
+            txt,
+            function (i) get_embeddings_from_ollama (i, code = code)
+        )
     } else {
-        embeddings <- lapply (txt, function (i) get_embeddings_from_ollama (i, code = code))
+        embeddings <- lapply (
+            txt,
+            function (i) get_embeddings_from_ollama (i, code = code)
+        )
     }
 
     do.call (cbind, embeddings)
