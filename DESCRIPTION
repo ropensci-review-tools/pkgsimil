@@ -17,6 +17,7 @@ Imports:
     httr2,
     memoise,
     pbapply,
+    Rcpp,
     tokenizers
 Suggests:
     rappdirs,
@@ -24,7 +25,10 @@ Suggests:
     roxygen2,
     testthat (>= 3.0.0),
     withr
+LinkingTo:
+    Rcpp
 Depends: R (>= 3.5.0)
+NeedsCompilation: yes
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
