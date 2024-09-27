@@ -22,11 +22,14 @@ Rcpp::NumericVector rcpp_bm25 (const Rcpp::DataFrame &idfs, const Rcpp::List &to
 
     const int ndocs = tokensList.size();
 
-    // Then make a set of the input tokens:
+    // Then make a map of the input tokens and counts:
+    std::unordered_map <std::string, int> these_tokens_map;
     const Rcpp::CharacterVector these_tokens_str = these_tokens ["token"];
-    std::unordered_set <std::string> these_tokens_set;
-    for (auto tok: these_tokens_str) {
-        these_tokens_set.emplace (static_cast<std::string> (tok));
+    const Rcpp::IntegerVector these_tokens_n = these_tokens ["np"];
+
+    for (int i = 0; i < these_tokens.nrow (); i++) {
+        const std::string this_string = static_cast <std::string> (these_tokens_str [i]);
+        these_tokens_map.emplace (this_string, these_tokens_n [i]);
     }
 
     Rcpp::NumericVector bm25 (ndocs, 0.0);
@@ -37,44 +40,32 @@ Rcpp::NumericVector rcpp_bm25 (const Rcpp::DataFrame &idfs, const Rcpp::List &to
         const Rcpp::IntegerVector tokens_n = tokens_i ["n"];
         const Rcpp::CharacterVector tokens_tok = tokens_i ["token"];
 
-        int len_i = 0;
-        for (auto n: tokens_n) len_i += n;
+        int doc_len_i = 0;
+        for (auto n: tokens_n) doc_len_i += n;
 
-        std::unordered_set <std::string> doc_tokens_set;
-        for (auto tok: tokens_tok) {
-            const std::string tok_str = static_cast <std::string> (tok);
-            if (idf_map.find (tok_str) != idf_map.end()) {
-                doc_tokens_set.emplace (tok_str);
+        // convert tokensList [[i]]  data.frame to map from token to count, but
+        // only for tokens that are in "these_tokens_map"::
+        std::unordered_map <std::string, int> doc_tokens_map;
+        for (int j = 0; j < tokens_i.nrow (); j++) {
+            const std::string tok_str = static_cast <std::string> (tokens_tok [j]);
+            if (idf_map.find (tok_str) != idf_map.end() && these_tokens_map.find (tok_str) != these_tokens_map.end ()) {
+                doc_tokens_map.emplace (tok_str, tokens_n [j]);
             }
         }
 
         // Find out where any of 'these_tokens' are in doc_tokens_set
         int n_toks_in_these = 0;
-        for (auto tok: these_tokens_set) {
-            if (doc_tokens_set.find (tok) != doc_tokens_set.end ()) n_toks_in_these++;
+        for (auto tok_iter: these_tokens_map) {
+            if (doc_tokens_map.find (tok_iter.first) != doc_tokens_map.end ()) n_toks_in_these++;
         }
 
         double bm25_i = 0.0;
         if (n_toks_in_these > 0) {
-            // Count numbers of instances of each token:
-            std::unordered_map <std::string, int> doc_tokens_counts;
-            for (auto tok: doc_tokens_set) {
-                auto count_map_iter = doc_tokens_counts.find (tok);
-                if (count_map_iter == doc_tokens_counts.end ()) {
-                    doc_tokens_counts.emplace (tok, 1L);
-                } else {
-                    int n = count_map_iter -> second;
-                    doc_tokens_counts.erase (count_map_iter);
-                    doc_tokens_counts.emplace (tok, n + 1);
-                }
-            }
-
-            // Then get numerator and denominator of BM25:
-            for (auto tok: doc_tokens_set) {
-                const double n_i = doc_tokens_counts.find (tok) -> second;
-                const double num_i = n_i * (k + 1);
-                const double denom_i = (n_i + k * (1 - b + b * len_i / ntoks_avg));
-                const double idf_i = idf_map.find (tok) -> second;
+            for (auto tok_iter: doc_tokens_map) {
+                const int freq_i = tok_iter.second;
+                const double num_i = freq_i * (k + 1);
+                const double denom_i = freq_i + k * (1 - b + b * doc_len_i / ntoks_avg);
+                const double idf_i = idf_map.find (tok_iter.first) -> second;
                 bm25_i += idf_i * num_i / denom_i;
             }
         }
