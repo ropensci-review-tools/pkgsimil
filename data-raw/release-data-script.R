@@ -35,6 +35,14 @@ saveRDS (bm25_data, "bm25-ropensci-fns.Rds")
 path <- "/<path>/<to>/<cran-mirror>/tarballs"
 packages <- fs::dir_ls (path, regexpr = "\\.tar\\.gz$")
 embeddings <- pkgsimil_embeddings_from_pkgs (packages)
+
+nms <- gsub ("\\_.*$", "", colnames (embeddings$text_with_fns))
+colnames (embeddings$text_with_fns) <- nms
+nms <- gsub ("\\_.*$", "", colnames (embeddings$text_wo_fns))
+colnames (embeddings$text_wo_fns) <- nms
+nms <- gsub ("\\_.*$", "", colnames (embeddings$code))
+colnames (embeddings$code) <- nms
+
 saveRDS (embeddings, "embeddings-cran.Rds")
 
 txt_with_fns <- lapply (packages, function (p) get_pkg_text (p))
