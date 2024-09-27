@@ -7,6 +7,7 @@ most similar packages to a given local repository.}
 \usage{
 pkgsimil_similar_pkgs(
   input,
+  corpus = "ropensci",
   embeddings = NULL,
   idfs = NULL,
   input_is_code = text_is_code(input),
@@ -16,6 +17,11 @@ pkgsimil_similar_pkgs(
 \arguments{
 \item{input}{Either a path to local source code of an R package, or a text
 string.}
+
+\item{corpus}{If \code{embeddings} or \code{idfs} parameters are not specified, they
+are automatically downloaded for the corpus specified by this parameter.
+Must be one of "ropensci" or "cran". The function will then return the most
+similar package from the specified corpus.}
 
 \item{embeddings}{Large Language Model embeddings for all rOpenSci packages,
 generated from \link{pkgsimil_embeddings_from_pkgs}. If not provided,
@@ -43,6 +49,12 @@ naming the \code{n} most similar packages.
 \description{
 Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} to identify
 most similar packages to a given local repository.
+}
+\note{
+The first time this function is run without passing either
+\code{embeddings} or \code{idfs}, required values will be automatically downloaded and
+stored in a locally persistent cache directory. Especially for the "cran"
+corpus, this downloading may take quite some time.
 }
 \examples{
 \dontrun{

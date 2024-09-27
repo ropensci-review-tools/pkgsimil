@@ -2,6 +2,7 @@
 #' function, either for all rOpenSci packages or, if `fns = TRUE`,  all
 #' individual functions within those packages.
 #'
+#' @inheritParams pkgsimil_similar_pkgs
 #' @param fns If `FALSE` (default), load embeddings for all rOpenSci packages;
 #' otherwise load (considerably larger dataset of) embeddings for all
 #' individual functions.
@@ -17,35 +18,58 @@
 #' idfs <- pkgsimil_load_data ("idfs")
 #' idfs_fns <- pkgsimil_load_data ("idfs", fns = TRUE)
 #' }
-pkgsimil_load_data <- function (what = "embeddings", fns = FALSE) {
+pkgsimil_load_data <- function (what = "embeddings", corpus = "ropensci", fns = FALSE) {
 
+    corpus <- match.arg (corpus, c ("ropensci", "cran"))
     what <- match.arg (what, c ("embeddings", "idfs"))
 
-    if (what == "embeddings") {
-        fname <- ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds")
-    } else {
-        fname <- ifelse (fns, "bm25-ropensci-fns.Rds", "bm25-ropensci.Rds")
+    if (corpus == "ropensci") {
+
+        if (what == "embeddings") {
+            fname <- ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds")
+        } else {
+            fname <- ifelse (fns, "bm25-ropensci-fns.Rds", "bm25-ropensci.Rds")
+        }
+
+    } else if (corpus == "cran") {
+
+        if (what == "embeddings") {
+            fname <- "embeddings-cran.Rds"
+        } else {
+            fname <- "bm25-cran.Rds"
+        }
     }
+
     fname <- fs::path (pkgsimil_cache_path (), fname)
     if (!fs::file_exists (fname)) {
-        fname <- pkgsimil_dl_data (what = what, fns = fns)
+        fname <- pkgsimil_dl_data (what = what, corpus = corpus, fns = fns)
     }
     readRDS (fname)
 }
 
-pkgsimil_dl_data <- function (what = "embeddings", fns = FALSE) {
+pkgsimil_dl_data <- function (what = "embeddings", corpus = "ropensci", fns = FALSE) {
 
     what <- match.arg (what, c ("embeddings", "idfs"))
+    corpus <- match.arg (corpus, c ("ropensci", "cran"))
 
     url_base <-
         "https://github.com/ropensci-review-tools/pkgsimil/releases/download/"
     version <- "v0.1.2"
 
-    if (what == "embeddings") {
-        file <- ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds")
-    } else {
-        file <- ifelse (fns, "bm25-ropensci-fns.Rds", "bm25-ropensci.Rds")
+    if (corpus == "ropensci") {
+        if (what == "embeddings") {
+            file <- ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds")
+        } else {
+            file <- ifelse (fns, "bm25-ropensci-fns.Rds", "bm25-ropensci.Rds")
+        }
+    } else if (corpus == "cran") {
+        if (what == "embeddings") {
+            file <- "embeddings-cran.Rds"
+        } else {
+            file <- "bm25-cran.Rds"
+        }
     }
+
     url <- paste0 (url_base, version, "/", file)
 
     destfile <- fs::path (pkgsimil_cache_path (), file)
