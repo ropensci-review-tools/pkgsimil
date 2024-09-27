@@ -11,21 +11,22 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // rcpp_bm25
-Rcpp::List rcpp_bm25(const Rcpp::DataFrame& idfs, const Rcpp::List& tokens, Rcpp::DataFrame& tokens_i);
-RcppExport SEXP _pkgsimil_rcpp_bm25(SEXP idfsSEXP, SEXP tokensSEXP, SEXP tokens_iSEXP) {
+Rcpp::NumericVector rcpp_bm25(const Rcpp::DataFrame& idfs, const Rcpp::List& tokensList, Rcpp::DataFrame& these_tokens, const double ntoks_avg);
+RcppExport SEXP _pkgsimil_rcpp_bm25(SEXP idfsSEXP, SEXP tokensListSEXP, SEXP these_tokensSEXP, SEXP ntoks_avgSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type idfs(idfsSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type tokens(tokensSEXP);
-    Rcpp::traits::input_parameter< Rcpp::DataFrame& >::type tokens_i(tokens_iSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_bm25(idfs, tokens, tokens_i));
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type tokensList(tokensListSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DataFrame& >::type these_tokens(these_tokensSEXP);
+    Rcpp::traits::input_parameter< const double >::type ntoks_avg(ntoks_avgSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_bm25(idfs, tokensList, these_tokens, ntoks_avg));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_pkgsimil_rcpp_bm25", (DL_FUNC) &_pkgsimil_rcpp_bm25, 3},
+    {"_pkgsimil_rcpp_bm25", (DL_FUNC) &_pkgsimil_rcpp_bm25, 4},
     {NULL, NULL, 0}
 };
 

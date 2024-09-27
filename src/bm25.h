@@ -2,4 +2,4 @@
 
 #include <Rcpp.h>
 
-Rcpp::List rcpp_bm25 (const Rcpp::DataFrame &idfs, const Rcpp::List &tokens, Rcpp::DataFrame &tokens_i);
+Rcpp::NumericVector rcpp_bm25 (const Rcpp::DataFrame &idfs, const Rcpp::List &tokensList, Rcpp::DataFrame &these_tokens, const double ntoks_avg);
