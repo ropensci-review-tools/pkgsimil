@@ -70,10 +70,10 @@ pkgsimil_dl_data <- function (what = "embeddings", corpus = "ropensci", fns = FA
         }
     }
 
-    url <- paste0 (url_base, version, "/", file)
+    dl_url <- paste0 (url_base, version, "/", file)
 
     destfile <- fs::path (pkgsimil_cache_path (), file)
-    utils::download.file (url, destfile = destfile)
+    curl::curl_download (url = dl_url, destfile = destfile, quiet = opt_is_quiet ())
     return (destfile)
 }
 

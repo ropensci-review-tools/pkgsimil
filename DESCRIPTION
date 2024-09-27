@@ -12,6 +12,7 @@ BugReports: https://github.com/ropensci-review-tools/pkgsimil/issues
 Imports:
     brio,
     cli,
+    curl,
     dplyr,
     fs,
     httr2,
