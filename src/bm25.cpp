@@ -61,7 +61,7 @@ Rcpp::NumericVector rcpp_bm25 (const Rcpp::DataFrame &idfs, const Rcpp::List &to
             for (auto tok: doc_tokens_set) {
                 auto count_map_iter = doc_tokens_counts.find (tok);
                 if (count_map_iter == doc_tokens_counts.end ()) {
-                    doc_tokens_counts.emplace (tok, 0L);
+                    doc_tokens_counts.emplace (tok, 1L);
                 } else {
                     int n = count_map_iter -> second;
                     doc_tokens_counts.erase (count_map_iter);
