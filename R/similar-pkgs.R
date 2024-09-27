@@ -48,10 +48,10 @@ pkgsimil_similar_pkgs <- function (input,
     corpus <- match.arg (corpus, c ("ropensci", "cran"))
 
     if (is.null (embeddings)) {
-        embeddings <- pkgsimil_load_data ("embeddings")
+        embeddings <- pkgsimil_load_data (what = "embeddings", corpus = corpus)
     }
     if (is.null (idfs)) {
-        idfs <- pkgsimil_load_data ("idfs")
+        idfs <- pkgsimil_load_data (what = "idfs", corpus = corpus)
     }
 
     nms_expected <- c ("text_with_fns", "text_wo_fns", "code")
