@@ -68,29 +68,21 @@ pkgsimil_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
 
     ntoks_list <- vapply (tokens_list, function (i) sum (i$n), integer (1L))
     ntoks_avg <- mean (ntoks_list)
+    tok_list_nms <- basename (names (tokens_list))
+    n_tarballs <- length (grep ("\\.tar\\.gz$", tok_list_nms))
+    if (n_tarballs / length (tokens_list) > 0.9) {
+        # All CRAN pkgs have only one underscore between pkg and version:
+        tok_list_nms <- gsub ("\\_.*$", "", tok_list_nms)
+    }
 
     tokens_i <- bm25_tokens_list (input) [[1]]
     tokens_i <- dplyr::rename (tokens_i, np = n)
 
-    # Fixed parameters used in the BM25 function. See wikipedia reference above
-    # for these values.
-    k <- 1.2
-    b <- 0.75
-
-    bm25 <- vapply (tokens_list, function (i) {
-        len_i <- sum (i$n)
-        toks_i <- dplyr::left_join (tokens_i, i, by = "token") |>
-            dplyr::left_join (tokens_idf, by = "token") |>
-            dplyr::filter (!is.na (n))
-        numer <- toks_i$n * (k + 1)
-        denom <- (toks_i$n + k * (1 - b + b * len_i / ntoks_avg))
-        toks_i$score <- toks_i$idf * numer / denom
-        sum (toks_i$score)
-    }, numeric (1L))
+    bm25 <- rcpp_bm25 (tokens_idf, tokens_list, tokens_i, ntoks_avg)
     index <- order (bm25, decreasing = TRUE)
     bm25 <- data.frame (
-        package = basename (names (bm25)),
-        bm25 = unname (bm25)
+        package = tok_list_nms,
+        bm25 = bm25
     ) [index, ]
     rownames (bm25) <- NULL
 
