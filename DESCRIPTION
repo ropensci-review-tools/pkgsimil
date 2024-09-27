@@ -1,6 +1,6 @@
 Package: pkgsimil
 Title: Similarity Metrics between R Packages
-Version: 0.1.2.112
+Version: 0.1.2.115
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2172-5265")))
@@ -17,6 +17,7 @@ Imports:
     httr2,
     memoise,
     pbapply,
+    Rcpp,
     tokenizers
 Suggests:
     rappdirs,
@@ -24,7 +25,10 @@ Suggests:
     roxygen2,
     testthat (>= 3.0.0),
     withr
+LinkingTo:
+    Rcpp
 Depends: R (>= 3.5.0)
+NeedsCompilation: yes
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
