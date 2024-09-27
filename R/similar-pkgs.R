@@ -3,6 +3,10 @@
 #'
 #' @param input Either a path to local source code of an R package, or a text
 #' string.
+#' @param corpus If `embeddings` or `idfs` parameters are not specified, they
+#' are automatically downloaded for the corpus specified by this parameter.
+#' Must be one of "ropensci" or "cran". The function will then return the most
+#' similar package from the specified corpus.
 #' @param embeddings Large Language Model embeddings for all rOpenSci packages,
 #' generated from \link{pkgsimil_embeddings_from_pkgs}. If not provided,
 #' pre-generated embeddings will be downloaded and stored in a local cache
@@ -21,6 +25,11 @@
 #' If `input` is a single text string, a single character vector is returned
 #' naming the `n` most similar packages.
 #'
+#' @note The first time this function is run without passing either
+#' `embeddings` or `idfs`, required values will be automatically downloaded and
+#' stored in a locally persistent cache directory. Especially for the "cran"
+#' corpus, this downloading may take quite some time.
+#'
 #' @seealso input_is_code
 #' @export
 #'
@@ -30,16 +39,19 @@
 #' pkgsimil_similar_pkgs (input)
 #' }
 pkgsimil_similar_pkgs <- function (input,
+                                   corpus = "ropensci",
                                    embeddings = NULL,
                                    idfs = NULL,
                                    input_is_code = text_is_code (input),
                                    n = 5L) {
 
+    corpus <- match.arg (corpus, c ("ropensci", "cran"))
+
     if (is.null (embeddings)) {
-        embeddings <- pkgsimil_load_data ("embeddings")
+        embeddings <- pkgsimil_load_data (what = "embeddings", corpus = corpus)
     }
     if (is.null (idfs)) {
-        idfs <- pkgsimil_load_data ("idfs")
+        idfs <- pkgsimil_load_data (what = "idfs", corpus = corpus)
     }
 
     nms_expected <- c ("text_with_fns", "text_wo_fns", "code")
