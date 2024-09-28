@@ -37,7 +37,7 @@ install ollama on your own computer in order to use this package. Once
 downloaded, ollama can be started by calling `ollama serve`. The
 particular models used to extract the embeddings will be automatically
 downloaded by this package if needed, or you can do this manually by
-running the following two commands (in a shell; not in R):
+running the following two commands (in a system console, not in R):
 
 ``` bash
 ollama pull jina/jina-embeddings-v2-base-en
