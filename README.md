@@ -51,7 +51,7 @@ download before proceeding.
 
 The package has two main functions:
 
-- `pkgsimil_similar_pkgs()` to find similar rOpenSci packages based
+- `pkgsimil_similar_pkgs()` to find similar rOpenSci or CRAN packages based
   input as either a local path to an entire package, or as a single
   descriptive text string; and
 - `pkgsimil_similar_fns()` to find similar functions from rOpenSci
