@@ -72,6 +72,17 @@ pkg_fns_from_r_search_internal <- function (pkg_name) {
 
 m_pkg_fns_from_r_search <- memoise::memoise (pkg_fns_from_r_search_internal)
 
+pkg_name_from_path <- function (path) {
+
+    desc_path <- fs::path (path, "DESCRIPTION")
+    if (!fs::file_exists (desc_path)) {
+        return (NULL)
+    }
+
+    desc <- data.frame (read.dcf (desc_path))
+    desc$Package
+}
+
 # Function to estimate the `token_threshold` above of 0.98, from running over
 # all rOpenSci packages.
 # get_threshold <- function (paths) {
