@@ -1,13 +1,18 @@
 library (pkgsimil)
+ollama_check ()
+
 path <- "/<path>/<to>/<ropensci>/<repos>"
 packages <- fs::dir_ls (path)
+
+# ----------------- EMBEDDINGS FOR ROPENSCI -----------------
 embeddings <- pkgsimil_embeddings_from_pkgs (packages)
 
-saveRDS (embeddings, "embeddings.Rds")
+saveRDS (embeddings, "embeddings-ropensci.Rds")
 embeddings_fns <-
     pkgsimil_embeddings_from_pkgs (packages, functions_only = TRUE)
 saveRDS (embeddings_fns, "embeddings-fns.Rds")
 
+# -------------------- BM25 FOR ROPENSCI --------------------
 txt_with_fns <- lapply (packages, function (p) get_pkg_text (p))
 txt_wo_fns <- rm_fns_from_pkg_txt (txt_with_fns)
 idfs <- list (
@@ -29,3 +34,64 @@ fns_lists <- fns_lists [index]
 names (fns_lists) <- txt_fns$fn [index]
 bm25_data <- list (idfs = fns_idfs, token_lists = fns_lists)
 saveRDS (bm25_data, "bm25-ropensci-fns.Rds")
+
+# ------------------ FN CALLS FOR ROPENSCI ------------------
+calls <- pbapply::pblapply (flist, function (f) {
+    res <- pkgsimil_tag_fns (f)
+    sort (table (res$name), decreasing = TRUE)
+})
+names (calls) <- basename (names (calls))
+index <- which (vapply (calls, length, integer (1L)) > 0)
+calls <- calls [index]
+saveRDS (calls, "fn-calls-ropensci.Rds")
+
+# -------------------- EMBEDDINGS FOR CRAN --------------------
+path <- "/<path>/<to>/<cran-mirror>/tarballs"
+packages <- fs::dir_ls (path, regexpr = "\\.tar\\.gz$")
+embeddings <- pkgsimil_embeddings_from_pkgs (packages)
+
+nms <- gsub ("\\_.*$", "", colnames (embeddings$text_with_fns))
+colnames (embeddings$text_with_fns) <- nms
+nms <- gsub ("\\_.*$", "", colnames (embeddings$text_wo_fns))
+colnames (embeddings$text_wo_fns) <- nms
+nms <- gsub ("\\_.*$", "", colnames (embeddings$code))
+colnames (embeddings$code) <- nms
+
+saveRDS (embeddings, "embeddings-cran.Rds")
+
+# -------------------- BM25 FOR CRAN --------------------
+txt_with_fns <- lapply (packages, function (p) get_pkg_text (p))
+txt_wo_fns <- rm_fns_from_pkg_txt (txt_with_fns)
+idfs <- list (
+    with_fns = bm25_idf (txt_with_fns),
+    wo_fns = bm25_idf (txt_wo_fns)
+)
+token_lists <- list (
+    with_fns = bm25_tokens_list (txt_with_fns),
+    wo_fns = bm25_tokens_list (txt_wo_fns)
+)
+bm25_data <- list (idfs = idfs, token_lists = token_lists)
+saveRDS (bm25_data, "bm25-cran.Rds")
+
+# ------------------ FN CALLS FOR CRAN ------------------
+num_cores <- parallel::detectCores () - 2L
+cl <- parallel::makeCluster (num_cores)
+
+calls <- pbapply::pblapply (packages, function (f) {
+    res <- tryCatch (
+        pkgsimil::pkgsimil_tag_fns (f),
+        error = function (e) NULL
+    )
+    if (is.null (res)) {
+        res <- data.frame (name = character (0L))
+    }
+    sort (table (res$name), decreasing = TRUE)
+}, cl = cl)
+
+parallel::stopCluster (cl)
+
+names (calls) <- basename (names (calls))
+index <- which (vapply (calls, length, integer (1L)) > 0)
+calls <- calls [index]
+head (names (calls))
+saveRDS (calls, "fn-calls-cran.Rds")

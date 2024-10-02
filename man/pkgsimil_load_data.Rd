@@ -6,11 +6,16 @@
 function, either for all rOpenSci packages or, if \code{fns = TRUE},  all
 individual functions within those packages.}
 \usage{
-pkgsimil_load_data(what = "embeddings", fns = FALSE)
+pkgsimil_load_data(what = "embeddings", corpus = "ropensci", fns = FALSE)
 }
 \arguments{
 \item{what}{Either "embeddings" to load pre-generated embeddings, or "idfs"
 to load pre-generated Inverse Document Frequency weightings.}
+
+\item{corpus}{If \code{embeddings} or \code{idfs} parameters are not specified, they
+are automatically downloaded for the corpus specified by this parameter.
+Must be one of "ropensci" or "cran". The function will then return the most
+similar package from the specified corpus.}
 
 \item{fns}{If \code{FALSE} (default), load embeddings for all rOpenSci packages;
 otherwise load (considerably larger dataset of) embeddings for all

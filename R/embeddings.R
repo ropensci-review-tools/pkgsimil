@@ -44,25 +44,48 @@ pkgsimil_embeddings_from_pkgs <- function (packages = NULL,
 
     pkgs_full <- packages
     packages <- convert_paths_to_pkgs (pkgs_full)
+    if (all (grepl ("\\.tar\\.gz$", packages))) {
+        packages <- gsub ("\\.tar\\.gz$", "", basename (packages))
+        packages <- gsub ("\\_.*$", "", packages)
+    }
 
-    txt_with_fns <- lapply (pkgs_full, function (p) get_pkg_text (p))
+    if (!opt_is_quiet () && length (packages) > 100) {
+        cli::cli_inform ("Extracting package text ...")
+        txt_with_fns <- pbapply::pblapply (pkgs_full, function (p) get_pkg_text (p))
+    } else {
+        txt_with_fns <- lapply (pkgs_full, function (p) get_pkg_text (p))
+    }
+
     txt_wo_fns <- rm_fns_from_pkg_txt (txt_with_fns)
 
     if (!functions_only) {
 
         cli::cli_inform ("Generating text embeddings [1 / 2] ...")
         embeddings_text_with_fns <- get_embeddings (txt_with_fns, code = FALSE)
+
         cli::cli_inform ("Generating text embeddings [2 / 2] ...")
         embeddings_text_wo_fns <- get_embeddings (txt_wo_fns, code = FALSE)
 
+        embeddings_text_with_fns <-
+            apply_col_names (embeddings_text_with_fns, txt_with_fns, packages)
+        embeddings_text_wo_fns <-
+            apply_col_names (embeddings_text_wo_fns, txt_wo_fns, packages)
+
+        if (!opt_is_quiet () && length (packages) > 100) {
+            cli::cli_inform ("Extracting package code ...")
+            code <- pbapply::pblapply (pkgs_full, function (p) get_pkg_code (p))
+            code <- unlist (code)
+        } else {
+            code <- vapply (
+                pkgs_full,
+                function (p) get_pkg_code (p),
+                character (1L)
+            )
+        }
         cli::cli_inform ("Generating code embeddings ...")
-        code <-
-            vapply (pkgs_full, function (p) get_pkg_code (p), character (1L))
         embeddings_code <- get_embeddings (code, code = TRUE)
 
-        colnames (embeddings_text_with_fns) <-
-            colnames (embeddings_text_wo_fns) <-
-            colnames (embeddings_code) <- packages
+        embeddings_code <- apply_col_names (embeddings_code, code, packages)
 
         ret <- list (
             text_with_fns = embeddings_text_with_fns,

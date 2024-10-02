@@ -42,6 +42,47 @@ input_is_dir <- function (input) {
     ifelse (is.null (chk), FALSE, chk)
 }
 
+#' Embeddings functions only return columns for input items that have > 0
+#' characters. This reduces `nms` to the appropriate length before applying as
+#' column names.
+#' @param obj Object for which column names are to be added.
+#' @param src Source of column names, generally a named character vector.
+#' @param nms Vector of names to be applied.
+#' @noRd
+apply_col_names <- function (obj, src, nms) {
+    index <- which (nzchar (src))
+    colnames (obj) <- nms [index]
+
+    return (obj)
+}
+
+#' Get names of exported functions for a given package from the
+#' search.r-project website
+#' @noRd
+pkg_fns_from_r_search <- function (pkg_name) {
+    m_pkg_fns_from_r_search (pkg_name)
+}
+
+pkg_fns_from_r_search_internal <- function (pkg_name) {
+    base_url <- "https://search.r-project.org/CRAN/refmans/"
+    url <- paste0 (base_url, pkg_name, "/html/00Index.html")
+    fns <- rvest::html_table (rvest::read_html (url))
+    do.call (rbind, fns)$X1
+}
+
+m_pkg_fns_from_r_search <- memoise::memoise (pkg_fns_from_r_search_internal)
+
+pkg_name_from_path <- function (path) {
+
+    desc_path <- fs::path (path, "DESCRIPTION")
+    if (!fs::file_exists (desc_path)) {
+        return (NULL)
+    }
+
+    desc <- data.frame (read.dcf (desc_path))
+    desc$Package
+}
+
 # Function to estimate the `token_threshold` above of 0.98, from running over
 # all rOpenSci packages.
 # get_threshold <- function (paths) {

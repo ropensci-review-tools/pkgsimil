@@ -1,9 +1,11 @@
 Package: pkgsimil
 Title: Similarity Metrics between R Packages
-Version: 0.1.2.105
+Version: 0.1.2.145
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-2172-5265")))
+           comment = c(ORCID = "0000-0003-2172-5265")),
+    person("Davis", "Vaughan", , "davis@posit.co", role = c("ctb"))
+    )
 Description: Similarity metrics between R packages, based on similarity of code and documentation.
 License: MIT + file LICENSE
 URL: https://docs.ropensci.org/pkgsimil/,
@@ -12,12 +14,20 @@ BugReports: https://github.com/ropensci-review-tools/pkgsimil/issues
 Imports:
     brio,
     cli,
+    curl,
     dplyr,
     fs,
     httr2,
     memoise,
     pbapply,
-    tokenizers
+    Rcpp,
+    rvest,
+    tibble,
+    tidyr,
+    tokenizers,
+    treesitter,
+    treesitter.r,
+    vctrs
 Suggests:
     rappdirs,
     httptest2,
@@ -26,7 +36,10 @@ Suggests:
     withr,
     knitr,
     rmarkdown
+LinkingTo:
+    Rcpp
 Depends: R (>= 3.5.0)
+NeedsCompilation: yes
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
