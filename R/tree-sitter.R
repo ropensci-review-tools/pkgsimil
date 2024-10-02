@@ -63,7 +63,11 @@ get_calls <- function (node) {
 }
 
 tressitter_calls_in_package <- function (path) {
-    path_r <- file.path (path, "R")
+
+    # supreess 'no visible binding' notes:
+    info <- NULL
+
+    path_r <- fs::path (path, "R")
     paths <- fs::dir_ls (path_r)
     paths <- as.character (paths)
 
