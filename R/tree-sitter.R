@@ -97,6 +97,9 @@ tressitter_calls_in_package <- function (path) {
     info <- NULL
 
     path_r <- fs::path (path, "R")
+    if (!fs::dir_exists (path_r)) {
+        return (NULL)
+    }
     paths <- fs::dir_ls (path_r, regexp = "\\.(r|R)$")
     paths <- as.character (paths)
 
@@ -163,9 +166,13 @@ pkgsimil_tag_fns <- function (path) {
     stopifnot (fs::dir_exists (path))
 
     calls <- tressitter_calls_in_package (path)
-    calls <- attach_this_pkg_namespace (path, calls)
-    calls <- attach_base_rcmd_ns (calls)
-    calls <- attach_local_dep_namespaces (path, calls)
+    if (nrow (calls) == 0L) {
+        calls <- data.frame (name = character (0L))
+    } else {
+        calls <- attach_this_pkg_namespace (path, calls)
+        calls <- attach_base_rcmd_ns (calls)
+        calls <- attach_local_dep_namespaces (path, calls)
+    }
 
     return (calls)
 }
