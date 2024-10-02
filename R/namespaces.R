@@ -92,3 +92,37 @@ attach_base_rcmd_ns <- function (calls) {
 
     return (calls)
 }
+
+#' List all dependencies of a local package, so namespaces can be appropriately
+#' designated.
+#' @noRd
+get_local_pkg_deps <- function (path) {
+
+    desc_path <- fs::path (path, "DESCRIPTION")
+    if (!fs::file_exists (desc_path)) {
+        return (NULL)
+    }
+
+    desc <- data.frame (read.dcf (desc_path))
+    what <- c ("Depends", "Imports", "Suggests", "LinkingTo")
+    pkgs <- unlist (lapply (what, function (i) {
+        i_sp <- gsub ("\\n", "", strsplit (desc [[i]], ",") [[1]])
+        gsub ("[[:space:]].*$", "", i_sp)
+    }))
+    out <- c ("R", base_pkgs, rcmd_pkgs)
+    pkgs [which (!pkgs %in% out)]
+}
+
+#' Iterate over all local pacakge dependencies and get all function names from
+#' the search.r-project site.
+#' @noRd
+get_local_pkg_dep_fns <- function (path) {
+    deps <- get_local_pkg_deps (path)
+    fns <- lapply (deps, function (d) {
+        data.frame (
+            package = d,
+            fn_name = pkg_fns_from_r_search (d)
+        )
+    })
+    do.call (rbind, fns)
+}
