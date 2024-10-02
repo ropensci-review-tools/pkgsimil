@@ -3,34 +3,6 @@
 # Adapated from code provided by Davis Vaughan in
 # https://github.com/ropensci-review-tools/pkgstats/pull/62#issuecomment-2359834446
 
-QUERY_FUNCTIONS <- r"(
-  (binary_operator
-      lhs: (identifier) @name
-      operator: "<-"
-      rhs: (function_definition) @fn
-  )
-)"
-QUERY_FUNCTIONS <- treesitter::query (treesitter.r::language (), QUERY_FUNCTIONS)
-
-QUERY_FUNCTIONS_EQ <- r"(
-  (binary_operator
-      lhs: (identifier) @name
-      operator: "="
-      rhs: (function_definition) @fn
-  )
-)"
-QUERY_FUNCTIONS_EQ <- treesitter::query (treesitter.r::language (), QUERY_FUNCTIONS_EQ)
-
-QUERY_CALLS <- r"(
-  (call
-    function: [
-      (identifier) @name
-      (namespace_operator) @name
-    ]
-  )
-)"
-QUERY_CALLS <- treesitter::query (treesitter.r::language (), QUERY_CALLS)
-
 #' Extract names of all function called from a given treesitter node
 #'
 #' This first identifies all functions, then recursively identifies all calls
@@ -38,6 +10,25 @@ QUERY_CALLS <- treesitter::query (treesitter.r::language (), QUERY_CALLS)
 #' function).
 #' @noRd
 get_calls_in_functions <- function (node) {
+
+    QUERY_FUNCTIONS <- r"(
+    (binary_operator
+        lhs: (identifier) @name
+        operator: "<-"
+        rhs: (function_definition) @fn
+    )
+    )"
+    QUERY_FUNCTIONS <- treesitter::query (treesitter.r::language (), QUERY_FUNCTIONS)
+
+    QUERY_FUNCTIONS_EQ <- r"(
+    (binary_operator
+        lhs: (identifier) @name
+        operator: "="
+        rhs: (function_definition) @fn
+    )
+    )"
+    QUERY_FUNCTIONS_EQ <- treesitter::query (treesitter.r::language (), QUERY_FUNCTIONS_EQ)
+
     functions <- treesitter::query_captures (QUERY_FUNCTIONS, node)
     names <- functions$node [functions$name == "name"]
     bodies <- functions$node [functions$name == "fn"]
@@ -52,6 +43,10 @@ get_calls_in_functions <- function (node) {
     ))
 }
 
+get_captures <- function (node, QUERY_CALLS) {
+    treesitter::query_captures (QUERY_CALLS, node)
+}
+
 #' Extract all function calls from a given treesitter node.
 #'
 #' This is called from the preceding `get_calls_in_functions()`, and is applied
@@ -59,12 +54,25 @@ get_calls_in_functions <- function (node) {
 #' function.
 #' @noRd
 get_calls <- function (node) {
+
+    QUERY_CALLS <- r"(
+    (call
+        function: [
+        (identifier) @name
+        (namespace_operator) @name
+        ]
+    )
+    )"
+    QUERY_CALLS <- treesitter::query (treesitter.r::language (), QUERY_CALLS)
+
     captures <- treesitter::query_captures (QUERY_CALLS, node)
+
     name <- vapply (
         captures$node,
         function (n) treesitter::node_text (n),
         character (1)
     )
+
     start <- vapply (
         captures$node,
         function (n) {
@@ -72,6 +80,7 @@ get_calls <- function (node) {
         },
         double (1)
     )
+
     end <- vapply (
         captures$node,
         function (n) {
