@@ -119,11 +119,29 @@ tressitter_calls_in_package <- function (path) {
     out
 }
 
-#' Attach namespace identifiers to function calls identified from
-#' `treesitter_calls_in_package().`
+#' Use "treesitter" to tag all function calls made within local package, and to
+#' associate those calls with package namespaces.
 #'
-#' @param calls Result of `treesitter_calls_in_package()`.
-#' @noRd
-treesitter_calls_namespace <- function (calls) {
+#' @param path Path to local package, or `.tar.gz` file of package source.
+#' @return A `data.frame` of all function calls made within the package, with
+#' the following columns:
+#' \itemize{
+#' \item 'fn' Name of the package function within which call is made, including
+#' namespace identifiers of "::" for exported functions and ":::" for
+#' non-exported functions.
+#' \item name Name of function being called, including namespace.
+#' \item start Byte number within file corresponding to start of definition
+#' \item end Byte number within file corresponding to end of definition
+#' \item file Name of file in which fn call is defined.
+#' }
+#'
+#' @export
+pkgsimil_tag_fns <- function (path) {
 
+    calls <- tressitter_calls_in_package (path)
+    calls <- attach_this_pkg_namespace (path, calls)
+    calls <- attach_base_rcmd_ns (calls)
+    calls <- attach_local_dep_namespaces (path, calls)
+
+    return (calls)
 }
