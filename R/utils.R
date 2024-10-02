@@ -56,6 +56,16 @@ apply_col_names <- function (obj, src, nms) {
     return (obj)
 }
 
+#' Get names of exported functions for a given package from the
+#' search.r-project website
+#' @noRd
+pkg_fns_from_r_search <- function (pkg_name) {
+    base_url <- "https://search.r-project.org/CRAN/refmans/"
+    url <- paste0 (base_url, pkg_name, "/html/00Index.html")
+    fns <- rvest::html_table (rvest::read_html (url))
+    do.call (rbind, fns)$X1
+}
+
 # Function to estimate the `token_threshold` above of 0.98, from running over
 # all rOpenSci packages.
 # get_threshold <- function (paths) {
