@@ -96,9 +96,12 @@ tressitter_calls_in_package <- function (path) {
     # supreess 'no visible binding' notes:
     info <- NULL
 
+    # Default return if not results:
+    df0 <- data.frame (fn = character (0L), name = character (0L))
+
     path_r <- fs::path (path, "R")
     if (!fs::dir_exists (path_r)) {
-        return (NULL)
+        return (df0)
     }
     paths <- fs::dir_ls (path_r, regexp = "\\.(r|R)$")
     paths <- as.character (paths)
@@ -128,7 +131,11 @@ tressitter_calls_in_package <- function (path) {
     }
 
     out <- vctrs::list_unchop (out)
-    out <- tidyr::unnest (out, info)
+    if (is.null (out)) {
+        out <- df0
+    } else {
+        out <- tidyr::unnest (out, info)
+    }
     out
 }
 
