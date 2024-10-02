@@ -22,6 +22,12 @@ QUERY_CALLS <- r"(
 )"
 QUERY_CALLS <- treesitter::query (treesitter.r::language (), QUERY_CALLS)
 
+#' Extract names of all function called from a given treesitter node
+#'
+#' This first identifies all functions, then recursively identifies all calls
+#' within the bodies of those functions (by calling the `get_calls()`
+#' function).
+#' @noRd
 get_calls_in_functions <- function (node) {
     functions <- treesitter::query_captures (QUERY_FUNCTIONS, node)
     names <- functions$node [functions$name == "name"]
@@ -33,6 +39,12 @@ get_calls_in_functions <- function (node) {
     ))
 }
 
+#' Extract all function calls from a given treesitter node.
+#'
+#' This is called from the preceding `get_calls_in_functions()`, and is applied
+#' to each individual function body, to identify all calls make within that
+#' function.
+#' @noRd
 get_calls <- function (node) {
     captures <- treesitter::query_captures (QUERY_CALLS, node)
     name <- vapply (
@@ -62,6 +74,10 @@ get_calls <- function (node) {
     ))
 }
 
+#' The main function applied to a package `path`, and used to identify and
+#' return all function calls made within the package.
+#'
+#' @noRd
 tressitter_calls_in_package <- function (path) {
 
     # supreess 'no visible binding' notes:
