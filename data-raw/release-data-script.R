@@ -72,3 +72,26 @@ token_lists <- list (
 )
 bm25_data <- list (idfs = idfs, token_lists = token_lists)
 saveRDS (bm25_data, "bm25-cran.Rds")
+
+# ------------------ FN CALLS FOR CRAN ------------------
+num_cores <- parallel::detectCores () - 2L
+cl <- parallel::makeCluster (num_cores)
+
+calls <- pbapply::pblapply (packages, function (f) {
+    res <- tryCatch (
+        pkgsimil::pkgsimil_tag_fns (f),
+        error = function (e) NULL
+    )
+    if (is.null (res)) {
+        res <- data.frame (name = character (0L))
+    }
+    sort (table (res$name), decreasing = TRUE)
+}, cl = cl)
+
+parallel::stopCluster (cl)
+
+names (calls) <- basename (names (calls))
+index <- which (vapply (calls, length, integer (1L)) > 0)
+calls <- calls [index]
+head (names (calls))
+saveRDS (calls, "fn-calls-cran.Rds")
