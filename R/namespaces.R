@@ -20,7 +20,7 @@ rcmd_pkgs <- c (
 #' @noRd
 get_pkg_exported_fns <- function (path) {
     rd_path <- fs::path (path, "man")
-    if (!fs:dir_exists (rd_path)) {
+    if (!fs::dir_exists (rd_path)) {
         return (NULL)
     }
     rd_files <- fs::dir_ls (rd_path, regexp = "\\.Rd$")
