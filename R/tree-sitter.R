@@ -110,6 +110,9 @@ tressitter_calls_in_package <- function (path) {
             brio::read_file (path),
             error = function (e) NULL
         )
+        if (length (text) == 0) {
+            text <- NULL
+        }
 
         if (!is.null (text)) {
 
