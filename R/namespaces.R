@@ -122,6 +122,13 @@ get_local_pkg_deps <- function (path) {
 get_local_pkg_dep_fns <- function (path) {
     deps <- get_local_pkg_deps (path)
     fns <- lapply (deps, function (d) {
+        fns <- tryCatch (
+            pkg_fns_from_r_search (d),
+            error = function (e) NULL
+        )
+        if (is.null (fns)) {
+            return (NULL)
+        }
         data.frame (
             package = d,
             fn_name = pkg_fns_from_r_search (d)
