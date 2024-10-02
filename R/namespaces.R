@@ -107,6 +107,7 @@ get_local_pkg_deps <- function (path) {
 
     desc <- data.frame (read.dcf (desc_path))
     what <- c ("Depends", "Imports", "Suggests", "LinkingTo")
+    what <- what [which (what %in% names (desc))]
     pkgs <- unlist (lapply (what, function (i) {
         i_sp <- gsub ("\\n", "", strsplit (desc [[i]], ",") [[1]])
         gsub ("[[:space:]].*$", "", i_sp)
