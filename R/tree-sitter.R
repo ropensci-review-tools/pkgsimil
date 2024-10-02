@@ -12,6 +12,15 @@ QUERY_FUNCTIONS <- r"(
 )"
 QUERY_FUNCTIONS <- treesitter::query (treesitter.r::language (), QUERY_FUNCTIONS)
 
+QUERY_FUNCTIONS_EQ <- r"(
+  (binary_operator
+      lhs: (identifier) @name
+      operator: "="
+      rhs: (function_definition) @fn
+  )
+)"
+QUERY_FUNCTIONS_EQ <- treesitter::query (treesitter.r::language (), QUERY_FUNCTIONS_EQ)
+
 QUERY_CALLS <- r"(
   (call
     function: [
@@ -32,6 +41,10 @@ get_calls_in_functions <- function (node) {
     functions <- treesitter::query_captures (QUERY_FUNCTIONS, node)
     names <- functions$node [functions$name == "name"]
     bodies <- functions$node [functions$name == "fn"]
+
+    functions_eq <- treesitter::query_captures (QUERY_FUNCTIONS_EQ, node)
+    names <- c (names, functions_eq$node [functions_eq$name == "name"])
+    bodies <- c (bodies, functions_eq$node [functions_eq$name == "fn"])
 
     tibble::new_tibble (list (
         fn = vapply (names, treesitter::node_text, character (1)),
@@ -104,4 +117,13 @@ tressitter_calls_in_package <- function (path) {
     out <- vctrs::list_unchop (out)
     out <- tidyr::unnest (out, info)
     out
+}
+
+#' Attach namespace identifiers to function calls identified from
+#' `treesitter_calls_in_package().`
+#'
+#' @param calls Result of `treesitter_calls_in_package()`.
+#' @noRd
+treesitter_calls_namespace <- function (calls) {
+
 }
