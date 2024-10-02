@@ -3,6 +3,8 @@ ollama_check ()
 
 path <- "/<path>/<to>/<ropensci>/<repos>"
 packages <- fs::dir_ls (path)
+
+# ----------------- EMBEDDINGS FOR ROPENSCI -----------------
 embeddings <- pkgsimil_embeddings_from_pkgs (packages)
 
 saveRDS (embeddings, "embeddings-ropensci.Rds")
@@ -10,6 +12,7 @@ embeddings_fns <-
     pkgsimil_embeddings_from_pkgs (packages, functions_only = TRUE)
 saveRDS (embeddings_fns, "embeddings-fns.Rds")
 
+# -------------------- BM25 FOR ROPENSCI --------------------
 txt_with_fns <- lapply (packages, function (p) get_pkg_text (p))
 txt_wo_fns <- rm_fns_from_pkg_txt (txt_with_fns)
 idfs <- list (
@@ -32,6 +35,17 @@ names (fns_lists) <- txt_fns$fn [index]
 bm25_data <- list (idfs = fns_idfs, token_lists = fns_lists)
 saveRDS (bm25_data, "bm25-ropensci-fns.Rds")
 
+# ------------------ FN CALLS FOR ROPENSCI ------------------
+calls <- pbapply::pblapply (flist, function (f) {
+    res <- pkgsimil_tag_fns (f)
+    sort (table (res$name), decreasing = TRUE)
+})
+names (calls) <- basename (names (calls))
+index <- which (vapply (calls, length, integer (1L)) > 0)
+calls <- calls [index]
+saveRDS (calls, "fn-calls-ropensci.Rds")
+
+# -------------------- EMBEDDINGS FOR CRAN --------------------
 path <- "/<path>/<to>/<cran-mirror>/tarballs"
 packages <- fs::dir_ls (path, regexpr = "\\.tar\\.gz$")
 embeddings <- pkgsimil_embeddings_from_pkgs (packages)
@@ -45,6 +59,7 @@ colnames (embeddings$code) <- nms
 
 saveRDS (embeddings, "embeddings-cran.Rds")
 
+# -------------------- BM25 FOR CRAN --------------------
 txt_with_fns <- lapply (packages, function (p) get_pkg_text (p))
 txt_wo_fns <- rm_fns_from_pkg_txt (txt_with_fns)
 idfs <- list (
