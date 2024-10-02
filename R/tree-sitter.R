@@ -148,6 +148,20 @@ tressitter_calls_in_package <- function (path) {
 #' @export
 pkgsimil_tag_fns <- function (path) {
 
+    stopifnot (length (path) == 1L)
+
+    path <- fs::path_norm (path)
+
+    is_tarball <- fs::path_ext (path) == "gz"
+    if (is_tarball) {
+        path <- tarball_to_path (path)
+        on.exit ({
+            fs::dir_delete (path)
+        })
+    }
+
+    stopifnot (fs::dir_exists (path))
+
     calls <- tressitter_calls_in_package (path)
     calls <- attach_this_pkg_namespace (path, calls)
     calls <- attach_base_rcmd_ns (calls)
