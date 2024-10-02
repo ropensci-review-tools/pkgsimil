@@ -62,20 +62,20 @@ get_calls <- function (node) {
     captures <- treesitter::query_captures (QUERY_CALLS, node)
     name <- vapply (
         captures$node,
-        function (node) treesitter::node_text (node),
+        function (n) treesitter::node_text (n),
         character (1)
     )
     start <- vapply (
         captures$node,
-        function (node) {
-            treesitter::point_row (treesitter::node_start_point (node))
+        function (n) {
+            treesitter::point_row (treesitter::node_start_point (n))
         },
         double (1)
     )
     end <- vapply (
         captures$node,
-        function (node) {
-            treesitter::point_row (treesitter::node_end_point (node))
+        function (n) {
+            treesitter::point_row (treesitter::node_end_point (n))
         },
         double (1)
     )
