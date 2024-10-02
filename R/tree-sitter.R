@@ -43,10 +43,6 @@ get_calls_in_functions <- function (node) {
     ))
 }
 
-get_captures <- function (node, QUERY_CALLS) {
-    treesitter::query_captures (QUERY_CALLS, node)
-}
-
 #' Extract all function calls from a given treesitter node.
 #'
 #' This is called from the preceding `get_calls_in_functions()`, and is applied
