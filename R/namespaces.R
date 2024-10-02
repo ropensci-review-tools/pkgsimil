@@ -19,7 +19,11 @@ rcmd_pkgs <- c (
 #' source repository, or extracted tarball).
 #' @noRd
 get_pkg_exported_fns <- function (path) {
-    rd_files <- fs::dir_ls (fs::path (path, "man"), regexp = "\\.Rd$")
+    rd_path <- fs::path (path, "man")
+    if (!fs:dir_exists (rd_path)) {
+        return (NULL)
+    }
+    rd_files <- fs::dir_ls (rd_path, regexp = "\\.Rd$")
     fn_names <- lapply (rd_files, function (i) {
         suppressWarnings (
             rd <- tools::parse_Rd (i)
