@@ -97,7 +97,7 @@ tressitter_calls_in_package <- function (path) {
     info <- NULL
 
     path_r <- fs::path (path, "R")
-    paths <- fs::dir_ls (path_r)
+    paths <- fs::dir_ls (path_r, regexp = "\\.(r|R)$")
     paths <- as.character (paths)
 
     parser <- treesitter::parser (treesitter.r::language ())
@@ -106,12 +106,19 @@ tressitter_calls_in_package <- function (path) {
 
     for (i in seq_along (out)) {
         path <- paths [[i]]
-        text <- brio::read_file (path)
-        tree <- treesitter::parser_parse (parser, text)
-        node <- treesitter::tree_root_node (tree)
-        elt <- get_calls_in_functions (node)
-        elt [["file"]] <- as.character (path)
-        out [[i]] <- elt
+        text <- tryCatch (
+            brio::read_file (path),
+            error = function (e) NULL
+        )
+
+        if (!is.null (text)) {
+
+            tree <- treesitter::parser_parse (parser, text)
+            node <- treesitter::tree_root_node (tree)
+            elt <- get_calls_in_functions (node)
+            elt [["file"]] <- as.character (path)
+            out [[i]] <- elt
+        }
     }
 
     out <- vctrs::list_unchop (out)
