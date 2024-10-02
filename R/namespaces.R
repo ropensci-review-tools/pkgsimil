@@ -45,7 +45,9 @@ get_pkg_exported_fns <- function (path) {
 
 #' Attach namespace of focal package to treesitter 'calls' output.
 #' @noRd
-attach_this_pkg_namespace <- function (calls) {
+attach_this_pkg_namespace <- function (path, calls) {
+
+    pkg_name <- pkg_name_from_path (path)
 
     fn_names <- get_pkg_exported_fns (path)
 
