@@ -41,7 +41,7 @@ pkgsimil_load_data <- function (what = "embeddings", corpus = "ropensci",
     readRDS (fname)
 }
 
-get_cache_file_name <- function (what, corpus, fns) {
+get_cache_file_name <- function (what, corpus, fns, raw) {
 
     corpus <- match.arg (tolower (corpus), c ("ropensci", "cran"))
     what <- match.arg (what, c ("embeddings", "idfs", "functions", "calls"))
