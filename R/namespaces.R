@@ -8,12 +8,17 @@ base_pkgs <- c (
     "tools", "utils"
 )
 
-# Recommended from R-devel/src/library/Recommended:
-rcmd_pkgs <- c (
-    "KernSmooth", "MASS", "Matrix", "boot", "class", "cluster",
-    "codetools", "foreign", "lattice", "mgcv", "nlme", "nnet", "rpart",
-    "spatial", "survival"
-)
+# Recommended from R-devel/src/library/Recommended, but these may not be
+# installed on all systems, so reduce only to those that are installed.
+rcmd_pkgs <- function () {
+    p <- c (
+        "KernSmooth", "MASS", "Matrix", "boot", "class", "cluster",
+        "codetools", "foreign", "lattice", "mgcv", "nlme", "nnet", "rpart",
+        "spatial", "survival"
+    )
+    ip <- installed.packages ()
+    p [which (p %in% ip [, "Package"])]
+}
 
 #' List all exported functions based on path to local package (either full
 #' source repository, or extracted tarball).
@@ -94,7 +99,7 @@ attach_base_rcmd_ns <- function (calls) {
     calls$name [calls$name == ".Call"] <- "base::.Call"
 
     for (p in base_pkgs) calls <- attach_ns (calls, p)
-    for (p in rcmd_pkgs) calls <- attach_ns (calls, p)
+    for (p in rcmd_pkgs ()) calls <- attach_ns (calls, p)
 
     return (calls)
 }
@@ -116,7 +121,7 @@ get_local_pkg_deps <- function (path) {
         i_sp <- gsub ("\\n", "", strsplit (desc [[i]], ",") [[1]])
         gsub ("[[:space:]].*$", "", i_sp)
     }))
-    out <- c ("R", base_pkgs, rcmd_pkgs)
+    out <- c ("R", base_pkgs, rcmd_pkgs ())
     pkgs [which (!pkgs %in% out)]
 }
 
