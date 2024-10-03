@@ -62,8 +62,12 @@ pkgsimil_similar_pkgs <- function (input,
 
     if (input_is_dir (input)) {
 
-        res <- similar_pkgs_from_pkg (input, embeddings, n)
-        res <- lapply (res, function (i) i$package)
+        res <- similar_pkgs_from_pkg (input, embeddings, n = 1e6)
+        # Then combine BM25 from function calls with "code" similarities:
+        bm25 <- pkgsimil_bm25_fn_calls (input)
+        code_sim <- dplyr::left_join (res$code, bm25, by = "package")
+        res$code <- pkgsimil_rerank (code_sim) [seq_len (n)]
+        res$text <- res$text$package [seq_len (n)]
 
     } else {
 
