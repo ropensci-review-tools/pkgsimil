@@ -3,12 +3,22 @@
 #' individual functions within those packages.
 #'
 #' @inheritParams pkgsimil_similar_pkgs
-#' @param what Either "embeddings" to load pre-generated embeddings, "idfs" to
-#' load pre-generated Inverse Document Frequency weightings, or "functions" to
-#' load pre-generated frequency tables for function calls.
+#' @param what One of:
+#' \itemize{
+#' \item "embeddings" to load pre-generated embeddings;
+#' \item "idfs" to load pre-generated Inverse Document Frequency weightings;
+#' \item "functions" to load pre-generated frequency tables for text
+#' descriptions of function calls; or
+#' \item "calls" to load pre-generated frequency tables for actual function
+#' calls.
+#' }
 #' @param fns If `FALSE` (default), load embeddings for all rOpenSci packages;
 #' otherwise load (considerably larger dataset of) embeddings for all
 #' individual functions.
+#' @param raw Only has effect of `what = "calls"`, in which case default of
+#' `FALSE` loads single Inverse Document Frequency table to entire corpus;
+#' otherwise if `TRUE`, loads raw function call counts for each package in
+#' corpus.
 #' @return The loaded `data.frame`.
 #' @export
 #'
@@ -19,13 +29,14 @@
 #' idfs <- pkgsimil_load_data ("idfs")
 #' idfs_fns <- pkgsimil_load_data ("idfs", fns = TRUE)
 #' }
-pkgsimil_load_data <- function (what = "embeddings", corpus = "ropensci", fns = FALSE) {
+pkgsimil_load_data <- function (what = "embeddings", corpus = "ropensci",
+                                fns = FALSE, raw = FALSE) {
 
-    fname <- get_cache_file_name (what, corpus, fns)
+    fname <- get_cache_file_name (what, corpus, fns, raw)
 
     fname <- fs::path (pkgsimil_cache_path (), fname)
     if (!fs::file_exists (fname)) {
-        fname <- pkgsimil_dl_data (what = what, corpus = corpus, fns = fns)
+        fname <- pkgsimil_dl_data (what = what, corpus = corpus, fns = fns, raw = raw)
     }
     readRDS (fname)
 }
@@ -33,14 +44,15 @@ pkgsimil_load_data <- function (what = "embeddings", corpus = "ropensci", fns = 
 get_cache_file_name <- function (what, corpus, fns) {
 
     corpus <- match.arg (tolower (corpus), c ("ropensci", "cran"))
-    what <- match.arg (what, c ("embeddings", "idfs", "functions"))
+    what <- match.arg (what, c ("embeddings", "idfs", "functions", "calls"))
 
     if (corpus == "ropensci") {
 
         fname <- switch (what,
             "embeddings" = ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds"),
             "idfs" = ifelse (fns, "bm25-ropensci-fns.Rds", "bm25-ropensci.Rds"),
-            "functions" = "fn-calls-ropensci.Rds"
+            "functions" = "fn-calls-ropensci.Rds",
+            "calls" = ifelse (raw, "fn-calls-ropensci.Rds", "idfs-fn-calls-ropensci.Rds")
         )
 
     } else if (corpus == "cran") {
@@ -48,7 +60,12 @@ get_cache_file_name <- function (what, corpus, fns) {
         fname <- switch (what,
             "embeddings" = "embeddings-cran.Rds",
             "idfs" = "bm25-cran.Rds",
-            "functions" = "fn-calls-cran.Rds"
+            "functions" = "fn-calls-cran.Rds",
+            "calls" = ifelse (
+                raw,
+                "fn-calls-ropensci.Rds",
+                "idfs-fn-calls-ropensci.Rds"
+            )
         )
     }
 
@@ -56,9 +73,10 @@ get_cache_file_name <- function (what, corpus, fns) {
 }
 
 # nocov start
-pkgsimil_dl_data <- function (what = "embeddings", corpus = "ropensci", fns = FALSE) {
+pkgsimil_dl_data <- function (what = "embeddings", corpus = "ropensci",
+                              fns = FALSE, raw = FALSE) {
 
-    fname <- get_cache_file_name (what, corpus, fns)
+    fname <- get_cache_file_name (what, corpus, fns, raw)
 
     url_base <-
         "https://github.com/ropensci-review-tools/pkgsimil/releases/download/"
@@ -67,7 +85,11 @@ pkgsimil_dl_data <- function (what = "embeddings", corpus = "ropensci", fns = FA
     dl_url <- paste0 (url_base, version, "/", fname)
 
     destfile <- fs::path (pkgsimil_cache_path (), fname)
-    curl::curl_download (url = dl_url, destfile = destfile, quiet = opt_is_quiet ())
+    curl::curl_download (
+        url = dl_url,
+        destfile = destfile,
+        quiet = opt_is_quiet ()
+    )
     return (destfile)
 }
 # nocov end
