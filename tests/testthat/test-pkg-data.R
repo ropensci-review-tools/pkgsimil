@@ -33,6 +33,24 @@ test_that ("get pkg local text", {
     fs::dir_delete (path)
 })
 
+test_that ("get pkg tarball text", {
+    path <- pkgsimil_test_skeleton ()
+    expect_true (dir.exists (path))
+    roxygen2::roxygenise (path) # Generate man files
+
+    txt0 <- get_pkg_text (path)
+
+    path_gz <- pkgbuild::build (path)
+    txt1 <- get_pkg_text (path_gz)
+
+    expect_identical (txt0, txt1)
+    # All tests above must then also pass ...
+
+    detach ("package:demo", unload = TRUE)
+    fs::dir_delete (path)
+    fs::file_delete (path_gz)
+})
+
 test_that ("get pkg installed text", {
     pkg <- "cli"
 
