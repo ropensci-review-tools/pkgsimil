@@ -104,6 +104,29 @@ attach_base_rcmd_ns <- function (calls) {
     return (calls)
 }
 
+get_fn_defs_namespace <- function (pkg_name, exported_only) {
+    if (!isNamespaceLoaded (pkg_name)) {
+        loadNamespace (pkg_name)
+    }
+    # `lsf.str` is for functions only:
+    fn_names <- unclass (
+        utils::lsf.str (envir = asNamespace (pkg_name), all = TRUE)
+    )
+    if (exported_only) {
+        suppressPackageStartupMessages (
+            require (pkg_name, character.only = TRUE)
+        )
+        fns_exp <- ls (paste0 ("package:", pkg_name))
+        fn_names <- fn_names [which (fn_names %in% fns_exp)]
+    }
+    fn_defs <- lapply (fn_names, function (f) {
+        utils::getFromNamespace (f, pkg_name)
+    })
+    names (fn_defs) <- fn_names
+
+    return (fn_defs)
+}
+
 #' List all dependencies of a local package, so namespaces can be appropriately
 #' designated.
 #' @noRd
