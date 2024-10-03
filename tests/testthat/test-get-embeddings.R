@@ -41,4 +41,9 @@ test_that ("raw embeddings", {
         pkgsimil_embeddings_from_pkgs (path, functions_only = TRUE)
     })
     expect_embeddings_matrix (emb_fns)
+
+    # detach is critical here, because httptest2 uses `utils::sessionInfo()`,
+    # which checks namespaces and tries to load DESC file from pkg location.
+    detach ("package:demo", unload = TRUE)
+    fs::dir_delete (path)
 })

@@ -11,4 +11,9 @@ test_that ("tree-sitter", {
     expect_identical (names (tags), c ("fn", "name", "start", "end", "file"))
     expect_true ("demo::test_fn" %in% tags$fn)
     expect_true ("base::message" %in% tags$name)
+
+    # detach is critical here, because httptest2 uses `utils::sessionInfo()`,
+    # which checks namespaces and tries to load DESC file from pkg location.
+    detach ("package:demo", unload = TRUE)
+    fs::dir_delete (path)
 })

@@ -26,6 +26,11 @@ test_that ("get pkg local text", {
     txt <- gsub ("\\n|#+", "", txt)
     expect_false (text_is_code (txt))
     expect_true (text_is_code (code))
+
+    # detach is critical here, because httptest2 uses `utils::sessionInfo()`,
+    # which checks namespaces and tries to load DESC file from pkg location.
+    detach ("package:demo", unload = TRUE)
+    fs::dir_delete (path)
 })
 
 test_that ("get pkg installed text", {

@@ -32,7 +32,7 @@ test_that ("similar pkgs package input", {
 
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
 
-    path <- pkgsimil_test_skeleton ()
+    path <- pkgsimil_test_skeleton (pkg_name = "demo")
     roxygen2::roxygenise (path)
 
     n <- 5L
@@ -55,6 +55,12 @@ test_that ("similar pkgs package input", {
             n = n
         )
     })
+
+    # detach is critical here, because httptest2 uses `utils::sessionInfo()`,
+    # which checks namespaces and tries to load DESC file from pkg location.
+    detach ("package:demo", unload = TRUE)
+    fs::dir_delete (path)
+
     expect_type (out, "list")
     expect_length (out, 2L)
     expect_identical (names (out), c ("text", "code"))
@@ -75,7 +81,7 @@ test_that ("similar fns", {
     input <- "A test function"
     n <- 5L
     out <- with_mock_dir ("sim_fns", {
-        pkgsimil_similar_fns (input, embeddings_fns, n = n)
+        pkgsimil_similar_fns (input = input, embeddings = embeddings_fns, n = n)
     })
     expect_type (out, "character")
     expect_length (out, n)
