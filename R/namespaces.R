@@ -16,7 +16,7 @@ rcmd_pkgs <- function () {
         "codetools", "foreign", "lattice", "mgcv", "nlme", "nnet", "rpart",
         "spatial", "survival"
     )
-    ip <- installed.packages ()
+    ip <- utils::installed.packages ()
     p [which (p %in% ip [, "Package"])]
 }
 
