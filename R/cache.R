@@ -32,7 +32,7 @@ pkgsimil_load_data <- function (what = "embeddings", corpus = "ropensci", fns = 
 
 get_cache_file_name <- function (what, corpus, fns) {
 
-    corpus <- match.arg (corpus, c ("ropensci", "cran"))
+    corpus <- match.arg (tolower (corpus), c ("ropensci", "cran"))
     what <- match.arg (what, c ("embeddings", "idfs", "functions"))
 
     if (corpus == "ropensci") {
