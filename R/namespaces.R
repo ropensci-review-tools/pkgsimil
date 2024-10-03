@@ -82,9 +82,14 @@ attach_base_rcmd_ns <- function (calls) {
 
     attach_ns <- function (calls, pkg_name) {
         index_no_ns <- which (!grepl ("\\:\\:", calls$name))
-        suppressWarnings (
-            base_fn_defs <- names (get_fn_defs_namespace (pkg_name, exported_only = TRUE))
-        )
+        # Errors mostly only with 'tctlk' when no X11 env present:
+        suppressWarnings ({
+            fn_defs <- tryCatch (
+                get_fn_defs_namespace (pkg_name, exported_only = TRUE),
+                error = function (e) NULL
+            )
+        })
+        base_fn_defs <- names (fn_defs)
         index <- which (calls$name [index_no_ns] %in% base_fn_defs)
         calls$name [index_no_ns] [index] <- paste0 (
             pkg_name,
