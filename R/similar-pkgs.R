@@ -149,6 +149,7 @@ pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
 
 order_output <- function (out, what = "text", n) {
 
+    n <- min (c (n, nrow (out)))
     index <- order (out [[what]])
     out <- out [index [seq_len (n)], c ("package", what)]
     rownames (out) <- NULL
