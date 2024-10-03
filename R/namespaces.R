@@ -105,9 +105,6 @@ attach_base_rcmd_ns <- function (calls) {
 }
 
 get_fn_defs_namespace <- function (pkg_name, exported_only) {
-    if (!isNamespaceLoaded (pkg_name)) {
-        loadNamespace (pkg_name)
-    }
     # `lsf.str` is for functions only:
     fn_names <- unclass (
         utils::lsf.str (envir = asNamespace (pkg_name), all = TRUE)
