@@ -9,8 +9,9 @@ individual functions within those packages.}
 pkgsimil_load_data(what = "embeddings", corpus = "ropensci", fns = FALSE)
 }
 \arguments{
-\item{what}{Either "embeddings" to load pre-generated embeddings, or "idfs"
-to load pre-generated Inverse Document Frequency weightings.}
+\item{what}{Either "embeddings" to load pre-generated embeddings, "idfs" to
+load pre-generated Inverse Document Frequency weightings, or "functions" to
+load pre-generated frequency tables for function calls.}
 
 \item{corpus}{If \code{embeddings} or \code{idfs} parameters are not specified, they
 are automatically downloaded for the corpus specified by this parameter.

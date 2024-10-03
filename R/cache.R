@@ -3,11 +3,12 @@
 #' individual functions within those packages.
 #'
 #' @inheritParams pkgsimil_similar_pkgs
+#' @param what Either "embeddings" to load pre-generated embeddings, "idfs" to
+#' load pre-generated Inverse Document Frequency weightings, or "functions" to
+#' load pre-generated frequency tables for function calls.
 #' @param fns If `FALSE` (default), load embeddings for all rOpenSci packages;
 #' otherwise load (considerably larger dataset of) embeddings for all
 #' individual functions.
-#' @param what Either "embeddings" to load pre-generated embeddings, or "idfs"
-#' to load pre-generated Inverse Document Frequency weightings.
 #' @return The loaded `data.frame`.
 #' @export
 #'
@@ -20,25 +21,7 @@
 #' }
 pkgsimil_load_data <- function (what = "embeddings", corpus = "ropensci", fns = FALSE) {
 
-    corpus <- match.arg (corpus, c ("ropensci", "cran"))
-    what <- match.arg (what, c ("embeddings", "idfs"))
-
-    if (corpus == "ropensci") {
-
-        if (what == "embeddings") {
-            fname <- ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds")
-        } else {
-            fname <- ifelse (fns, "bm25-ropensci-fns.Rds", "bm25-ropensci.Rds")
-        }
-
-    } else if (corpus == "cran") {
-
-        if (what == "embeddings") {
-            fname <- "embeddings-cran.Rds"
-        } else {
-            fname <- "bm25-cran.Rds"
-        }
-    }
+    fname <- get_cache_file_name (what, corpus, fns)
 
     fname <- fs::path (pkgsimil_cache_path (), fname)
     if (!fs::file_exists (fname)) {
@@ -47,33 +30,43 @@ pkgsimil_load_data <- function (what = "embeddings", corpus = "ropensci", fns = 
     readRDS (fname)
 }
 
+get_cache_file_name <- function (what, corpus, fns) {
+
+    corpus <- match.arg (corpus, c ("ropensci", "cran"))
+    what <- match.arg (what, c ("embeddings", "idfs", "functions"))
+
+    if (corpus == "ropensci") {
+
+        fname <- switch (what,
+            "embeddings" = ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds"),
+            "idfs" = ifelse (fns, "bm25-ropensci-fns.Rds", "bm25-ropensci.Rds"),
+            "functions" = "fn-calls-ropensci.Rds"
+        )
+
+    } else if (corpus == "cran") {
+
+        fname <- switch (what,
+            "embeddings" = "embeddings-cran.Rds",
+            "idfs" = "bm25-cran.Rds",
+            "functions" = "fn-calls-cran.Rds"
+        )
+    }
+
+    return (fname)
+}
+
 # nocov start
 pkgsimil_dl_data <- function (what = "embeddings", corpus = "ropensci", fns = FALSE) {
 
-    what <- match.arg (what, c ("embeddings", "idfs"))
-    corpus <- match.arg (corpus, c ("ropensci", "cran"))
+    fname <- get_cache_file_name (what, corpus, fns)
 
     url_base <-
         "https://github.com/ropensci-review-tools/pkgsimil/releases/download/"
     version <- "v0.1.2"
 
-    if (corpus == "ropensci") {
-        if (what == "embeddings") {
-            file <- ifelse (fns, "embeddings-fns.Rds", "embeddings.Rds")
-        } else {
-            file <- ifelse (fns, "bm25-ropensci-fns.Rds", "bm25-ropensci.Rds")
-        }
-    } else if (corpus == "cran") {
-        if (what == "embeddings") {
-            file <- "embeddings-cran.Rds"
-        } else {
-            file <- "bm25-cran.Rds"
-        }
-    }
+    dl_url <- paste0 (url_base, version, "/", fname)
 
-    dl_url <- paste0 (url_base, version, "/", file)
-
-    destfile <- fs::path (pkgsimil_cache_path (), file)
+    destfile <- fs::path (pkgsimil_cache_path (), fname)
     curl::curl_download (url = dl_url, destfile = destfile, quiet = opt_is_quiet ())
     return (destfile)
 }
