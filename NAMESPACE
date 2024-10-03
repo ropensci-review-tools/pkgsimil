@@ -2,6 +2,7 @@
 
 export(ollama_check)
 export(pkgsimil_bm25)
+export(pkgsimil_bm25_fn_calls)
 export(pkgsimil_embeddings_from_pkgs)
 export(pkgsimil_embeddings_from_text)
 export(pkgsimil_load_data)
