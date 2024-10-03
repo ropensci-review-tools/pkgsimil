@@ -47,6 +47,7 @@ pkgsimil_load_data <- function (what = "embeddings", corpus = "ropensci", fns = 
     readRDS (fname)
 }
 
+# nocov start
 pkgsimil_dl_data <- function (what = "embeddings", corpus = "ropensci", fns = FALSE) {
 
     what <- match.arg (what, c ("embeddings", "idfs"))
@@ -76,12 +77,13 @@ pkgsimil_dl_data <- function (what = "embeddings", corpus = "ropensci", fns = FA
     curl::curl_download (url = dl_url, destfile = destfile, quiet = opt_is_quiet ())
     return (destfile)
 }
+# nocov end
 
 pkgsimil_cache_path <- function () {
 
     cache_dir <- Sys.getenv ("PKGSIMIL_CACHE_DIR")
 
-    if (cache_dir == "") {
+    if (cache_dir == "") { # nocov start
         cache_dir <- fs::path_expand (fs::path (
             rappdirs::user_cache_dir (),
             "R",
@@ -90,7 +92,7 @@ pkgsimil_cache_path <- function () {
         if (!fs::dir_exists (cache_dir)) {
             fs::dir_create (cache_dir, recurse = TRUE)
         }
-    }
+    } # nocov end
 
     return (cache_dir)
 }
