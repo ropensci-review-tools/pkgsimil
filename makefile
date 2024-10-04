@@ -9,6 +9,9 @@ doc: ## Update package documentation with `roxygen2`
 init: ## Initialize pkgdown site
 	echo "pkgdown::init_site()" | R --no-save -q
 
+pkgdown: ## Build entire pkgdown site
+	echo "pkgdown::build_site()" | R --no-save -q
+
 vignette: ## Build pkgdown article
 	echo "pkgdown::build_article('$(VIGNETTE)',quiet=FALSE)" | R --no-save -q
 
@@ -24,8 +27,8 @@ open: ## Open main HTML vignette in browser
 check: ## Run pkgcheck
 	Rscript -e 'library(pkgcheck); checks <- pkgcheck(); print(checks); summary (checks)'
 
-clean: ## Clean all junk files
-	rm -rf *.html *.png README_cache 
+clean: ## Clean all junk files, including all pkgdown docs
+	rm -rf *.html *.png README_cache docs/
 
 help: ## Show this help
 	@printf "Usage:\033[36m make [target]\033[0m\n"
