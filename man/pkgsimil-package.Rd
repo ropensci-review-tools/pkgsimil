@@ -4,7 +4,7 @@
 \name{pkgsimil-package}
 \alias{pkgsimil}
 \alias{pkgsimil-package}
-\title{pkgsimil: Similarity Metrics between R Packages}
+\title{pkgsimil: Similarity Metrics Between R Packages}
 \description{
 Similarity metrics between R packages, based on similarity of code and documentation.
 }
