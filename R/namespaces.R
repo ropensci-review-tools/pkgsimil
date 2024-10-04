@@ -101,9 +101,14 @@ attach_base_rcmd_ns <- function (calls) {
     attach_ns <- function (calls, pkg_name, base = TRUE) {
 
         if (base) {
-            fn_names <- fn_names_base (pkg_name)
+            # This can error for  "tcltk" on some systems when no X11 driver
+            # loaded
+            fn_names <- tryCatch (
+                fn_names_base (pkg_name),
+                error = function (e) NULL
+            )
         } else {
-            fn_names <- fn_names_rcmd (pkg_name)
+            fn_names_rcmd (pkg_name)
         }
 
         index_no_ns <- which (!grepl ("\\:\\:", calls$name))
