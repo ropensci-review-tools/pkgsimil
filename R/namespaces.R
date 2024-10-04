@@ -82,9 +82,9 @@ attach_base_rcmd_ns <- function (calls) {
 
     # This requires namespaces to be loaded:
     fn_names_base <- function (pkg_name) {
-        unclass (
+        as.character (unclass (
             utils::lsf.str (envir = asNamespace (pkg_name), all = FALSE)
-        )
+        ))
     }
 
     # Read namespace file without requiring it to be loaded: Note that results
@@ -100,11 +100,11 @@ attach_base_rcmd_ns <- function (calls) {
 
     attach_ns <- function (calls, pkg_name, base = TRUE) {
 
-        fn_names <- ifelse (
-            base,
-            fn_names_base (pkg_name),
-            fn_names_rcmd (pkg_name)
-        )
+        if (base) {
+            fn_names <- fn_names_base (pkg_name)
+        } else {
+            fn_names <- fn_names_rcmd (pkg_name)
+        }
 
         index_no_ns <- which (!grepl ("\\:\\:", calls$name))
         index <- which (calls$name [index_no_ns] %in% fn_names)
@@ -116,7 +116,7 @@ attach_base_rcmd_ns <- function (calls) {
         return (calls)
     }
 
-    calls <- attach_ns (calls, "base")
+    calls <- attach_ns (calls, "base", base = TRUE)
     # From some reason, `.Call` is not listed in base:
     calls$name [calls$name == ".Call"] <- "base::.Call"
 
