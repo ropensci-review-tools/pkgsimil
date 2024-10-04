@@ -108,7 +108,7 @@ attach_base_rcmd_ns <- function (calls) {
                 error = function (e) NULL
             )
         } else {
-            fn_names_rcmd (pkg_name)
+            fn_names <- fn_names_rcmd (pkg_name)
         }
 
         index_no_ns <- which (!grepl ("\\:\\:", calls$name))
