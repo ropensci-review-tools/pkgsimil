@@ -22,7 +22,15 @@ organisations such as [mistral.ai](https://mistral.ai),
 Inputs, generally in text form, are sent to the external service which then
 responds in some specified form, such as text completions.
 
-Accessing LLMs through APIs has several notable drawbacks, including:
+Accessing LLMs through APIs has the two key advantages of:
+
+- Being easier to develop, as external APIs generally take care of much of the
+processing that might otherwise have to be written and executed locally; and
+- Being able to access the latest and biggest and fastest models which are
+generally only available in the form of external APIs.
+
+In spite of those advantages, building software around external APIs entails
+several drawbacks, notably including:
 
 - There is no guarantee that the API will continue to be available in the
 future, or that processes used to generate responses will remain stable and
@@ -33,23 +41,17 @@ software.
 them to train and refine models, so privacy-protecting use is generally not
 possible.
 
-In spite of those drawbacks, building software around external APIs offers the
-two key advantages of:
-
-- Being easier to develop, as the external API will generally take care of much
-of the processing that might otherwise have to be written and executed locally;
-and
-- Being able to access the latest and biggest and fastest models which are
-generally only available in the form of external APIs.
-
-The "pkgsimil" package interfaces with LLMs exclusively through a local server
-provided by [the "ollama" software](https://ollama.com). The "pkgsimil" package
-relies on two openly published LLM models, both from
+We, the developers of this package, believe that the disadvantages of external
+APIs far outweigh these advantages, and so have developed this package to
+interface with LLMs exclusively through a local server. The server used here is
+provided by [the "ollama" software](https://ollama.com), which is used to run
+and serve results from two openly published LLM models, both from
 [jina.ai](https://jina.ai):
 
 - [jina-embeddings-v2-base-en](https://huggingface.co/jinaai/jina-embeddings-v2-base-en)
 - [jina-embeddings-v2-base-code](https://huggingface.co/jinaai/jina-embeddings-v2-base-code)
 
-```{r setup}
-library (pkgsimil)
-```
+The package relies on comparing user inputs with equivalent results from two
+main corpora of R packages. For the package to work, results must be guaranteed
+to be directly comparable. The use of stable, openly published models
+guarantees this ability in ways that external APIs can not.
