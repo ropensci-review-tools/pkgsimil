@@ -2,7 +2,8 @@
 % Please edit documentation in R/bm25.R
 \name{pkgsimil_bm25}
 \alias{pkgsimil_bm25}
-\title{Calculate the "BM25" = "Best Matching 25" ranking function.}
+\title{Calculate the "BM25" = "Best Matching 25" ranking function between text
+input and all R packages within specified corpus.}
 \usage{
 pkgsimil_bm25(input, txt = NULL, idfs = NULL, corpus = "ropensci")
 }
@@ -37,3 +38,8 @@ idfs <- pkgsimil_load_data ("idfs", fns = FALSE)
 bm25 <- pkgsimil_bm25 (input, idfs = idfs)
 }
 }
+\seealso{
+Other bm25: 
+\code{\link{pkgsimil_bm25_fn_calls}()}
+}
+\concept{bm25}

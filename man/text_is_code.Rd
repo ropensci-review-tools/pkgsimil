@@ -24,3 +24,8 @@ text_is_code (txt)
 txt <- "this_is_code <- function (x) { x }"
 text_is_code (txt)
 }
+\seealso{
+Other utils: 
+\code{\link{pkgsimil_load_data}()}
+}
+\concept{utils}

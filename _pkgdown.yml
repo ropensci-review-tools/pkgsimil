@@ -1,0 +1,24 @@
+url: https://docs.ropensci.org/pkgsimil
+
+figures:
+  dev: grDevices::png
+
+reference:
+- title: Main functions
+  contents:
+  - has_concept("main")
+- title: BM25 functions
+  contents:
+  - has_concept("bm25")
+- title: Embeddings functions
+  contents:
+  - has_concept("embeddings")
+- title: Treesitter functions
+  contents:
+  - has_concept("treesitter")
+- title: Ollama functions
+  contents:
+  - has_concept("ollama")
+- title: Utility functions
+  contents:
+  - has_concept("utils")

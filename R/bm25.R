@@ -1,4 +1,5 @@
-#' Calculate the "BM25" = "Best Matching 25" ranking function.
+#' Calculate the "BM25" = "Best Matching 25" ranking function between text
+#' input and all R packages within specified corpus.
 #'
 #' See \url{https://en.wikipedia.org/wiki/Okapi_BM25}.
 #'
@@ -16,6 +17,7 @@
 #' @return A `data.frame` of package names and 'BM25' measures against text
 #' from whole packages both with and without function descriptions.
 #'
+#' @family bm25
 #' @export
 #'
 #' @examples
@@ -62,10 +64,13 @@ pkgsimil_bm25 <- function (input, txt = NULL,
     dplyr::left_join (bm25_with_fns, bm25_wo_fns, by = "package")
 }
 
-#' Calculate a "BM25" index from function-call frequencies.
+#' Calculate a "BM25" index from function-call frequencies between a local R
+#' package and all packages in specified corpus.
 #'
 #' @param path Local path to source code of an R package.
 #' @param corpus One of "ropensci" or "cran"
+#'
+#' @family bm25
 #' @export
 pkgsimil_bm25_fn_calls <- function (path, corpus = "ropensci") {
 

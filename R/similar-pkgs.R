@@ -1,5 +1,5 @@
-#' Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} to identify
-#' most similar packages to a given local repository.
+#' For an input of either a text string or local path to an R package, identify
+#' most similar R packages from a specified corpus.
 #'
 #' @param input Either a path to local source code of an R package, or a text
 #' string.
@@ -31,6 +31,8 @@
 #' corpus, this downloading may take quite some time.
 #'
 #' @seealso input_is_code
+#'
+#' @family main
 #' @export
 #'
 #' @examples
@@ -111,9 +113,8 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
     )
 }
 
-#' Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} with
-#' `functions_only = TRUE` to identify functions best matching a given input
-#' string.
+#' Identify functions best matching a given input string. Only applies to
+#' functions from the corpus of rOpenSci packages.
 #'
 #' @inheritParams pkgsimil_similar_pkgs
 #' @param input A text string.
@@ -124,6 +125,7 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
 #' @return A character vector of function names in the form
 #' "<package>::<function>".
 #'
+#' @family main
 #' @export
 #'
 #' @examples
@@ -134,7 +136,7 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
 pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
 
     if (is.null (embeddings)) {
-        embeddings <- pkgsimil_load_data ("embeddings", fns = TRUE)
+        embeddings <- pkgsimil_load_data ("embeddings", corpus = "ropensci", fns = TRUE)
     }
     stopifnot (is.matrix (embeddings))
     stopifnot (is.character (input))

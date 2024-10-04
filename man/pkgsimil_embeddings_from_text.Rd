@@ -24,3 +24,8 @@ input <- "Download open spatial data from NASA"
 emb <- pkgsimil_embeddings_from_text (input = input)
 }
 }
+\seealso{
+Other embeddings: 
+\code{\link{pkgsimil_embeddings_from_pkgs}()}
+}
+\concept{embeddings}

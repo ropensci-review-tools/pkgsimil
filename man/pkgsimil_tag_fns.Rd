@@ -27,3 +27,4 @@ non-exported functions.
 Use "treesitter" to tag all function calls made within local package, and to
 associate those calls with package namespaces.
 }
+\concept{treesitter}

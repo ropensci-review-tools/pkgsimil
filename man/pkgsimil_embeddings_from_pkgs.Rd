@@ -35,3 +35,8 @@ names (emb_pkg) # text_with_fns, text_wo_fns, code
 colnames (emb_pkg$text_with_fns) # cli, fs
 }
 }
+\seealso{
+Other embeddings: 
+\code{\link{pkgsimil_embeddings_from_text}()}
+}
+\concept{embeddings}

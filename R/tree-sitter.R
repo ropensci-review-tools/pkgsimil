@@ -160,6 +160,7 @@ tressitter_calls_in_package <- function (path) {
 #' \item file Name of file in which fn call is defined.
 #' }
 #'
+#' @family treesitter
 #' @export
 pkgsimil_tag_fns <- function (path) {
 

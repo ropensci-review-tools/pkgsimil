@@ -20,6 +20,8 @@
 #' otherwise if `TRUE`, loads raw function call counts for each package in
 #' corpus.
 #' @return The loaded `data.frame`.
+#'
+#' @family utils
 #' @export
 #'
 #' @examples

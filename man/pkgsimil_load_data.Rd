@@ -54,3 +54,8 @@ idfs <- pkgsimil_load_data ("idfs")
 idfs_fns <- pkgsimil_load_data ("idfs", fns = TRUE)
 }
 }
+\seealso{
+Other utils: 
+\code{\link{text_is_code}()}
+}
+\concept{utils}

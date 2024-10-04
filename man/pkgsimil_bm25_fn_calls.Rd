@@ -2,7 +2,8 @@
 % Please edit documentation in R/bm25.R
 \name{pkgsimil_bm25_fn_calls}
 \alias{pkgsimil_bm25_fn_calls}
-\title{Calculate a "BM25" index from function-call frequencies.}
+\title{Calculate a "BM25" index from function-call frequencies between a local R
+package and all packages in specified corpus.}
 \usage{
 pkgsimil_bm25_fn_calls(path, corpus = "ropensci")
 }
@@ -12,5 +13,11 @@ pkgsimil_bm25_fn_calls(path, corpus = "ropensci")
 \item{corpus}{One of "ropensci" or "cran"}
 }
 \description{
-Calculate a "BM25" index from function-call frequencies.
+Calculate a "BM25" index from function-call frequencies between a local R
+package and all packages in specified corpus.
 }
+\seealso{
+Other bm25: 
+\code{\link{pkgsimil_bm25}()}
+}
+\concept{bm25}
