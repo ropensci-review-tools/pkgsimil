@@ -80,11 +80,33 @@ attach_this_pkg_namespace <- function (path, calls) {
 #' @noRd
 attach_base_rcmd_ns <- function (calls) {
 
-    attach_ns <- function (calls, pkg_name) {
-        index_no_ns <- which (!grepl ("\\:\\:", calls$name))
-        fn_names <- unclass (
+    # This requires namespaces to be loaded:
+    fn_names_base <- function (pkg_name) {
+        unclass (
             utils::lsf.str (envir = asNamespace (pkg_name), all = FALSE)
         )
+    }
+
+    # Read namespace file without requiring it to be loaded: Note that results
+    # differ from the above, but it is the best approach without loading the
+    # namespace.
+    fn_names_rcmd <- function (pkg_name) {
+        ip <- utils::installed.packages ()
+        i <- which (ip [, "Package"] == pkg_name)
+        lp <- ip [i, "LibPath"]
+        ns <- parseNamespaceFile (pkg_name, package.lib = lp)
+        unique (c (ns$exports, ns$exportMethods))
+    }
+
+    attach_ns <- function (calls, pkg_name, base = TRUE) {
+
+        fn_names <- ifelse (
+            base,
+            fn_names_base (pkg_name),
+            fn_names_rcmd (pkg_name)
+        )
+
+        index_no_ns <- which (!grepl ("\\:\\:", calls$name))
         index <- which (calls$name [index_no_ns] %in% fn_names)
         calls$name [index_no_ns] [index] <- paste0 (
             pkg_name,
@@ -98,8 +120,8 @@ attach_base_rcmd_ns <- function (calls) {
     # From some reason, `.Call` is not listed in base:
     calls$name [calls$name == ".Call"] <- "base::.Call"
 
-    for (p in base_pkgs) calls <- attach_ns (calls, p)
-    for (p in rcmd_pkgs ()) calls <- attach_ns (calls, p)
+    for (p in base_pkgs) calls <- attach_ns (calls, p, base = TRUE)
+    for (p in rcmd_pkgs ()) calls <- attach_ns (calls, p, base = FALSE)
 
     return (calls)
 }

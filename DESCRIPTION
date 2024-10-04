@@ -1,6 +1,6 @@
 Package: pkgsimil
 Title: Similarity Metrics between R Packages
-Version: 0.2.0.002
+Version: 0.2.0.003
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2172-5265")),
@@ -29,22 +29,10 @@ Imports:
     treesitter.r,
     vctrs
 Suggests:
-    boot,
-    class,
-    cluster,
-    foreign,
     httptest2,
-    KernSmooth,
-    MASS,
-    Matrix,
-    mgcv,
-    nnet,
     pkgbuild,
     rappdirs,
     roxygen2,
-    rpart,
-    spatial,
-    survival,
     testthat (>= 3.0.0),
     withr
 LinkingTo:
