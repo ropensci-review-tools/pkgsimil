@@ -37,13 +37,38 @@ saveRDS (bm25_data, "bm25-ropensci-fns.Rds")
 
 # ------------------ FN CALLS FOR ROPENSCI ------------------
 calls <- pbapply::pblapply (flist, function (f) {
-    res <- pkgsimil_tag_fns (f)
+    res <- pkgsimil_treesitter_fn_tags (f)
     sort (table (res$name), decreasing = TRUE)
 })
 names (calls) <- basename (names (calls))
 index <- which (vapply (calls, length, integer (1L)) > 0)
 calls <- calls [index]
+
 saveRDS (calls, "fn-calls-ropensci.Rds")
+
+# Then remove self-calls:
+calls <- lapply (seq_along (calls), function (i) {
+    this_pkg <- names (calls) [i]
+    ptn <- paste0 ("^", this_pkg, "\\:\\:")
+    index <- which (!grepl (ptn, names (calls [[i]])))
+    names (calls [[i]]) [index]
+})
+
+# And convert to inverse doc freqs:
+tokens_idf <- data.frame (
+    token = unique (unlist (calls)),
+    n = 0L
+)
+for (i in seq_along (calls)) {
+    index <- match (calls [[i]], tokens_idf$token)
+    tokens_idf$n [index] <- tokens_idf$n [index] + 1L
+}
+n_docs <- length (calls)
+tokens_idf$idf <- log ((n_docs - tokens_idf$n + 0.5) / (tokens_idf$n + 0.5) + 1)
+tokens_idf$n <- NULL
+
+saveRDS (tokens_idf, "idfs-fn-calls-ropensci.Rds")
+
 
 # -------------------- EMBEDDINGS FOR CRAN --------------------
 path <- "/<path>/<to>/<cran-mirror>/tarballs"
@@ -79,7 +104,7 @@ cl <- parallel::makeCluster (num_cores)
 
 calls <- pbapply::pblapply (packages, function (f) {
     res <- tryCatch (
-        pkgsimil::pkgsimil_tag_fns (f),
+        pkgsimil::pkgsimil_treesitter_fn_tags (f),
         error = function (e) NULL
     )
     if (is.null (res)) {
@@ -95,3 +120,26 @@ index <- which (vapply (calls, length, integer (1L)) > 0)
 calls <- calls [index]
 head (names (calls))
 saveRDS (calls, "fn-calls-cran.Rds")
+
+# Then remove self-calls:
+calls <- lapply (seq_along (calls), function (i) {
+    this_pkg <- names (calls) [i]
+    ptn <- paste0 ("^", this_pkg, "\\:\\:")
+    index <- which (!grepl (ptn, names (calls [[i]])))
+    names (calls [[i]]) [index]
+})
+
+# And convert to inverse doc freqs:
+tokens_idf <- data.frame (
+    token = unique (unlist (calls)),
+    n = 0L
+)
+for (i in seq_along (calls)) {
+    index <- match (calls [[i]], tokens_idf$token)
+    tokens_idf$n [index] <- tokens_idf$n [index] + 1L
+}
+n_docs <- length (calls)
+tokens_idf$idf <- log ((n_docs - tokens_idf$n + 0.5) / (tokens_idf$n + 0.5) + 1)
+tokens_idf$n <- NULL
+
+saveRDS (tokens_idf, "idfs-fn-calls-cran.Rds")

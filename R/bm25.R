@@ -1,4 +1,5 @@
-#' Calculate the "BM25" = "Best Matching 25" ranking function.
+#' Calculate the "BM25" = "Best Matching 25" ranking function between text
+#' input and all R packages within specified corpus.
 #'
 #' See \url{https://en.wikipedia.org/wiki/Okapi_BM25}.
 #'
@@ -16,6 +17,7 @@
 #' @return A `data.frame` of package names and 'BM25' measures against text
 #' from whole packages both with and without function descriptions.
 #'
+#' @family bm25
 #' @export
 #'
 #' @examples
@@ -62,9 +64,34 @@ pkgsimil_bm25 <- function (input, txt = NULL,
     dplyr::left_join (bm25_with_fns, bm25_wo_fns, by = "package")
 }
 
+#' Calculate a "BM25" index from function-call frequencies between a local R
+#' package and all packages in specified corpus.
+#'
+#' @param path Local path to source code of an R package.
+#' @param corpus One of "ropensci" or "cran"
+#'
+#' @family bm25
+#' @export
+pkgsimil_bm25_fn_calls <- function (path, corpus = "ropensci") {
+
+    tokens_idf <- pkgsimil_load_data (what = "calls", corpus = corpus, raw = FALSE)
+    calls <- pkgsimil_load_data (what = "calls", corpus = corpus, raw = TRUE)
+
+    tokens_list <- lapply (calls, function (i) {
+        data.frame (
+            token = names (i),
+            n = as.integer (i)
+        )
+    })
+
+    input <- pkgsimil_treesitter_fn_tags (path)
+
+    pkgsimil_bm25_from_idf (input, tokens_list, tokens_idf)
+}
+
 pkgsimil_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
 
-    n <- NULL # suppress no visible binding note
+    n <- name <- NULL # suppress no visible binding note
 
     ntoks_list <- vapply (tokens_list, function (i) sum (i$n), integer (1L))
     ntoks_avg <- mean (ntoks_list)
@@ -75,8 +102,18 @@ pkgsimil_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
         tok_list_nms <- gsub ("\\_.*$", "", tok_list_nms)
     }
 
-    tokens_i <- bm25_tokens_list (input) [[1]]
-    tokens_i <- dplyr::rename (tokens_i, np = n)
+    if (is.character (input)) {
+        tokens_i <- bm25_tokens_list (input) [[1]]
+        tokens_i <- dplyr::rename (tokens_i, np = n)
+    } else if (is.data.frame (input)) {
+        treesit_nms <- c ("fn", "name", "start", "end", "file")
+        if (!identical (names (input), treesit_nms)) {
+            cli::cli_abort ("'input' must be from 'pkgsimil_treesitter_fn_tags()'")
+        }
+        tokens_i <-
+            dplyr::summarise (dplyr::group_by (input, name), np = dplyr::n ())
+        tokens_i <- dplyr::rename (tokens_i, token = "name")
+    }
 
     bm25 <- rcpp_bm25 (tokens_idf, tokens_list, tokens_i, ntoks_avg)
     index <- order (bm25, decreasing = TRUE)

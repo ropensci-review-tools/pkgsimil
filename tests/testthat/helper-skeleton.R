@@ -15,19 +15,15 @@ write_desc <- function (d, pkg_name) {
     desc <- c (
         paste0 ("Package: ", pkg_name),
         "Title: What the Package Does (One Line, Title Case)",
-        "Version: 0.0.0.9000",
+        "Version: 0.0.1",
         "Authors@R: ",
         "  person(given = \"First\",",
         "         family = \"Last\",",
         "         role = c(\"aut\", \"cre\"),",
         "         email = \"first.last@example.com\")",
         "Description: What the package does (one paragraph).",
-        "Imports:",
-        "    Rcpp",
         "Suggests:",
         "    testthat",
-        "LinkingTo:",
-        "    Rcpp",
         "License: GPL-3",
         "Encoding: UTF-8"
     )

@@ -28,6 +28,8 @@ convert_paths_to_pkgs <- function (packages) {
 #' descriptions of all package functions, and one for the entire code base. For
 #' `functions_only`, a single matrix of embeddings for all function
 #' descriptions.
+#'
+#' @family embeddings
 #' @export
 #'
 #' @examples
@@ -115,6 +117,8 @@ pkgsimil_embeddings_from_pkgs <- function (packages = NULL,
 #' to be extracted.
 #' @return A matrix of embeddings, one column for each `input` item, and a
 #' fixed number of rows defined by the embedding length of the language models.
+#'
+#' @family embeddings
 #' @export
 #'
 #' @examples

@@ -2,8 +2,8 @@
 % Please edit documentation in R/similar-pkgs.R
 \name{pkgsimil_similar_pkgs}
 \alias{pkgsimil_similar_pkgs}
-\title{Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} to identify
-most similar packages to a given local repository.}
+\title{For an input of either a text string or local path to an R package, identify
+most similar R packages from a specified corpus.}
 \usage{
 pkgsimil_similar_pkgs(
   input,
@@ -47,8 +47,8 @@ If \code{input} is a single text string, a single character vector is returned
 naming the \code{n} most similar packages.
 }
 \description{
-Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} to identify
-most similar packages to a given local repository.
+For an input of either a text string or local path to an R package, identify
+most similar R packages from a specified corpus.
 }
 \note{
 The first time this function is run without passing either
@@ -64,4 +64,8 @@ pkgsimil_similar_pkgs (input)
 }
 \seealso{
 input_is_code
+
+Other main: 
+\code{\link{pkgsimil_similar_fns}()}
 }
+\concept{main}

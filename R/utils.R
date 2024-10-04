@@ -11,6 +11,8 @@ opt_is_quiet <- function () {
 #' @param txt Single input text string
 #' @return Logical value indicating whether or not `txt` was identified as
 #' code.
+#'
+#' @family utils
 #' @export
 #'
 #' @examples

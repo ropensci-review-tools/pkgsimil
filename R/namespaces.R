@@ -8,12 +8,17 @@ base_pkgs <- c (
     "tools", "utils"
 )
 
-# Recommended from R-devel/src/library/Recommended:
-rcmd_pkgs <- c (
-    "KernSmooth", "MASS", "Matrix", "boot", "class", "cluster",
-    "codetools", "foreign", "lattice", "mgcv", "nlme", "nnet", "rpart",
-    "spatial", "survival"
-)
+# Recommended from R-devel/src/library/Recommended, but these may not be
+# installed on all systems, so reduce only to those that are installed.
+rcmd_pkgs <- function () {
+    p <- c (
+        "KernSmooth", "MASS", "Matrix", "boot", "class", "cluster",
+        "codetools", "foreign", "lattice", "mgcv", "nlme", "nnet", "rpart",
+        "spatial", "survival"
+    )
+    ip <- utils::installed.packages ()
+    p [which (p %in% ip [, "Package"])]
+}
 
 #' List all exported functions based on path to local package (either full
 #' source repository, or extracted tarball).
@@ -75,12 +80,39 @@ attach_this_pkg_namespace <- function (path, calls) {
 #' @noRd
 attach_base_rcmd_ns <- function (calls) {
 
-    attach_ns <- function (calls, pkg_name) {
+    # This requires namespaces to be loaded:
+    fn_names_base <- function (pkg_name) {
+        as.character (unclass (
+            utils::lsf.str (envir = asNamespace (pkg_name), all = FALSE)
+        ))
+    }
+
+    # Read namespace file without requiring it to be loaded: Note that results
+    # differ from the above, but it is the best approach without loading the
+    # namespace.
+    fn_names_rcmd <- function (pkg_name) {
+        ip <- utils::installed.packages ()
+        i <- which (ip [, "Package"] == pkg_name)
+        lp <- ip [i, "LibPath"]
+        ns <- parseNamespaceFile (pkg_name, package.lib = lp)
+        unique (c (ns$exports, ns$exportMethods))
+    }
+
+    attach_ns <- function (calls, pkg_name, base = TRUE) {
+
+        if (base) {
+            # This can error for  "tcltk" on some systems when no X11 driver
+            # loaded
+            fn_names <- tryCatch (
+                fn_names_base (pkg_name),
+                error = function (e) NULL
+            )
+        } else {
+            fn_names <- fn_names_rcmd (pkg_name)
+        }
+
         index_no_ns <- which (!grepl ("\\:\\:", calls$name))
-        suppressWarnings (
-            base_fn_defs <- names (get_fn_defs_namespace (pkg_name, exported_only = TRUE))
-        )
-        index <- which (calls$name [index_no_ns] %in% base_fn_defs)
+        index <- which (calls$name [index_no_ns] %in% fn_names)
         calls$name [index_no_ns] [index] <- paste0 (
             pkg_name,
             "::",
@@ -89,14 +121,34 @@ attach_base_rcmd_ns <- function (calls) {
         return (calls)
     }
 
-    calls <- attach_ns (calls, "base")
+    calls <- attach_ns (calls, "base", base = TRUE)
     # From some reason, `.Call` is not listed in base:
     calls$name [calls$name == ".Call"] <- "base::.Call"
 
-    for (p in base_pkgs) calls <- attach_ns (calls, p)
-    for (p in rcmd_pkgs) calls <- attach_ns (calls, p)
+    for (p in base_pkgs) calls <- attach_ns (calls, p, base = TRUE)
+    for (p in rcmd_pkgs ()) calls <- attach_ns (calls, p, base = FALSE)
 
     return (calls)
+}
+
+get_fn_defs_namespace <- function (pkg_name, exported_only) {
+    # `lsf.str` is for functions only:
+    fn_names <- unclass (
+        utils::lsf.str (envir = asNamespace (pkg_name), all = TRUE)
+    )
+    if (exported_only) {
+        suppressPackageStartupMessages (
+            require (pkg_name, character.only = TRUE)
+        )
+        fns_exp <- ls (paste0 ("package:", pkg_name))
+        fn_names <- fn_names [which (fn_names %in% fns_exp)]
+    }
+    fn_defs <- lapply (fn_names, function (f) {
+        utils::getFromNamespace (f, pkg_name)
+    })
+    names (fn_defs) <- fn_names
+
+    return (fn_defs)
 }
 
 #' List all dependencies of a local package, so namespaces can be appropriately
@@ -116,7 +168,7 @@ get_local_pkg_deps <- function (path) {
         i_sp <- gsub ("\\n", "", strsplit (desc [[i]], ",") [[1]])
         gsub ("[[:space:]].*$", "", i_sp)
     }))
-    out <- c ("R", base_pkgs, rcmd_pkgs)
+    out <- c ("R", base_pkgs, rcmd_pkgs ())
     pkgs [which (!pkgs %in% out)]
 }
 

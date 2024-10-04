@@ -17,4 +17,6 @@ Check that ollama is installed with required models, and download if not.
 \dontrun{
 chk <- ollama_check ()
 }
+
 }
+\concept{ollama}

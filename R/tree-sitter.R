@@ -145,7 +145,8 @@ tressitter_calls_in_package <- function (path) {
 }
 
 #' Use "treesitter" to tag all function calls made within local package, and to
-#' associate those calls with package namespaces.
+#' associate those calls with package namespaces. This is used as input to the
+#' \link{pkgsimil_bm25_fn_calls} function.
 #'
 #' @param path Path to local package, or `.tar.gz` file of package source.
 #' @return A `data.frame` of all function calls made within the package, with
@@ -160,8 +161,9 @@ tressitter_calls_in_package <- function (path) {
 #' \item file Name of file in which fn call is defined.
 #' }
 #'
+#' @family treesitter
 #' @export
-pkgsimil_tag_fns <- function (path) {
+pkgsimil_treesitter_fn_tags <- function (path) {
 
     stopifnot (length (path) == 1L)
 

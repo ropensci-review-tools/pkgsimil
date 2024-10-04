@@ -6,11 +6,23 @@
 function, either for all rOpenSci packages or, if \code{fns = TRUE},  all
 individual functions within those packages.}
 \usage{
-pkgsimil_load_data(what = "embeddings", corpus = "ropensci", fns = FALSE)
+pkgsimil_load_data(
+  what = "embeddings",
+  corpus = "ropensci",
+  fns = FALSE,
+  raw = FALSE
+)
 }
 \arguments{
-\item{what}{Either "embeddings" to load pre-generated embeddings, or "idfs"
-to load pre-generated Inverse Document Frequency weightings.}
+\item{what}{One of:
+\itemize{
+\item "embeddings" to load pre-generated embeddings;
+\item "idfs" to load pre-generated Inverse Document Frequency weightings;
+\item "functions" to load pre-generated frequency tables for text
+descriptions of function calls; or
+\item "calls" to load pre-generated frequency tables for actual function
+calls.
+}}
 
 \item{corpus}{If \code{embeddings} or \code{idfs} parameters are not specified, they
 are automatically downloaded for the corpus specified by this parameter.
@@ -20,6 +32,11 @@ similar package from the specified corpus.}
 \item{fns}{If \code{FALSE} (default), load embeddings for all rOpenSci packages;
 otherwise load (considerably larger dataset of) embeddings for all
 individual functions.}
+
+\item{raw}{Only has effect of \code{what = "calls"}, in which case default of
+\code{FALSE} loads single Inverse Document Frequency table to entire corpus;
+otherwise if \code{TRUE}, loads raw function call counts for each package in
+corpus.}
 }
 \value{
 The loaded \code{data.frame}.
@@ -37,3 +54,8 @@ idfs <- pkgsimil_load_data ("idfs")
 idfs_fns <- pkgsimil_load_data ("idfs", fns = TRUE)
 }
 }
+\seealso{
+Other utils: 
+\code{\link{text_is_code}()}
+}
+\concept{utils}

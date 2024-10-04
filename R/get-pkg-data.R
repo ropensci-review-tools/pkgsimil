@@ -233,26 +233,6 @@ pkg_is_installed <- function (pkg_name) {
     pkg_name %in% ip$Package
 }
 
-get_fn_defs_namespace <- function (pkg_name, exported_only) {
-    # `lsf.str` is for functions only:
-    fn_names <- unclass (
-        utils::lsf.str (envir = asNamespace (pkg_name), all = TRUE)
-    )
-    if (exported_only) {
-        suppressPackageStartupMessages (
-            require (pkg_name, character.only = TRUE)
-        )
-        fns_exp <- ls (paste0 ("package:", pkg_name))
-        fn_names <- fn_names [which (fn_names %in% fns_exp)]
-    }
-    fn_defs <- lapply (fn_names, function (f) {
-        utils::getFromNamespace (f, pkg_name)
-    })
-    names (fn_defs) <- fn_names
-
-    return (fn_defs)
-}
-
 get_fn_defs_local <- function (path) {
     path <- fs::path_norm (path)
 

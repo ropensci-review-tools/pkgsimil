@@ -79,6 +79,8 @@ ollama_is_running <- function () {
 #' \dontrun{
 #' chk <- ollama_check ()
 #' }
+#'
+#' @family ollama
 #' @export
 ollama_check <- function () {
     if (identical (Sys.getenv ("PKGSIMIL_TESTS"), "true")) {

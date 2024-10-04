@@ -1,0 +1,19 @@
+test_that ("tree-sitter", {
+
+    withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
+
+    path <- pkgsimil_test_skeleton ()
+    roxygen2::roxygenise (path)
+
+    tags <- pkgsimil_treesitter_fn_tags (path)
+    expect_s3_class (tags, "data.frame")
+    expect_true (nrow (tags) > 0L)
+    expect_identical (names (tags), c ("fn", "name", "start", "end", "file"))
+    expect_true ("demo::test_fn" %in% tags$fn)
+    expect_true ("base::message" %in% tags$name)
+
+    # detach is critical here, because httptest2 uses `utils::sessionInfo()`,
+    # which checks namespaces and tries to load DESC file from pkg location.
+    detach ("package:demo", unload = TRUE)
+    fs::dir_delete (path)
+})

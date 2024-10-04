@@ -2,9 +2,8 @@
 % Please edit documentation in R/similar-pkgs.R
 \name{pkgsimil_similar_fns}
 \alias{pkgsimil_similar_fns}
-\title{Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} with
-\code{functions_only = TRUE} to identify functions best matching a given input
-string.}
+\title{Identify functions best matching a given input string. Only applies to
+functions from the corpus of rOpenSci packages.}
 \usage{
 pkgsimil_similar_fns(input, embeddings = NULL, n = 5L)
 }
@@ -24,9 +23,8 @@ A character vector of function names in the form
 "\if{html}{\out{<package>}}::\if{html}{\out{<function>}}".
 }
 \description{
-Use the embeddings from \link{pkgsimil_embeddings_from_pkgs} with
-\code{functions_only = TRUE} to identify functions best matching a given input
-string.
+Identify functions best matching a given input string. Only applies to
+functions from the corpus of rOpenSci packages.
 }
 \examples{
 \dontrun{
@@ -34,3 +32,8 @@ input <- "Process raster satellite images"
 pkgsimil_similar_fns (input)
 }
 }
+\seealso{
+Other main: 
+\code{\link{pkgsimil_similar_pkgs}()}
+}
+\concept{main}
