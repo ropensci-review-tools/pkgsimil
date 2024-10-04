@@ -37,7 +37,7 @@ saveRDS (bm25_data, "bm25-ropensci-fns.Rds")
 
 # ------------------ FN CALLS FOR ROPENSCI ------------------
 calls <- pbapply::pblapply (flist, function (f) {
-    res <- pkgsimil_tag_fns (f)
+    res <- pkgsimil_treesitter_fn_tags (f)
     sort (table (res$name), decreasing = TRUE)
 })
 names (calls) <- basename (names (calls))
@@ -104,7 +104,7 @@ cl <- parallel::makeCluster (num_cores)
 
 calls <- pbapply::pblapply (packages, function (f) {
     res <- tryCatch (
-        pkgsimil::pkgsimil_tag_fns (f),
+        pkgsimil::pkgsimil_treesitter_fn_tags (f),
         error = function (e) NULL
     )
     if (is.null (res)) {

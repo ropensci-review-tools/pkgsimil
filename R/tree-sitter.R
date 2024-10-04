@@ -162,7 +162,7 @@ tressitter_calls_in_package <- function (path) {
 #'
 #' @family treesitter
 #' @export
-pkgsimil_tag_fns <- function (path) {
+pkgsimil_treesitter_fn_tags <- function (path) {
 
     stopifnot (length (path) == 1L)
 
