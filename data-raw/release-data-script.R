@@ -71,6 +71,7 @@ saveRDS (tokens_idf, "idfs-fn-calls-ropensci.Rds")
 
 
 # -------------------- EMBEDDINGS FOR CRAN --------------------
+options ("rlib_message_verbosity" = "verbose")
 path <- "/<path>/<to>/<cran-mirror>/tarballs"
 packages <- fs::dir_ls (path, regexpr = "\\.tar\\.gz$")
 embeddings <- pkgsimil_embeddings_from_pkgs (packages)
