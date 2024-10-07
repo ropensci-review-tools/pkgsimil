@@ -63,11 +63,7 @@ get_cache_file_name <- function (what, corpus, fns, raw) {
             "embeddings" = "embeddings-cran.Rds",
             "idfs" = "bm25-cran.Rds",
             "functions" = "fn-calls-cran.Rds",
-            "calls" = ifelse (
-                raw,
-                "fn-calls-ropensci.Rds",
-                "idfs-fn-calls-ropensci.Rds"
-            )
+            "calls" = ifelse (raw, "fn-calls-cran.Rds", "idfs-fn-calls-cran.Rds")
         )
     }
 
