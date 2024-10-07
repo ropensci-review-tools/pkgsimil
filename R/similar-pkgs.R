@@ -66,7 +66,7 @@ pkgsimil_similar_pkgs <- function (input,
 
         res <- similar_pkgs_from_pkg (input, embeddings, n = 1e6)
         # Then combine BM25 from function calls with "code" similarities:
-        bm25 <- pkgsimil_bm25_fn_calls (input)
+        bm25 <- pkgsimil_bm25_fn_calls (input, corpus = corpus)
         code_sim <- dplyr::left_join (res$code, bm25, by = "package")
         res$code <- pkgsimil_rerank (code_sim) [seq_len (n)]
         res$text <- res$text$package [seq_len (n)]
@@ -97,15 +97,17 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
     npkgs <- ncol (embeddings$text_with_fns)
     nrow <- nrow (emb$text_with_fns)
     emb_text <- matrix (emb$text_with_fns, nrow = nrow, ncol = npkgs)
-    emb_code <- matrix (emb$code, nrow = nrow, ncol = npkgs)
     d_text <- colSums (sqrt ((emb_text - embeddings$text_with_fns)^2))
     d_text <- data.frame (package = names (d_text), text = unname (d_text))
+
+    npkgs <- ncol (embeddings$code)
+    emb_code <- matrix (emb$code, nrow = nrow, ncol = npkgs)
     d_code <- colSums (sqrt ((emb_code - embeddings$code)^2))
     d_code <- data.frame (package = names (d_code), code = unname (d_code))
 
     out <- dplyr::left_join (d_text, d_code, by = "package")
-    out$code <- out$code / max (out$code)
-    out$text <- out$text / max (out$text)
+    out$code <- out$code / max (out$code, na.rm = TRUE)
+    out$text <- out$text / max (out$text, na.rm = TRUE)
 
     list (
         text = order_output (out, "text", n),
