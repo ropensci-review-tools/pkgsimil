@@ -37,7 +37,7 @@ install ollama on your own computer in order to use this package. Once
 downloaded, ollama can be started by calling `ollama serve`. The
 particular models used to extract the embeddings will be automatically
 downloaded by this package if needed, or you can do this manually by
-running the following two commands (in a system console, not in R):
+running the following two commands (in a system console; not in R):
 
 ``` bash
 ollama pull jina/jina-embeddings-v2-base-en
@@ -51,9 +51,9 @@ download before proceeding.
 
 The package has two main functions:
 
-- `pkgsimil_similar_pkgs()` to find similar rOpenSci or CRAN packages based
-  input as either a local path to an entire package, or as a single
-  descriptive text string; and
+- `pkgsimil_similar_pkgs()` to find similar rOpenSci or CRAN packages
+  based input as either a local path to an entire package, or as a
+  single descriptive text string; and
 - `pkgsimil_similar_fns()` to find similar functions from rOpenSci
   packages based on descriptive text input.
 
@@ -68,16 +68,16 @@ on visualising inter-relationships among distinct trees.
 pkgsimil_similar_pkgs (input)
 ```
 
-    ## [1] "phruta"        "dendroNetwork" "rotl"          "occCite"      
-    ## [5] "phylotaR"
+    ## [1] "lingtypology"   "treedata.table" "treestartr"     "babette"       
+    ## [5] "canaper"
 
 ``` r
 input <- "Download global-scale spatial data"
 pkgsimil_similar_pkgs (input)
 ```
 
-    ## [1] "rnaturalearth"      "rfema"              "rnaturalearthhires"
-    ## [4] "GSODR"              "helminthR"
+    ## [1] "gbifdb"            "rnaturalearth"     "nasapower"        
+    ## [4] "getCRUCLdata"      "rnaturalearthdata"
 
 And then two demonstrates of finding functions from rOpenSci packages:
 
