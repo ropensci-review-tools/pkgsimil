@@ -64,12 +64,11 @@ pkgsimil_similar_pkgs <- function (input,
 
     if (input_is_dir (input)) {
 
-        res <- similar_pkgs_from_pkg (input, embeddings, n = 1e6)
+        res <- similar_pkgs_from_pkg (input, embeddings)
         # Then combine BM25 from function calls with "code" similarities:
         bm25 <- pkgsimil_bm25_fn_calls (input, corpus = corpus)
         code_sim <- dplyr::left_join (res$code, bm25, by = "package")
-        res$code <- pkgsimil_rerank (code_sim) [seq_len (n)]
-        res$text <- res$text$package [seq_len (n)]
+        res$code <- pkgsimil_rerank (code_sim)
 
     } else {
 
@@ -77,15 +76,17 @@ pkgsimil_similar_pkgs <- function (input,
             input = input,
             embeddings = embeddings,
             idfs = idfs,
-            input_is_code = input_is_code,
-            n = n
+            input_is_code = input_is_code
         )
     }
+
+    class (res) <- c ("pkgsimil", class (res))
+    attr (res, "n") <- as.integer (n)
 
     return (res)
 }
 
-similar_pkgs_from_pkg <- function (input, embeddings, n) {
+similar_pkgs_from_pkg <- function (input, embeddings) {
 
     op <- options ()
     options (rlib_message_verbosity = "quiet")
@@ -110,56 +111,15 @@ similar_pkgs_from_pkg <- function (input, embeddings, n) {
     out$text <- out$text / max (out$text, na.rm = TRUE)
 
     list (
-        text = order_output (out, "text", n),
-        code = order_output (out, "code", n)
+        text = order_output (out, "text"),
+        code = order_output (out, "code")
     )
 }
 
-#' Identify functions best matching a given input string. Only applies to
-#' functions from the corpus of rOpenSci packages.
-#'
-#' @inheritParams pkgsimil_similar_pkgs
-#' @param input A text string.
-#' @param embeddings A single matrix of embeddings produced from
-#' \link{pkgsimil_embeddings_from_pkgs} with `functions_only = TRUE`. If not
-#' cache directory.
-#' provided, pre-generated embeddings will be downloaded and stored in a local
-#' @return A character vector of function names in the form
-#' "<package>::<function>".
-#'
-#' @family main
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' input <- "Process raster satellite images"
-#' pkgsimil_similar_fns (input)
-#' }
-pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
+order_output <- function (out, what = "text") {
 
-    if (is.null (embeddings)) {
-        embeddings <- pkgsimil_load_data ("embeddings", corpus = "ropensci", fns = TRUE)
-    }
-    stopifnot (is.matrix (embeddings))
-    stopifnot (is.character (input))
-    stopifnot (length (input) == 1L)
-
-    op <- options ()
-    options (rlib_message_verbosity = "quiet")
-    emb <- get_embeddings (input)
-    options (op)
-
-    emb_mat <- matrix (emb, nrow = length (emb), ncol = ncol (embeddings))
-    d <- colMeans (sqrt ((emb_mat - embeddings)^2))
-    index <- order (d) [seq_len (n)]
-    colnames (embeddings) [index]
-}
-
-order_output <- function (out, what = "text", n) {
-
-    n <- min (c (n, nrow (out)))
     index <- order (out [[what]])
-    out <- out [index [seq_len (n)], c ("package", what)]
+    out <- out [index, c ("package", what)]
     rownames (out) <- NULL
 
     return (out)
@@ -168,8 +128,7 @@ order_output <- function (out, what = "text", n) {
 similar_pkgs_from_text <- function (input,
                                     embeddings = NULL,
                                     idfs = NULL,
-                                    input_is_code = text_is_code (input),
-                                    n = 5L) {
+                                    input_is_code = text_is_code (input)) {
 
     stopifnot (is.character (input))
     stopifnot (length (input) == 1L)
@@ -200,10 +159,9 @@ similar_pkgs_from_text <- function (input,
     )
     similarities [is.na (similarities)] <- 0
 
-    index <- seq_len (n)
     rm_fn_data <- !input_mentions_functions (input)
 
-    return (pkgsimil_rerank (similarities, rm_fn_data) [index])
+    return (pkgsimil_rerank (similarities, rm_fn_data))
 }
 
 input_mentions_functions <- function (input) {

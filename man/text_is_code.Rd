@@ -26,6 +26,7 @@ text_is_code (txt)
 }
 \seealso{
 Other utils: 
-\code{\link{pkgsimil_load_data}()}
+\code{\link{pkgsimil_load_data}()},
+\code{\link{print.pkgsimil}()}
 }
 \concept{utils}
