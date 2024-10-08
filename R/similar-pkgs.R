@@ -114,46 +114,6 @@ similar_pkgs_from_pkg <- function (input, embeddings) {
     )
 }
 
-#' Identify functions best matching a given input string. Only applies to
-#' functions from the corpus of rOpenSci packages.
-#'
-#' @inheritParams pkgsimil_similar_pkgs
-#' @param input A text string.
-#' @param embeddings A single matrix of embeddings produced from
-#' \link{pkgsimil_embeddings_from_pkgs} with `functions_only = TRUE`. If not
-#' cache directory.
-#' provided, pre-generated embeddings will be downloaded and stored in a local
-#' @return A character vector of function names in the form
-#' "<package>::<function>".
-#'
-#' @family main
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' input <- "Process raster satellite images"
-#' pkgsimil_similar_fns (input)
-#' }
-pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
-
-    if (is.null (embeddings)) {
-        embeddings <- pkgsimil_load_data ("embeddings", corpus = "ropensci", fns = TRUE)
-    }
-    stopifnot (is.matrix (embeddings))
-    stopifnot (is.character (input))
-    stopifnot (length (input) == 1L)
-
-    op <- options ()
-    options (rlib_message_verbosity = "quiet")
-    emb <- get_embeddings (input)
-    options (op)
-
-    emb_mat <- matrix (emb, nrow = length (emb), ncol = ncol (embeddings))
-    d <- colMeans (sqrt ((emb_mat - embeddings)^2))
-    index <- order (d) [seq_len (n)]
-    colnames (embeddings) [index]
-}
-
 order_output <- function (out, what = "text") {
 
     index <- order (out [[what]])
