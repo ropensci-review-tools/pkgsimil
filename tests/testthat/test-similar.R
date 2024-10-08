@@ -23,9 +23,13 @@ test_that ("similar pkgs text input", {
             n = n
         )
     })
-    expect_type (out, "character")
-    expect_length (out, 5L)
-    expect_true (all (out %in% colnames (embeddings$text_with_fns)))
+    expect_s3_class (out, "pkgsimil")
+    expect_type (out, "list")
+    expect_true (all (out$package %in% colnames (embeddings$text_with_fns)))
+    expect_equal (attr (out, "n"), n)
+
+    out_p <- strsplit (capture.output (print (out)), "\\\"\\s") [[1]]
+    expect_length (out_p, n)
 })
 
 test_that ("similar pkgs package input", {
@@ -36,9 +40,10 @@ test_that ("similar pkgs package input", {
     roxygen2::roxygenise (path)
 
     n <- 5L
+    npkgs <- 10L
     embeddings <- get_test_embeddings (
-        npkgs = 10,
-        nfns = 10,
+        npkgs = npkgs,
+        nfns = npkgs,
         embedding_len = 768
     )
     txt <- c (
@@ -61,29 +66,36 @@ test_that ("similar pkgs package input", {
     detach ("package:demo", unload = TRUE)
     fs::dir_delete (path)
 
+    expect_s3_class (out, "pkgsimil")
     expect_type (out, "list")
     expect_length (out, 2L)
     expect_identical (names (out), c ("text", "code"))
     expect_false (identical (out$text, out$code))
-    expect_true (all (vapply (out, class, character (1L)) == "character"))
-    lens <- vapply (out, length, integer (1L))
-    expect_true (all (lens == n))
-    out_vec <- unname (unlist (out))
-    expect_true (all (out_vec %in% colnames (embeddings$text_with_fns)))
+    expect_true (all (vapply (out, class, character (1L)) == "data.frame"))
+    nrows <- vapply (out, nrow, integer (1L))
+    expect_true (all (nrows == npkgs))
+
+    expect_true (all (out$text$package %in% colnames (embeddings$text_with_fns)))
+    expect_true (all (out$code$package %in% colnames (embeddings$code)))
 })
 
 test_that ("similar fns", {
 
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
 
-    embeddings_fns <- get_test_embeddings_fns (nfns = 10, embedding_len = 768)
+    nfns <- 10L
+    embeddings_fns <- get_test_embeddings_fns (nfns = nfns, embedding_len = 768)
 
     input <- "A test function"
     n <- 5L
     out <- with_mock_dir ("sim_fns", {
         pkgsimil_similar_fns (input = input, embeddings = embeddings_fns, n = n)
     })
-    expect_type (out, "character")
-    expect_length (out, n)
-    expect_true (all (out %in% colnames (embeddings_fns)))
+    expect_s3_class (out, "pkgsimil")
+    expect_type (out, "list")
+    expect_equal (nrow (out), nfns)
+    expect_equal (ncol (out), 3L)
+    expect_identical (names (out), c ("package", "simil", "rank"))
+    expect_true (all (out$package %in% colnames (embeddings_fns)))
+    expect_identical (out$rank, seq_len (nrow (out)))
 })
