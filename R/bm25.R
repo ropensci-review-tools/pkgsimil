@@ -113,6 +113,8 @@ pkgsimil_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
         tokens_i <-
             dplyr::summarise (dplyr::group_by (input, name), np = dplyr::n ())
         tokens_i <- dplyr::rename (tokens_i, token = "name")
+    } else {
+        cli::cli_abort ("Unrecognised 'input' type in 'bm25_from_idf()'")
     }
 
     bm25 <- rcpp_bm25 (tokens_idf, tokens_list, tokens_i, ntoks_avg)
