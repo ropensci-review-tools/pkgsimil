@@ -50,6 +50,8 @@ pkgsimil_similar_pkgs <- function (input,
                                    input_is_code = text_is_code (input),
                                    n = 5L) {
 
+    code <- NULL # Supress no visible binding note
+
     corpus <- match.arg (corpus, c ("ropensci", "cran"))
 
     if (is.null (embeddings)) {
