@@ -87,6 +87,8 @@ pkgsimil_similar_pkgs <- function (input,
 
         res <- dplyr::left_join (res, bm25_code, by = "package")
 
+        rm_fn_data <- TRUE # TODO: Expose that parameter
+
     } else {
 
         res <- similar_pkgs_from_text (
@@ -96,7 +98,12 @@ pkgsimil_similar_pkgs <- function (input,
             corpus = corpus,
             input_is_code = input_is_code
         )
+
+        rm_fn_data <- !input_mentions_functions (input)
+
     }
+
+    res <- pkgsimil_rerank (res, rm_fn_data)
 
     class (res) <- c ("pkgsimil", class (res))
     attr (res, "n") <- as.integer (n)
@@ -186,9 +193,7 @@ similar_pkgs_from_text <- function (input,
     )
     similarities [is.na (similarities)] <- 0
 
-    rm_fn_data <- !input_mentions_functions (input)
-
-    return (pkgsimil_rerank (similarities, rm_fn_data))
+    return (similarities)
 }
 
 input_mentions_functions <- function (input) {
