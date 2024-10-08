@@ -29,6 +29,10 @@ pkgsimil_rerank <- function (s, rm_fn_data = TRUE) {
     }
 
     rank_scores <- rowSums (rank_matrix)
+    index <- order (rank_scores, decreasing = TRUE)
 
-    s$package [order (rank_scores, decreasing = TRUE)]
+    s <- s [index, -match (cols, names (s))]
+    s$rank <- seq_along (rank_scores)
+
+    return (s)
 }
