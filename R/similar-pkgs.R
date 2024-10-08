@@ -17,7 +17,7 @@
 #' @param input_is_code A binary flag indicating whether `input` is code or
 #' plain text. Ignored if `input` is path to a local package; otherwise can be
 #' used to force appropriate interpretation if input type.
-#' @param When the result of this function is printed to screen, the top `n`
+#' @param n When the result of this function is printed to screen, the top `n`
 #' packages will be displayed.
 #'
 #' @return If `input` is a path to a local package, a list of two `data.frame`

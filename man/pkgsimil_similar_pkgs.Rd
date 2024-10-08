@@ -36,7 +36,7 @@ tables will be downloaded and stored in a local cache directory.}
 plain text. Ignored if \code{input} is path to a local package; otherwise can be
 used to force appropriate interpretation if input type.}
 
-\item{When}{the result of this function is printed to screen, the top \code{n}
+\item{n}{When the result of this function is printed to screen, the top \code{n}
 packages will be displayed.}
 }
 \value{

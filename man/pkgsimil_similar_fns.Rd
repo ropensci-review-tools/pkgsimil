@@ -14,6 +14,9 @@ pkgsimil_similar_fns(input, embeddings = NULL, n = 5L)
 \link{pkgsimil_embeddings_from_pkgs} with \code{functions_only = TRUE}. If not
 cache directory.
 provided, pre-generated embeddings will be downloaded and stored in a local}
+
+\item{n}{When the result of this function is printed to screen, the top \code{n}
+packages will be displayed.}
 }
 \value{
 A character vector of function names in the form
