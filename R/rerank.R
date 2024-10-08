@@ -31,14 +31,20 @@ pkgsimil_rerank <- function (s, rm_fn_data = TRUE) {
     code_cols <- grep ("code", colnames (rank_matrix))
     text_cols <- seq_len (ncol (rank_matrix)) [-(code_cols)]
 
-    code_rank <- rank_matrix [, code_cols]
-    code_index <- order (rowSums (code_rank), decreasing = TRUE)
     text_rank <- rank_matrix [, text_cols]
     text_index <- order (rowSums (text_rank), decreasing = TRUE)
 
-    data.frame (
+    out <- data.frame (
         package = s$package,
-        code_rank = code_index,
         text_rank = text_index
     )
+
+    if (length (code_cols) > 0L) {
+        code_rank <- rank_matrix [, code_cols]
+        out$code_rank <- order (rowSums (code_rank), decreasing = TRUE)
+    } else {
+        out <- dplyr::rename (out, rank = "text_rank")
+    }
+
+    return (out)
 }
