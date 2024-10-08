@@ -17,13 +17,16 @@
 #' @param input_is_code A binary flag indicating whether `input` is code or
 #' plain text. Ignored if `input` is path to a local package; otherwise can be
 #' used to force appropriate interpretation if input type.
-#' @param n identify the `n` most similar packages in terms of both code and
-#' text embeddings.
-#' @return If `input` is a path to a local package, a list of two character
+#' @param When the result of this function is printed to screen, the top `n`
+#' packages will be displayed.
+#'
+#' @return If `input` is a path to a local package, a list of two `data.frame`
+#' objects with data quantifying similarities in terms of descriptive textual
+#' similarity ("text"), and in terms of similarity of code structure ("code").
+#'
 #' vectors naming the `n` most similar packages in terms of descriptive textual
 #' similarity ("text"), and in terms of similarity of code structure ("code").
-#' If `input` is a single text string, a single character vector is returned
-#' naming the `n` most similar packages.
+#' If `input` is a single text string, a single `data.frame` object is returned
 #'
 #' @note The first time this function is run without passing either
 #' `embeddings` or `idfs`, required values will be automatically downloaded and

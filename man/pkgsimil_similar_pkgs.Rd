@@ -36,15 +36,17 @@ tables will be downloaded and stored in a local cache directory.}
 plain text. Ignored if \code{input} is path to a local package; otherwise can be
 used to force appropriate interpretation if input type.}
 
-\item{n}{identify the \code{n} most similar packages in terms of both code and
-text embeddings.}
+\item{When}{the result of this function is printed to screen, the top \code{n}
+packages will be displayed.}
 }
 \value{
-If \code{input} is a path to a local package, a list of two character
+If \code{input} is a path to a local package, a list of two \code{data.frame}
+objects with data quantifying similarities in terms of descriptive textual
+similarity ("text"), and in terms of similarity of code structure ("code").
+
 vectors naming the \code{n} most similar packages in terms of descriptive textual
 similarity ("text"), and in terms of similarity of code structure ("code").
-If \code{input} is a single text string, a single character vector is returned
-naming the \code{n} most similar packages.
+If \code{input} is a single text string, a single \code{data.frame} object is returned
 }
 \description{
 For an input of either a text string or local path to an R package, identify
