@@ -24,15 +24,21 @@ pkgsimil_rerank <- function (s, rm_fn_data = TRUE) {
     rank_matrix <- 1 / (k + rank_matrix)
 
     if (rm_fn_data) {
-        cols_wo <- grep ("wo", colnames (rank_matrix))
-        rank_matrix <- rank_matrix [, cols_wo]
+        cols_with <- grep ("\\_with\\_", colnames (rank_matrix))
+        rank_matrix <- rank_matrix [, -(cols_with)]
     }
 
-    rank_scores <- rowSums (rank_matrix)
-    index <- order (rank_scores, decreasing = TRUE)
+    code_cols <- grep ("code", colnames (rank_matrix))
+    text_cols <- seq_len (ncol (rank_matrix)) [-(code_cols)]
 
-    s <- s [index, -match (cols, names (s))]
-    s$rank <- seq_along (rank_scores)
+    code_rank <- rank_matrix [, code_cols]
+    code_index <- order (rowSums (code_rank), decreasing = TRUE)
+    text_rank <- rank_matrix [, text_cols]
+    text_index <- order (rowSums (text_rank), decreasing = TRUE)
 
-    return (s)
+    data.frame (
+        package = s$package,
+        code_rank = code_index,
+        text_rank = text_index
+    )
 }
