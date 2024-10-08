@@ -93,7 +93,7 @@ pkgsimil_similar_pkgs (".")
 ```
 
     ## $text
-    ## [1] "pkgstats"  "ReLTER"    "textreuse" "phylotaR"  "mauricer" 
+    ## [1] "tokenizers"   "tarchetypes"  "goodpractice" "pkgstats"     "cld3"        
     ## 
     ## $code
     ## [1] "autotest"   "srr"        "mctq"       "cffr"       "rotemplate"
@@ -107,8 +107,7 @@ pkgsimil_similar_pkgs (".", corpus = "cran")
 ```
 
     ## $text
-    ## [1] "RcppCWB"        "statnet.common" "lares"          "crosstalkr"    
-    ## [5] "ngram"         
+    ## [1] "ngram"     "toscutil"  "rdeps"     "admisc"    "librarian"
     ## 
     ## $code
     ## [1] "Rd2md"         "rdwd"          "ctv"           "rempsyc"      
