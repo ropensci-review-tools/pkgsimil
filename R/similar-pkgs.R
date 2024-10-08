@@ -81,6 +81,9 @@ pkgsimil_similar_pkgs <- function (input,
         )
     }
 
+    class (res) <- c ("pkgsimil", class (res))
+    attr (res, "n") <- as.integer (n)
+
     return (res)
 }
 

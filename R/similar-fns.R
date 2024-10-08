@@ -32,8 +32,11 @@ pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
     emb <- get_embeddings (input)
     options (op)
 
-    emb_mat <- matrix (emb, nrow = length (emb), ncol = ncol (embeddings))
-    d <- colMeans (sqrt ((emb_mat - embeddings)^2))
-    index <- order (d) [seq_len (n)]
-    colnames (embeddings) [index]
+    res <- cosine_similarity (emb [, 1], embeddings)
+    res$rank <- seq_len (nrow (res))
+
+    class (res) <- c ("pkgsimil", class (res))
+    attr (res, "n") <- as.integer (n)
+
+    return (res)
 }
