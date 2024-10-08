@@ -69,7 +69,6 @@ pkgsimil_similar_pkgs <- function (input,
         bm25 <- pkgsimil_bm25_fn_calls (input, corpus = corpus)
         code_sim <- dplyr::left_join (res$code, bm25, by = "package")
         res$code <- pkgsimil_rerank (code_sim)
-        res$text <- res$text$package
 
     } else {
 

@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/ropensci-review-tools/pkgsimil",
   "issueTracker": "https://github.com/ropensci-review-tools/pkgsimil/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.2.0.019",
+  "version": "0.2.0.020",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
