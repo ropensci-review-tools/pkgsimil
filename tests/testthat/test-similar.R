@@ -69,6 +69,7 @@ test_that ("similar pkgs package input", {
     expect_s3_class (out, "pkgsimil")
     expect_type (out, "list")
     expect_length (out, 2L)
+    expect_equal (attr (out, "n"), n)
     expect_identical (names (out), c ("text", "code"))
     expect_false (identical (out$text, out$code))
     expect_true (all (vapply (out, class, character (1L)) == "data.frame"))
@@ -77,6 +78,18 @@ test_that ("similar pkgs package input", {
 
     expect_true (all (out$text$package %in% colnames (embeddings$text_with_fns)))
     expect_true (all (out$code$package %in% colnames (embeddings$code)))
+
+    out_p <- capture.output (print (out))
+    expect_true (any (grepl ("^\\$text$", out_p)))
+    expect_true (any (grepl ("^\\$code$", out_p)))
+    nm_lines <- grep ("^\\[", out_p, value = TRUE)
+    lens <- vapply (
+        nm_lines,
+        function (n) length (strsplit (n, "\\\"\\s") [[1]]),
+        integer (1L),
+        USE.NAMES = FALSE
+    )
+    expect_true (all (lens == n))
 })
 
 test_that ("similar fns", {
@@ -98,4 +111,7 @@ test_that ("similar fns", {
     expect_identical (names (out), c ("package", "simil", "rank"))
     expect_true (all (out$package %in% colnames (embeddings_fns)))
     expect_identical (out$rank, seq_len (nrow (out)))
+
+    out_p <- strsplit (capture.output (print (out)), "\\\"\\s") [[1]]
+    expect_length (out_p, n)
 })
