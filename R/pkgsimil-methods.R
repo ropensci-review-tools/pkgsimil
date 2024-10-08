@@ -10,10 +10,14 @@ print.pkgsimil <- function (x, ...) {
     n <- attr (x, "n")
 
     if (inherits (x, "data.frame")) {
-        xout <- list (
-            "text" = x$package [x$text_rank] [seq_len (n)],
-            "code" = x$package [x$code_rank] [seq_len (n)]
-        )
+        if ("rank" %in% names (x)) {
+            xout <- x$package [seq_len (n)]
+        } else {
+            xout <- list (
+                "text" = x$package [x$text_rank] [seq_len (n)],
+                "code" = x$package [x$code_rank] [seq_len (n)]
+            )
+        }
         print (xout)
     } else if (inherits (x, "list")) {
         xout <- lapply (x, function (i) utils::head (i$package, n))
