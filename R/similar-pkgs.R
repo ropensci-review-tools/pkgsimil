@@ -55,15 +55,10 @@ pkgsimil_similar_pkgs <- function (input,
     if (is.null (embeddings)) {
         embeddings <- pkgsimil_load_data (what = "embeddings", corpus = corpus)
     }
-    if (is.null (idfs)) {
-        idfs <- pkgsimil_load_data (what = "idfs", corpus = corpus)
-    }
 
     nms_expected <- c ("text_with_fns", "text_wo_fns", "code")
     stopifnot (is.list (embeddings))
     stopifnot (identical (names (embeddings), nms_expected))
-    stopifnot (is.list (idfs))
-    stopifnot (identical (names (idfs), c ("idfs", "token_lists")))
 
     if (input_is_dir (input)) {
 
@@ -74,6 +69,12 @@ pkgsimil_similar_pkgs <- function (input,
         res$code <- pkgsimil_rerank (code_sim)
 
     } else {
+
+        if (is.null (idfs)) {
+            idfs <- pkgsimil_load_data (what = "idfs", corpus = corpus)
+        }
+        stopifnot (is.list (idfs))
+        stopifnot (identical (names (idfs), c ("idfs", "token_lists")))
 
         res <- similar_pkgs_from_text (
             input = input,
