@@ -67,17 +67,14 @@ test_that ("similar pkgs package input", {
     fs::dir_delete (path)
 
     expect_s3_class (out, "pkgsimil")
-    expect_type (out, "list")
-    expect_length (out, 2L)
+    expect_s3_class (out, "data.frame")
     expect_equal (attr (out, "n"), n)
-    expect_identical (names (out), c ("text", "code"))
+    expect_equal (ncol (out), 3L)
+    expect_identical (names (out), c ("package", "text_rank", "code_rank"))
     expect_false (identical (out$text, out$code))
-    expect_true (all (vapply (out, class, character (1L)) == "data.frame"))
-    nrows <- vapply (out, nrow, integer (1L))
-    expect_true (all (nrows == npkgs))
+    expect_equal (nrow (out), npkgs)
 
-    expect_true (all (out$text$package %in% colnames (embeddings$text_with_fns)))
-    expect_true (all (out$code$package %in% colnames (embeddings$code)))
+    expect_true (all (out$package %in% colnames (embeddings$text_with_fns)))
 
     out_p <- capture.output (print (out))
     expect_true (any (grepl ("^\\$text$", out_p)))

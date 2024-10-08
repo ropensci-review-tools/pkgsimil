@@ -15,8 +15,8 @@ pkgsimil_similar_fns(input, embeddings = NULL, n = 5L)
 cache directory.
 provided, pre-generated embeddings will be downloaded and stored in a local}
 
-\item{n}{identify the \code{n} most similar packages in terms of both code and
-text embeddings.}
+\item{n}{When the result of this function is printed to screen, the top \code{n}
+packages will be displayed.}
 }
 \value{
 A character vector of function names in the form
