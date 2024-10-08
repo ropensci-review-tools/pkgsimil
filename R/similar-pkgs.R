@@ -93,6 +93,7 @@ pkgsimil_similar_pkgs <- function (input,
             input = input,
             embeddings = embeddings,
             idfs = idfs,
+            corpus = corpus,
             input_is_code = input_is_code
         )
     }
@@ -152,13 +153,14 @@ order_output <- function (out, what = "text") {
 similar_pkgs_from_text <- function (input,
                                     embeddings = NULL,
                                     idfs = NULL,
+                                    corpus = "ropensci",
                                     input_is_code = text_is_code (input)) {
 
     stopifnot (is.character (input))
     stopifnot (length (input) == 1L)
 
     if (is.null (embeddings)) {
-        embeddings <- pkgsimil_load_data ("embeddings")
+        embeddings <- pkgsimil_load_data (what = "embeddings", corpus = corpus)
     }
     if (input_is_code) {
         similarities <- similarity_embeddings (
@@ -174,7 +176,8 @@ similar_pkgs_from_text <- function (input,
         )
     }
 
-    similarities_bm25 <- pkgsimil_bm25 (input = input, idfs = idfs)
+    similarities_bm25 <-
+        pkgsimil_bm25 (input = input, idfs = idfs, corpus = corpus)
 
     similarities <- dplyr::left_join (
         similarities,
