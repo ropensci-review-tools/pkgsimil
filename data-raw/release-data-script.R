@@ -1,15 +1,15 @@
-library (pkgsimil)
+library (pkgmatch)
 ollama_check ()
 
 path <- "/<path>/<to>/<ropensci>/<repos>"
 packages <- fs::dir_ls (path)
 
 # ----------------- EMBEDDINGS FOR ROPENSCI -----------------
-embeddings <- pkgsimil_embeddings_from_pkgs (packages)
+embeddings <- pkgmatch_embeddings_from_pkgs (packages)
 
 saveRDS (embeddings, "embeddings-ropensci.Rds")
 embeddings_fns <-
-    pkgsimil_embeddings_from_pkgs (packages, functions_only = TRUE)
+    pkgmatch_embeddings_from_pkgs (packages, functions_only = TRUE)
 saveRDS (embeddings_fns, "embeddings-fns.Rds")
 
 # -------------------- BM25 FOR ROPENSCI --------------------
@@ -37,7 +37,7 @@ saveRDS (bm25_data, "bm25-ropensci-fns.Rds")
 
 # ------------------ FN CALLS FOR ROPENSCI ------------------
 calls <- pbapply::pblapply (flist, function (f) {
-    res <- pkgsimil_treesitter_fn_tags (f)
+    res <- pkgmatch_treesitter_fn_tags (f)
     sort (table (res$name), decreasing = TRUE)
 })
 names (calls) <- basename (names (calls))
@@ -71,16 +71,28 @@ saveRDS (tokens_idf, "idfs-fn-calls-ropensci.Rds")
 
 
 # -------------------- EMBEDDINGS FOR CRAN --------------------
+options ("rlib_message_verbosity" = "verbose")
 path <- "/<path>/<to>/<cran-mirror>/tarballs"
 packages <- fs::dir_ls (path, regexpr = "\\.tar\\.gz$")
-embeddings <- pkgsimil_embeddings_from_pkgs (packages)
+embeddings <- pkgmatch_embeddings_from_pkgs (packages)
 
-nms <- gsub ("\\_.*$", "", colnames (embeddings$text_with_fns))
-colnames (embeddings$text_with_fns) <- nms
-nms <- gsub ("\\_.*$", "", colnames (embeddings$text_wo_fns))
-colnames (embeddings$text_wo_fns) <- nms
-nms <- gsub ("\\_.*$", "", colnames (embeddings$code))
-colnames (embeddings$code) <- nms
+# Fn to reduce names and remove any duplicate packages (owing to multiple
+# versions in tarball dir):
+rename_cols <- function (e) {
+    nms <- basename (gsub ("\\_.*$", "", colnames (e)))
+    dups <- nms [which (duplicated (nms))]
+    if (length (dups) > 0L) {
+        index <- match (dups, nms)
+        e <- e [, -index]
+        nms <- nms [-index]
+    }
+    colnames (e) <- nms
+
+    return (e)
+}
+embeddings$text_with_fns <- rename_cols (embeddings$text_with_fns)
+embeddings$text_wo_fns <- rename_cols (embeddings$text_wo_fns)
+embeddings$code <- rename_cols (embeddings$code)
 
 saveRDS (embeddings, "embeddings-cran.Rds")
 
@@ -95,6 +107,21 @@ token_lists <- list (
     with_fns = bm25_tokens_list (txt_with_fns),
     wo_fns = bm25_tokens_list (txt_wo_fns)
 )
+rename_lists <- function (ll) {
+    nms <- gsub ("\\_.*$", "", basename (names (ll)))
+    dups <- nms [which (duplicated (nms))]
+    if (length (dups) > 0L) {
+        index <- match (dups, nms)
+        ll <- ll [-index]
+        nms <- nms [-index]
+    }
+    names (ll) <- nms
+
+    return (ll)
+
+}
+token_lists$with_fns <- rename_lists (token_lists$with_fns)
+token_lists$wo_fns <- rename_lists (token_lists$wo_fns)
 bm25_data <- list (idfs = idfs, token_lists = token_lists)
 saveRDS (bm25_data, "bm25-cran.Rds")
 
@@ -104,7 +131,7 @@ cl <- parallel::makeCluster (num_cores)
 
 calls <- pbapply::pblapply (packages, function (f) {
     res <- tryCatch (
-        pkgsimil::pkgsimil_treesitter_fn_tags (f),
+        pkgmatch::pkgmatch_treesitter_fn_tags (f),
         error = function (e) NULL
     )
     if (is.null (res)) {
@@ -118,7 +145,14 @@ parallel::stopCluster (cl)
 names (calls) <- basename (names (calls))
 index <- which (vapply (calls, length, integer (1L)) > 0)
 calls <- calls [index]
-head (names (calls))
+
+# Rm any duplicated packages (with different versions)
+nms <- gsub ("\\_.*$", "", names (calls))
+dups <- nms [which (duplicated (nms))]
+if (length (dups) > 0L) {
+    index <- match (dups, nms)
+    calls <- calls [-index]
+}
 saveRDS (calls, "fn-calls-cran.Rds")
 
 # Then remove self-calls:

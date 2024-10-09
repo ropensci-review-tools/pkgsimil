@@ -1,11 +1,11 @@
 test_that ("tree-sitter", {
 
-    withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
+    withr::local_envvar (list ("PKGMATCH_TESTS" = "true"))
 
-    path <- pkgsimil_test_skeleton ()
+    path <- pkgmatch_test_skeleton ()
     roxygen2::roxygenise (path)
 
-    tags <- pkgsimil_treesitter_fn_tags (path)
+    tags <- pkgmatch_treesitter_fn_tags (path)
     expect_s3_class (tags, "data.frame")
     expect_true (nrow (tags) > 0L)
     expect_identical (names (tags), c ("fn", "name", "start", "end", "file"))

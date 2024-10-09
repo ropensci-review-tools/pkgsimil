@@ -1,18 +1,18 @@
-# Contributing to `pkgsimil`
+# Contributing to `pkgmatch`
 
 <!-- This CONTRIBUTING.md is adapted from https://gist.github.com/peterdesmet/e90a1b0dc17af6c12daf6e8b2f044e7c -->
 
-First of all, thanks for considering contributing to `pkgsimil`! 👍 It's
+First of all, thanks for considering contributing to `pkgmatch`! 👍 It's
 people like you that make it rewarding for us - the project maintainers - to
-work on `pkgsimil`. 😊
+work on `pkgmatch`. 😊
 
-`pkgsimil` is an open source project, maintained by people who care.
+`pkgmatch` is an open source project, maintained by people who care.
 
-- repo: https://github.com/ropensci-review-tools/pkgsimil
-- issues: https://github.com/ropensci-review-tools/pkgsimil/issues
-- new_issue: https://github.com/ropensci-review-tools/pkgsimil/issues/new
-- website: https://docs.ropensci.org/pkgsimil/
-- citation: https://ropensci-review-tools.github.io/pkgsimil/authors.html
+- repo: https://github.com/ropensci-review-tools/pkgmatch
+- issues: https://github.com/ropensci-review-tools/pkgmatch/issues
+- new_issue: https://github.com/ropensci-review-tools/pkgmatch/issues/new
+- website: https://docs.ropensci.org/pkgmatch/
+- citation: https://ropensci-review-tools.github.io/pkgmatch/authors.html
 - email: mailto:mark@ropensci.org
 
 ## Code of conduct
@@ -29,18 +29,18 @@ this [Open Source Guide](https://opensource.guide/how-to-contribute/).
 
 ### Share the love ❤️
 
-Think `pkgsimil` is useful? Let others discover it, by telling them in person,
+Think `pkgmatch` is useful? Let others discover it, by telling them in person,
 via Twitter or a blog post.
 
-Using `pkgsimil` for a paper you are writing? Consider [citing
-it](https://github.com/ropensci-review-tools/pkgsimil/blob/main/inst/CITATION).
+Using `pkgmatch` for a paper you are writing? Consider [citing
+it](https://github.com/ropensci-review-tools/pkgmatch/blob/main/inst/CITATION).
 
 ### Ask a question ⁉️
 
-Using `pkgsimil` and got stuck? [Browse the
-documentation](https://docs.ropensci.org/pkgsimil/) to see if you can find a
+Using `pkgmatch` and got stuck? [Browse the
+documentation](https://docs.ropensci.org/pkgmatch/) to see if you can find a
 solution. Still stuck? Post your question as an [issue on
-GitHub](https://github.com/ropensci-review-tools/pkgsimil/issues). While we
+GitHub](https://github.com/ropensci-review-tools/pkgmatch/issues). While we
 cannot offer user support, we'll try to do our best to address it, as questions
 often lead to better documentation or the discovery of bugs.
 
@@ -49,11 +49,11 @@ Want to ask a question in private? Contact the package maintainer by
 
 ### Propose an idea 💡
 
-Have an idea for a new `pkgsimil` feature? Take a look at [the
-documentation](https://docs.ropensci.org/pkgsimil/) and [issues
-list](https://github.com/ropensci-review-tools/pkgsimil/issues) to see if it
+Have an idea for a new `pkgmatch` feature? Take a look at [the
+documentation](https://docs.ropensci.org/pkgmatch/) and [issues
+list](https://github.com/ropensci-review-tools/pkgmatch/issues) to see if it
 isn't included or suggested yet. If not, suggest your idea as an [issue on
-GitHub](https://github.com/ropensci-review-tools/pkgsimil/issues/new).
+GitHub](https://github.com/ropensci-review-tools/pkgmatch/issues/new).
 While we can't promise to implement your idea, it helps to:
 
 * Explain in detail how it would work.
@@ -63,17 +63,17 @@ See below if you want to contribute code for your idea as well.
 
 ### Report a bug 🐛
 
-Using `pkgsimil` and discovered a bug? That's annoying! Don't let others have
+Using `pkgmatch` and discovered a bug? That's annoying! Don't let others have
 the same experience and report it as an [issue on
-GitHub](https://github.com/ropensci-review-tools/pkgsimil/issues/new) so we can
+GitHub](https://github.com/ropensci-review-tools/pkgmatch/issues/new) so we can
 fix it. A good bug report makes it easier for us to do so, so please:
 
 - Use [the `reprex` package](https://reprex.tidyverse.org) to create a
   reproducible example.
-- Include the version of `pkgsimil` with the following line in your `reprex`
+- Include the version of `pkgmatch` with the following line in your `reprex`
   code:
   ```
-  packageVersion("pkgsimil")
+  packageVersion("pkgmatch")
   ```
 
 ### Improve the documentation 📖
@@ -84,7 +84,7 @@ welcome!
 
 #### The website
 
-[This website](https://docs.ropensci.org/pkgsimil/) is generated with
+[This website](https://docs.ropensci.org/pkgmatch/) is generated with
 [`pkgdown`](http://pkgdown.r-lib.org/). That means we don't have to write any
 html: content is pulled together from documentation in the code, vignettes,
 [Markdown](https://guides.github.com/features/mastering-markdown/) files, the
@@ -92,7 +92,7 @@ package `DESCRIPTION` and `_pkgdown.yml` settings. If you know your way around
 `pkgdown`, you can [propose a file
 change](https://help.github.com/articles/editing-files-in-another-user-s-repository/)
 to improve documentation. If not, [report an
-issue](https://github.com/ropensci-review-tools/pkgsimil/issues/new) and we can
+issue](https://github.com/ropensci-review-tools/pkgmatch/issues/new) and we can
 point you in the right direction.
 
 #### Function documentation
@@ -102,7 +102,7 @@ documentation using [`roxygen2`](https://klutometis.github.io/roxygen/). If you
 want to improve a function description:
 
 1. Go to `R/` directory in the [code
-   repository](https://github.com/ropensci-review-tools/pkgsimil/tree/main/R).
+   repository](https://github.com/ropensci-review-tools/pkgmatch/tree/main/R).
 2. Look for the file with the name of the function.
 3. [Propose a file
    change](https://help.github.com/articles/editing-files-in-another-user-s-repository/)
@@ -111,9 +111,9 @@ want to improve a function description:
 
 ### Contribute code 📝
 
-Care to fix bugs or implement new functionality for `pkgsimil`? Awesome! 👏
+Care to fix bugs or implement new functionality for `pkgmatch`? Awesome! 👏
 Have a look at the [issue
-list](https://github.com/ropensci-review-tools/pkgsimil/issues) and leave a
+list](https://github.com/ropensci-review-tools/pkgmatch/issues) and leave a
 comment on the things you want to work on. See also the development guidelines
 below.
 
@@ -122,7 +122,7 @@ below.
 We try to follow the [GitHub
 flow](https://guides.github.com/introduction/flow/) for development.
 
-1. Fork [this repo](https://github.com/ropensci-review-tools/pkgsimil/) and
+1. Fork [this repo](https://github.com/ropensci-review-tools/pkgmatch/) and
    clone it to your computer. To learn more about this process, see [this
    guide](https://guides.github.com/activities/forking/).
 2. If you have forked and cloned the project before and it has been a while
@@ -141,11 +141,11 @@ flow](https://guides.github.com/introduction/flow/) for development.
 
 ## Code style
 
-The `pkgsimil` coding style diverges somewhat from [the commonly used tidyverse
+The `pkgmatch` coding style diverges somewhat from [the commonly used tidyverse
 style guide](https://style.tidyverse.org/syntax.html#spacing), primarily
 through judicious use of
 whitespace, which aims to improve code readability. Code references in
-`pkgsimil` are separated by whitespace, just like words of text. Just like it
+`pkgmatch` are separated by whitespace, just like words of text. Just like it
 is easier to understand "these three words" than "thesethreewords", code is 
 formatted like this:
 
@@ -165,7 +165,7 @@ The position of brackets is then arbitrary, and we could also write
 these <- three( words (x))
 ```
 
-`pkgsimil` code opts for the former style, with the natural result that one
+`pkgmatch` code opts for the former style, with the natural result that one
 ends up writing
 
 ```r

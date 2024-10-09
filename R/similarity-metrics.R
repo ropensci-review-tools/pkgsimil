@@ -22,7 +22,7 @@ similarity_embeddings <- function (input, embeddings, input_is_code) {
 
 similarity_bm25 <- function (input, bm25, idfs = NULL) {
 
-    b <- pkgsimil_bm25 (input = input, idfs = idfs)
+    b <- pkgmatch_bm25 (input = input, idfs = idfs)
     this_emb <- get_embeddings (input, code = FALSE)
 }
 

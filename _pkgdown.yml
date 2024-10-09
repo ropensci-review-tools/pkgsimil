@@ -1,4 +1,4 @@
-url: https://docs.ropensci.org/pkgsimil
+url: https://docs.ropensci.org/pkgmatch
 
 figures:
   dev: grDevices::png

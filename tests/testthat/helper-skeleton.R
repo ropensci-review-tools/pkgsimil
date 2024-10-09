@@ -110,7 +110,7 @@ write_readme <- function (d, pkg_name) {
 }
 
 
-pkgsimil_test_skeleton <- function (base_dir = tempdir (), pkg_name = "demo") {
+pkgmatch_test_skeleton <- function (base_dir = tempdir (), pkg_name = "demo") {
 
     d <- make_pkg_path (base_dir, pkg_name)
 
