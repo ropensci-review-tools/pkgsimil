@@ -115,7 +115,8 @@ pkgmatch_similar_pkgs (".")
 ```
 
     ## $text
-    ## [1] "pdftools" "dittodb"  "jqr"      "auk"      "phylotaR"
+    ## [1] "pdftools"        "dittodb"         "autotest"        "qualR"          
+    ## [5] "allcontributors"
     ## 
     ## $code
     ## [1] "stplanr"      "fellingdater" "pkgstats"     "pangaear"     "ohun"
@@ -129,8 +130,7 @@ pkgmatch_similar_pkgs (".", corpus = "cran")
 ```
 
     ## $text
-    ## [1] "htmlTable"           "Require"             "Iso"                
-    ## [4] "ollamar"             "ThomasJeffersonUniv"
+    ## [1] "rcolors"   "Require"   "dma"       "ollamar"   "htmlTable"
     ## 
     ## $code
     ## [1] "shinylive"   "StroupGLMM"  "box.linters" "eda4treeR"   "fs"

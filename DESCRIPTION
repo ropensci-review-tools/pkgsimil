@@ -34,7 +34,9 @@ Suggests:
     rappdirs,
     roxygen2,
     testthat (>= 3.0.0),
-    withr
+    withr,
+    knitr,
+    rmarkdown
 LinkingTo:
     Rcpp
 Depends: R (>= 3.5.0)
@@ -44,3 +46,4 @@ Language: en-GB
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Config/testthat/edition: 3
+VignetteBuilder: knitr
