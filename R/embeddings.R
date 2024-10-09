@@ -48,7 +48,6 @@ pkgmatch_embeddings_from_pkgs <- function (packages = NULL,
     packages <- convert_paths_to_pkgs (pkgs_full)
     if (all (grepl ("\\.tar\\.gz$", packages))) {
         packages <- gsub ("\\.tar\\.gz$", "", basename (packages))
-        packages <- gsub ("\\_.*$", "", packages)
     }
 
     if (!opt_is_quiet () && length (packages) > 100) {
