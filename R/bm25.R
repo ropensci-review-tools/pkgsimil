@@ -30,6 +30,10 @@
 #' }
 pkgmatch_bm25 <- function (input, txt = NULL,
                            idfs = NULL, corpus = "ropensci") {
+    m_pkgmatch_bm25 (input, txt, idfs, corpus)
+}
+
+pkgmatch_bm25_internal <- function (input, txt, idfs, corpus) {
 
     if (is.null (txt)) {
         if (is.null (idfs)) {
@@ -63,6 +67,7 @@ pkgmatch_bm25 <- function (input, txt = NULL,
 
     dplyr::left_join (bm25_with_fns, bm25_wo_fns, by = "package")
 }
+m_pkgmatch_bm25 <- memoise::memoise (pkgmatch_bm25_internal)
 
 #' Calculate a "BM25" index from function-call frequencies between a local R
 #' package and all packages in specified corpus.
