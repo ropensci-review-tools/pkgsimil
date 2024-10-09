@@ -1,4 +1,4 @@
-library (pkgsimil)
+library (pkgmatch)
 ollama_check ()
 
 path <- "/<path>/<to>/<ropensci>/<repos>"
@@ -131,7 +131,7 @@ cl <- parallel::makeCluster (num_cores)
 
 calls <- pbapply::pblapply (packages, function (f) {
     res <- tryCatch (
-        pkgsimil::pkgsimil_treesitter_fn_tags (f),
+        pkgmatch::pkgsimil_treesitter_fn_tags (f),
         error = function (e) NULL
     )
     if (is.null (res)) {
