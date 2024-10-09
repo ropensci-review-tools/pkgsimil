@@ -163,7 +163,7 @@ tressitter_calls_in_package <- function (path) {
 #'
 #' @family treesitter
 #' @export
-pkgsimil_treesitter_fn_tags <- function (path) {
+pkgmatch_treesitter_fn_tags <- function (path) {
 
     stopifnot (length (path) == 1L)
 

@@ -84,7 +84,7 @@ pkgsimil_bm25_fn_calls <- function (path, corpus = "ropensci") {
         )
     })
 
-    input <- pkgsimil_treesitter_fn_tags (path)
+    input <- pkgmatch_treesitter_fn_tags (path)
 
     pkgsimil_bm25_from_idf (input, tokens_list, tokens_idf)
 }
