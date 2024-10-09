@@ -25,7 +25,7 @@
 #' input <- "Download open spatial data from NASA"
 #' bm25 <- pkgmatch_bm25 (input)
 #' # Or pre-load document-frequency weightings:
-#' idfs <- pkgsimil_load_data ("idfs", fns = FALSE)
+#' idfs <- pkgmatch_load_data ("idfs", fns = FALSE)
 #' bm25 <- pkgmatch_bm25 (input, idfs = idfs)
 #' }
 pkgmatch_bm25 <- function (input, txt = NULL,
@@ -33,7 +33,7 @@ pkgmatch_bm25 <- function (input, txt = NULL,
 
     if (is.null (txt)) {
         if (is.null (idfs)) {
-            idfs <- pkgsimil_load_data ("idfs", fns = FALSE)
+            idfs <- pkgmatch_load_data ("idfs", fns = FALSE)
         }
         tokens_idf <- idfs$idfs
         tokens_list <- idfs$token_lists
@@ -74,8 +74,8 @@ pkgmatch_bm25 <- function (input, txt = NULL,
 #' @export
 pkgmatch_bm25_fn_calls <- function (path, corpus = "ropensci") {
 
-    tokens_idf <- pkgsimil_load_data (what = "calls", corpus = corpus, raw = FALSE)
-    calls <- pkgsimil_load_data (what = "calls", corpus = corpus, raw = TRUE)
+    tokens_idf <- pkgmatch_load_data (what = "calls", corpus = corpus, raw = FALSE)
+    calls <- pkgmatch_load_data (what = "calls", corpus = corpus, raw = TRUE)
 
     tokens_list <- lapply (calls, function (i) {
         data.frame (

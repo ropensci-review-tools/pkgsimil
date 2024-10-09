@@ -34,7 +34,7 @@ See \url{https://en.wikipedia.org/wiki/Okapi_BM25}.
 input <- "Download open spatial data from NASA"
 bm25 <- pkgmatch_bm25 (input)
 # Or pre-load document-frequency weightings:
-idfs <- pkgsimil_load_data ("idfs", fns = FALSE)
+idfs <- pkgmatch_load_data ("idfs", fns = FALSE)
 bm25 <- pkgmatch_bm25 (input, idfs = idfs)
 }
 }

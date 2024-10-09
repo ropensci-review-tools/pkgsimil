@@ -26,19 +26,19 @@
 #'
 #' @examples
 #' \dontrun{
-#' embeddings <- pkgsimil_load_data ("embeddings")
-#' embeddings_fns <- pkgsimil_load_data ("embeddings", fns = TRUE)
-#' idfs <- pkgsimil_load_data ("idfs")
-#' idfs_fns <- pkgsimil_load_data ("idfs", fns = TRUE)
+#' embeddings <- pkgmatch_load_data ("embeddings")
+#' embeddings_fns <- pkgmatch_load_data ("embeddings", fns = TRUE)
+#' idfs <- pkgmatch_load_data ("idfs")
+#' idfs_fns <- pkgmatch_load_data ("idfs", fns = TRUE)
 #' }
-pkgsimil_load_data <- function (what = "embeddings", corpus = "ropensci",
+pkgmatch_load_data <- function (what = "embeddings", corpus = "ropensci",
                                 fns = FALSE, raw = FALSE) {
 
     fname <- get_cache_file_name (what, corpus, fns, raw)
 
-    fname <- fs::path (pkgsimil_cache_path (), fname)
+    fname <- fs::path (pkgmatch_cache_path (), fname)
     if (!fs::file_exists (fname)) {
-        fname <- pkgsimil_dl_data (what = what, corpus = corpus, fns = fns, raw = raw)
+        fname <- pkgmatch_dl_data (what = what, corpus = corpus, fns = fns, raw = raw)
     }
     readRDS (fname)
 }
@@ -71,18 +71,18 @@ get_cache_file_name <- function (what, corpus, fns, raw) {
 }
 
 # nocov start
-pkgsimil_dl_data <- function (what = "embeddings", corpus = "ropensci",
+pkgmatch_dl_data <- function (what = "embeddings", corpus = "ropensci",
                               fns = FALSE, raw = FALSE) {
 
     fname <- get_cache_file_name (what, corpus, fns, raw)
 
     url_base <-
-        "https://github.com/ropensci-review-tools/pkgsimil/releases/download/"
+        "https://github.com/ropensci-review-tools/pkgmatch/releases/download/"
     version <- "v0.1.2"
 
     dl_url <- paste0 (url_base, version, "/", fname)
 
-    destfile <- fs::path (pkgsimil_cache_path (), fname)
+    destfile <- fs::path (pkgmatch_cache_path (), fname)
     curl::curl_download (
         url = dl_url,
         destfile = destfile,
@@ -92,7 +92,7 @@ pkgsimil_dl_data <- function (what = "embeddings", corpus = "ropensci",
 }
 # nocov end
 
-pkgsimil_cache_path <- function () {
+pkgmatch_cache_path <- function () {
 
     cache_dir <- Sys.getenv ("PKGMATCH_CACHE_DIR")
 

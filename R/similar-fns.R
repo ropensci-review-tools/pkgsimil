@@ -21,7 +21,7 @@
 pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
 
     if (is.null (embeddings)) {
-        embeddings <- pkgsimil_load_data ("embeddings", corpus = "ropensci", fns = TRUE)
+        embeddings <- pkgmatch_load_data ("embeddings", corpus = "ropensci", fns = TRUE)
     }
     stopifnot (is.matrix (embeddings))
     stopifnot (is.character (input))

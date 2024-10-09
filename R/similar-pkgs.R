@@ -55,14 +55,14 @@ pkgsimil_similar_pkgs <- function (input,
     corpus <- match.arg (corpus, c ("ropensci", "cran"))
 
     if (is.null (embeddings)) {
-        embeddings <- pkgsimil_load_data (what = "embeddings", corpus = corpus)
+        embeddings <- pkgmatch_load_data (what = "embeddings", corpus = corpus)
     }
     nms_expected <- c ("text_with_fns", "text_wo_fns", "code")
     stopifnot (is.list (embeddings))
     stopifnot (identical (names (embeddings), nms_expected))
 
     if (is.null (idfs)) {
-        idfs <- pkgsimil_load_data (what = "idfs", corpus = corpus)
+        idfs <- pkgmatch_load_data (what = "idfs", corpus = corpus)
     }
     stopifnot (is.list (idfs))
     stopifnot (identical (names (idfs), c ("idfs", "token_lists")))
@@ -169,7 +169,7 @@ similar_pkgs_from_text <- function (input,
     stopifnot (length (input) == 1L)
 
     if (is.null (embeddings)) {
-        embeddings <- pkgsimil_load_data (what = "embeddings", corpus = corpus)
+        embeddings <- pkgmatch_load_data (what = "embeddings", corpus = corpus)
     }
     if (input_is_code) {
         similarities <- similarity_embeddings (
