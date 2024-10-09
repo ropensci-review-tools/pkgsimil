@@ -56,7 +56,7 @@ idfs_fns <- pkgsimil_load_data ("idfs", fns = TRUE)
 }
 \seealso{
 Other utils: 
-\code{\link{print.pkgsimil}()},
+\code{\link{print.pkgmatch}()},
 \code{\link{text_is_code}()}
 }
 \concept{utils}

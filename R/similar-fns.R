@@ -35,7 +35,7 @@ pkgsimil_similar_fns <- function (input, embeddings = NULL, n = 5L) {
     res <- cosine_similarity (emb [, 1], embeddings)
     res$rank <- seq_len (nrow (res))
 
-    class (res) <- c ("pkgsimil", class (res))
+    class (res) <- c ("pkgmatch", class (res))
     attr (res, "n") <- as.integer (n)
 
     return (res)

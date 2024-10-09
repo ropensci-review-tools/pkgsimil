@@ -1,11 +1,11 @@
-#' Print method for 'pkgsimil' objects
+#' Print method for 'pkgmatch' objects
 #'
 #' @param x Object to be printed
 #' @param ... Not used
 #'
 #' @family utils
 #' @export
-print.pkgsimil <- function (x, ...) {
+print.pkgmatch <- function (x, ...) {
 
     n <- attr (x, "n")
 

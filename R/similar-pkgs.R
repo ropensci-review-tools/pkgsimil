@@ -107,7 +107,7 @@ pkgsimil_similar_pkgs <- function (input,
 
     res <- pkgsimil_rerank (res, rm_fn_data)
 
-    class (res) <- c ("pkgsimil", class (res))
+    class (res) <- c ("pkgmatch", class (res))
     attr (res, "n") <- as.integer (n)
 
     return (res)
