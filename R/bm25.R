@@ -79,6 +79,11 @@ m_pkgmatch_bm25 <- memoise::memoise (pkgmatch_bm25_internal)
 #' @export
 pkgmatch_bm25_fn_calls <- function (path, corpus = "ropensci") {
 
+    m_pkgmatch_bm25_fn_calls (path, corpus)
+}
+
+pkgmatch_bm25_fn_calls_internal <- function (path, corpus) {
+
     tokens_idf <- pkgmatch_load_data (what = "calls", corpus = corpus, raw = FALSE)
     calls <- pkgmatch_load_data (what = "calls", corpus = corpus, raw = TRUE)
 
@@ -93,8 +98,14 @@ pkgmatch_bm25_fn_calls <- function (path, corpus = "ropensci") {
 
     pkgmatch_bm25_from_idf (input, tokens_list, tokens_idf)
 }
+m_pkgmatch_bm25_fn_calls <- memoise::memoise (pkgmatch_bm25_fn_calls_internal)
 
 pkgmatch_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
+
+    m_pkgmatch_bm25_from_idf (input, tokens_list, tokens_idf)
+}
+
+pkgmatch_bm25_from_idf_internal <- function (input, tokens_list, tokens_idf) {
 
     n <- name <- NULL # suppress no visible binding note
 
@@ -132,6 +143,7 @@ pkgmatch_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
 
     return (bm25)
 }
+m_pkgmatch_bm25_from_idf <- memoise::memoise (pkgmatch_bm25_from_idf_internal)
 
 #' Convert input list of text documents into lists of tokens.
 #'
