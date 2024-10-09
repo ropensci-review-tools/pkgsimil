@@ -79,14 +79,15 @@ embeddings <- pkgmatch_embeddings_from_pkgs (packages)
 # Fn to reduce names and remove any duplicate packages (owing to multiple
 # versions in tarball dir):
 rename_cols <- function (e) {
-    nms <- basename (gsub ("\\_.*$", "", colnames (e)))
+    nms_full <- basename (colnames (e))
+    nms <- gsub ("\\_.*$", "", nms_full)
     dups <- nms [which (duplicated (nms))]
     if (length (dups) > 0L) {
         index <- match (dups, nms)
         e <- e [, -index]
-        nms <- nms [-index]
+        nms_full <- nms_full [-index]
     }
-    colnames (e) <- nms
+    colnames (e) <- nms_full
 
     return (e)
 }
@@ -108,14 +109,15 @@ token_lists <- list (
     wo_fns = bm25_tokens_list (txt_wo_fns)
 )
 rename_lists <- function (ll) {
-    nms <- gsub ("\\_.*$", "", basename (names (ll)))
+    nms_full <- basename (names (ll))
+    nms <- gsub ("\\_.*$", "", nms_full)
     dups <- nms [which (duplicated (nms))]
     if (length (dups) > 0L) {
         index <- match (dups, nms)
         ll <- ll [-index]
-        nms <- nms [-index]
+        nms_full <- nms_full [-index]
     }
-    names (ll) <- nms
+    names (ll) <- nms_full
 
     return (ll)
 
