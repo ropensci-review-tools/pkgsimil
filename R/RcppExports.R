@@ -2,5 +2,5 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 rcpp_bm25 <- function (idfs, tokensList, these_tokens, ntoks_avg) {
-    .Call (`_pkgsimil_rcpp_bm25`, idfs, tokensList, these_tokens, ntoks_avg)
+    .Call (`_pkgmatch_rcpp_bm25`, idfs, tokensList, these_tokens, ntoks_avg)
 }
