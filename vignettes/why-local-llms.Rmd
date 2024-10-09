@@ -14,7 +14,7 @@ knitr::opts_chunk$set (
 )
 ```
 
-The "pksimil" package uses Large Language Models (LLMs) to assess relationships
+The "pkgmatch" package uses Large Language Models (LLMs) to assess relationships
 between R packages. Software which relies on LLMs commonly accesses them
 through Application Programming Interfaces (APIs) provided by external
 organisations such as [mistral.ai](https://mistral.ai),
