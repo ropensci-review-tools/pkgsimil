@@ -115,6 +115,11 @@ pkgmatch_similar_pkgs <- function (input,
 
 similar_pkgs_from_pkg <- function (input, embeddings) {
 
+    m_similar_pkgs_from_pkg (input, embeddings)
+}
+
+similar_pkgs_from_pkg_internal <- function (input, embeddings) {
+
     op <- options ()
     options (rlib_message_verbosity = "quiet")
 
@@ -149,6 +154,7 @@ similar_pkgs_from_pkg <- function (input, embeddings) {
 
     return (out)
 }
+m_similar_pkgs_from_pkg <- memoise::memoise (similar_pkgs_from_pkg_internal)
 
 order_output <- function (out, what = "text") {
 

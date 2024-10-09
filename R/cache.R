@@ -34,6 +34,10 @@
 pkgmatch_load_data <- function (what = "embeddings", corpus = "ropensci",
                                 fns = FALSE, raw = FALSE) {
 
+    m_load_data_internal (what, corpus, fns, raw)
+}
+
+load_data_internal <- function (what, corpus, fns, raw) {
     fname <- get_cache_file_name (what, corpus, fns, raw)
 
     fname <- fs::path (pkgmatch_cache_path (), fname)
@@ -42,6 +46,7 @@ pkgmatch_load_data <- function (what = "embeddings", corpus = "ropensci",
     }
     readRDS (fname)
 }
+m_load_data_internal <- memoise::memoise (load_data_internal)
 
 get_cache_file_name <- function (what, corpus, fns, raw) {
 

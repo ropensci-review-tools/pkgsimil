@@ -2,6 +2,11 @@ get_Rd_metadata <- utils::getFromNamespace (".Rd_get_metadata", "tools") # nolin
 
 get_pkg_text <- function (pkg_name) {
 
+    m_get_pkg_text (pkg_name)
+}
+
+get_pkg_text_internal <- function (pkg_name) {
+
     if (pkg_is_installed (pkg_name)) {
         txt <- get_pkg_text_namespace (pkg_name)
     } else {
@@ -10,6 +15,7 @@ get_pkg_text <- function (pkg_name) {
 
     return (txt)
 }
+m_get_pkg_text <- memoise::memoise (get_pkg_text_internal)
 
 get_pkg_text_namespace <- function (pkg_name) {
 
