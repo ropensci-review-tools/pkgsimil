@@ -94,7 +94,7 @@ pkgsimil_dl_data <- function (what = "embeddings", corpus = "ropensci",
 
 pkgsimil_cache_path <- function () {
 
-    cache_dir <- Sys.getenv ("PKGSIMIL_CACHE_DIR")
+    cache_dir <- Sys.getenv ("PKGMATCH_CACHE_DIR")
 
     if (cache_dir == "") { # nocov start
         cache_dir <- fs::path_expand (fs::path (

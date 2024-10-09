@@ -1,6 +1,6 @@
 test_that ("similar pkgs text input", {
 
-    withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
+    withr::local_envvar (list ("PKGMATCH_TESTS" = "true"))
 
     input <- "A similar package"
     n <- 5L
@@ -34,7 +34,7 @@ test_that ("similar pkgs text input", {
 
 test_that ("similar pkgs package input", {
 
-    withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
+    withr::local_envvar (list ("PKGMATCH_TESTS" = "true"))
 
     path <- pkgmatch_test_skeleton (pkg_name = "demo")
     roxygen2::roxygenise (path)
@@ -91,7 +91,7 @@ test_that ("similar pkgs package input", {
 
 test_that ("similar fns", {
 
-    withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
+    withr::local_envvar (list ("PKGMATCH_TESTS" = "true"))
 
     nfns <- 10L
     embeddings_fns <- get_test_embeddings_fns (nfns = nfns, embedding_len = 768)

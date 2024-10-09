@@ -8,7 +8,7 @@ expect_embeddings_matrix <- function (x) {
 
 test_that ("embeddings properties", {
 
-    withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
+    withr::local_envvar (list ("PKGMATCH_TESTS" = "true"))
 
     txt <- "test text"
     emb <- with_mock_dir ("emb_test_text", {
@@ -19,7 +19,7 @@ test_that ("embeddings properties", {
 
 test_that ("raw embeddings", {
 
-    withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
+    withr::local_envvar (list ("PKGMATCH_TESTS" = "true"))
 
     packages <- "rappdirs"
     emb <- with_mock_dir ("emb_raw", {

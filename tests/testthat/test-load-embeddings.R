@@ -4,7 +4,7 @@ test_that ("load embeddings", {
     if (!dir.exists (fp)) {
         dir.create (fp, recursive = TRUE)
     }
-    Sys.setenv ("PKGSIMIL_CACHE_DIR" = fp)
+    Sys.setenv ("PKGMATCH_CACHE_DIR" = fp)
     expect_equal (pkgsimil_cache_path (), fp)
 
     embeddings <-

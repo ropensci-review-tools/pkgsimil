@@ -1,6 +1,6 @@
 test_that ("tree-sitter", {
 
-    withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
+    withr::local_envvar (list ("PKGMATCH_TESTS" = "true"))
 
     path <- pkgmatch_test_skeleton ()
     roxygen2::roxygenise (path)
