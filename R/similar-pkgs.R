@@ -41,9 +41,9 @@
 #' @examples
 #' \dontrun{
 #' input <- "Download open spatial data from NASA"
-#' pkgsimil_similar_pkgs (input)
+#' pkgmatch_similar_pkgs (input)
 #' }
-pkgsimil_similar_pkgs <- function (input,
+pkgmatch_similar_pkgs <- function (input,
                                    corpus = "ropensci",
                                    embeddings = NULL,
                                    idfs = NULL,

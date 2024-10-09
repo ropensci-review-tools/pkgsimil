@@ -108,7 +108,7 @@ pkgmatch_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
     } else if (is.data.frame (input)) {
         treesit_nms <- c ("fn", "name", "start", "end", "file")
         if (!identical (names (input), treesit_nms)) {
-            cli::cli_abort ("'input' must be from 'pkgsimil_treesitter_fn_tags()'")
+            cli::cli_abort ("'input' must be from 'pkgmatch_treesitter_fn_tags()'")
         }
         tokens_i <-
             dplyr::summarise (dplyr::group_by (input, name), np = dplyr::n ())

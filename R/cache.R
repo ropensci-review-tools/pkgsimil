@@ -2,7 +2,7 @@
 #' function, either for all rOpenSci packages or, if `fns = TRUE`,  all
 #' individual functions within those packages.
 #'
-#' @inheritParams pkgsimil_similar_pkgs
+#' @inheritParams pkgmatch_similar_pkgs
 #' @param what One of:
 #' \itemize{
 #' \item "embeddings" to load pre-generated embeddings;

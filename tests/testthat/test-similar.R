@@ -16,7 +16,7 @@ test_that ("similar pkgs text input", {
     )
     idfs <- get_test_idfs (txt)
     out <- with_mock_dir ("sim_pkgs_txt", {
-        pkgsimil_similar_pkgs (
+        pkgmatch_similar_pkgs (
             input,
             embeddings = embeddings,
             idfs = idfs,
@@ -53,7 +53,7 @@ test_that ("similar pkgs package input", {
     )
     idfs <- get_test_idfs (txt)
     out <- with_mock_dir ("sim_pkgs_pkg", {
-        pkgsimil_similar_pkgs (
+        pkgmatch_similar_pkgs (
             path,
             embeddings = embeddings,
             idfs = idfs,
@@ -99,7 +99,7 @@ test_that ("similar fns", {
     input <- "A test function"
     n <- 5L
     out <- with_mock_dir ("sim_fns", {
-        pkgsimil_similar_fns (input = input, embeddings = embeddings_fns, n = n)
+        pkgmatch_similar_fns (input = input, embeddings = embeddings_fns, n = n)
     })
     expect_s3_class (out, "pkgmatch")
     expect_type (out, "list")

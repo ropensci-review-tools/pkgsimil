@@ -1,6 +1,6 @@
 test_that ("load embeddings", {
 
-    fp <- file.path (tempdir (), "pkgsimil")
+    fp <- file.path (tempdir (), "pkgmatch")
     if (!dir.exists (fp)) {
         dir.create (fp, recursive = TRUE)
     }
