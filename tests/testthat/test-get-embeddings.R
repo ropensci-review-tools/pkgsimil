@@ -34,7 +34,7 @@ test_that ("raw embeddings", {
     # expect_embeddings_matrix (emb$text_wo_fns)
     # expect_embeddings_matrix (emb$code)
 
-    path <- pkgsimil_test_skeleton ()
+    path <- pkgmatch_test_skeleton ()
     roxygen2::roxygenise (path)
 
     emb_fns <- with_mock_dir ("emb_raw_fns", {

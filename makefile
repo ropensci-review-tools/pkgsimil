@@ -1,5 +1,5 @@
 LFILE = README
-VIGNETTE = pkgsimil
+VIGNETTE = pkgmatch
 
 all: help
 

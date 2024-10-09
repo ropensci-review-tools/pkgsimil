@@ -36,7 +36,7 @@ test_that ("similar pkgs package input", {
 
     withr::local_envvar (list ("PKGSIMIL_TESTS" = "true"))
 
-    path <- pkgsimil_test_skeleton (pkg_name = "demo")
+    path <- pkgmatch_test_skeleton (pkg_name = "demo")
     roxygen2::roxygenise (path)
 
     n <- 5L
