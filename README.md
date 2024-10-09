@@ -55,10 +55,10 @@ download before proceeding.
 
 The package has two main functions:
 
-- `pkgsimil_similar_pkgs()` to find similar rOpenSci or CRAN packages
+- `pkgmatch_similar_pkgs()` to find similar rOpenSci or CRAN packages
   based input as either a local path to an entire package, or as a
   single descriptive text string; and
-- `pkgsimil_similar_fns()` to find similar functions from rOpenSci
+- `pkgmatch_similar_fns()` to find similar functions from rOpenSci
   packages based on descriptive text input. (Not available for functions
   from CRAN packages.)
 
@@ -70,7 +70,7 @@ input <- "
 Packages for analysing evolutionary trees, with a particular focus
 on visualising inter-relationships among distinct trees.
 "
-pkgsimil_similar_pkgs (input)
+pkgmatch_similar_pkgs (input)
 ```
 
     ## [1] "phruta"         "treebase"       "occCite"        "rinat"         
@@ -78,7 +78,7 @@ pkgsimil_similar_pkgs (input)
 
 ``` r
 input <- "Download global-scale spatial data"
-pkgsimil_similar_pkgs (input)
+pkgmatch_similar_pkgs (input)
 ```
 
     ## [1] "rnaturalearth"      "rnaturalearthhires" "rfema"             
@@ -89,7 +89,7 @@ following code finds the most similar packages to this very package by
 passing `input = "."`:
 
 ``` r
-pkgsimil_similar_pkgs (".")
+pkgmatch_similar_pkgs (".")
 ```
 
     ## $text
@@ -103,7 +103,7 @@ rOpenSci. Packages from CRAN can be matched by specifying the `corpus`
 parameter:
 
 ``` r
-pkgsimil_similar_pkgs (".", corpus = "cran")
+pkgmatch_similar_pkgs (".", corpus = "cran")
 ```
 
     ## $text
@@ -123,7 +123,7 @@ best match a text description.
 
 ``` r
 input <- "A function to label a set of geographic coordinates"
-pkgsimil_similar_fns (input)
+pkgmatch_similar_fns (input)
 ```
 
     ## [1] "GSODR::nearest_stations"          "refsplitr::plot_addresses_points"
@@ -132,7 +132,7 @@ pkgsimil_similar_fns (input)
 
 ``` r
 input <- "Identify genetic sequences matching a given input fragment"
-pkgsimil_similar_fns (input)
+pkgmatch_similar_fns (input)
 ```
 
     ## [1] "charlatan::SequenceProvider" "beastier::is_alignment"     
