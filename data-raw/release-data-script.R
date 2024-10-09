@@ -1,15 +1,15 @@
-library (pkgsimil)
+library (pkgmatch)
 ollama_check ()
 
 path <- "/<path>/<to>/<ropensci>/<repos>"
 packages <- fs::dir_ls (path)
 
 # ----------------- EMBEDDINGS FOR ROPENSCI -----------------
-embeddings <- pkgsimil_embeddings_from_pkgs (packages)
+embeddings <- pkgmatch_embeddings_from_pkgs (packages)
 
 saveRDS (embeddings, "embeddings-ropensci.Rds")
 embeddings_fns <-
-    pkgsimil_embeddings_from_pkgs (packages, functions_only = TRUE)
+    pkgmatch_embeddings_from_pkgs (packages, functions_only = TRUE)
 saveRDS (embeddings_fns, "embeddings-fns.Rds")
 
 # -------------------- BM25 FOR ROPENSCI --------------------
@@ -37,7 +37,7 @@ saveRDS (bm25_data, "bm25-ropensci-fns.Rds")
 
 # ------------------ FN CALLS FOR ROPENSCI ------------------
 calls <- pbapply::pblapply (flist, function (f) {
-    res <- pkgsimil_treesitter_fn_tags (f)
+    res <- pkgmatch_treesitter_fn_tags (f)
     sort (table (res$name), decreasing = TRUE)
 })
 names (calls) <- basename (names (calls))
@@ -74,7 +74,7 @@ saveRDS (tokens_idf, "idfs-fn-calls-ropensci.Rds")
 options ("rlib_message_verbosity" = "verbose")
 path <- "/<path>/<to>/<cran-mirror>/tarballs"
 packages <- fs::dir_ls (path, regexpr = "\\.tar\\.gz$")
-embeddings <- pkgsimil_embeddings_from_pkgs (packages)
+embeddings <- pkgmatch_embeddings_from_pkgs (packages)
 
 # Fn to reduce names and remove any duplicate packages (owing to multiple
 # versions in tarball dir):
@@ -131,7 +131,7 @@ cl <- parallel::makeCluster (num_cores)
 
 calls <- pbapply::pblapply (packages, function (f) {
     res <- tryCatch (
-        pkgsimil::pkgsimil_treesitter_fn_tags (f),
+        pkgmatch::pkgmatch_treesitter_fn_tags (f),
         error = function (e) NULL
     )
     if (is.null (res)) {

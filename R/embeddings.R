@@ -35,13 +35,13 @@ convert_paths_to_pkgs <- function (packages) {
 #' @examples
 #' \dontrun{
 #' packages <- c ("cli", "fs")
-#' emb_fns <- pkgsimil_embeddings_from_pkgs (packages, functions_only = TRUE)
+#' emb_fns <- pkgmatch_embeddings_from_pkgs (packages, functions_only = TRUE)
 #' colnames (emb_fns) # All functions of the two packages
-#' emb_pkg <- pkgsimil_embeddings_from_pkgs (packages, functions_only = FALSE)
+#' emb_pkg <- pkgmatch_embeddings_from_pkgs (packages, functions_only = FALSE)
 #' names (emb_pkg) # text_with_fns, text_wo_fns, code
 #' colnames (emb_pkg$text_with_fns) # cli, fs
 #' }
-pkgsimil_embeddings_from_pkgs <- function (packages = NULL,
+pkgmatch_embeddings_from_pkgs <- function (packages = NULL,
                                            functions_only = FALSE) {
 
     pkgs_full <- packages
@@ -124,9 +124,9 @@ pkgsimil_embeddings_from_pkgs <- function (packages = NULL,
 #' @examples
 #' \dontrun{
 #' input <- "Download open spatial data from NASA"
-#' emb <- pkgsimil_embeddings_from_text (input = input)
+#' emb <- pkgmatch_embeddings_from_text (input = input)
 #' }
-pkgsimil_embeddings_from_text <- function (input = NULL) {
+pkgmatch_embeddings_from_text <- function (input = NULL) {
 
     get_embeddings (input, code = FALSE)
 }

@@ -12,7 +12,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // rcpp_bm25
 Rcpp::NumericVector rcpp_bm25(const Rcpp::DataFrame& idfs, const Rcpp::List& tokensList, Rcpp::DataFrame& these_tokens, const double ntoks_avg);
-RcppExport SEXP _pkgsimil_rcpp_bm25(SEXP idfsSEXP, SEXP tokensListSEXP, SEXP these_tokensSEXP, SEXP ntoks_avgSEXP) {
+RcppExport SEXP _pkgmatch_rcpp_bm25(SEXP idfsSEXP, SEXP tokensListSEXP, SEXP these_tokensSEXP, SEXP ntoks_avgSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -26,11 +26,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_pkgsimil_rcpp_bm25", (DL_FUNC) &_pkgsimil_rcpp_bm25, 4},
+    {"_pkgmatch_rcpp_bm25", (DL_FUNC) &_pkgmatch_rcpp_bm25, 4},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_pkgsimil(DllInfo *dll) {
+RcppExport void R_init_pkgmatch(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

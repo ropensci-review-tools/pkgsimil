@@ -8,6 +8,6 @@
 
 library (testthat)
 library (httptest2)
-library (pkgsimil)
+library (pkgmatch)
 
-test_check ("pkgsimil")
+test_check ("pkgmatch")

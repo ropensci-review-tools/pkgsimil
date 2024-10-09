@@ -83,7 +83,7 @@ ollama_is_running <- function () {
 #' @family ollama
 #' @export
 ollama_check <- function () {
-    if (identical (Sys.getenv ("PKGSIMIL_TESTS"), "true")) {
+    if (identical (Sys.getenv ("PKGMATCH_TESTS"), "true")) {
         return (TRUE)
     }
     if (!has_ollama ()) {

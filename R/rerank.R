@@ -3,7 +3,7 @@
 #' @param rm_fn_data If `TRUE` (default), only generate combined ranks from
 #' data excluding function descriptions.
 #' @noRd
-pkgsimil_rerank <- function (s, rm_fn_data = TRUE) {
+pkgmatch_rerank <- function (s, rm_fn_data = TRUE) {
 
     cols <- names (s) [-which (names (s) == "package")]
     new_cols <- paste0 (cols, "_rank")
