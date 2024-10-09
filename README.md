@@ -1,13 +1,13 @@
 <!-- badges: start -->
 
 [![R build
-status](https://github.com/ropensci-review-tools/pkgsimil/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci-review-tools/pkgsimil/actions?query=workflow%3AR-CMD-check)
-[![codecov](https://codecov.io/gh/ropensci-review-tools/pkgsimil/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci-review-tools/pkgsimil)
+status](https://github.com/ropensci-review-tools/pkgmatch/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci-review-tools/pkgmatch/actions?query=workflow%3AR-CMD-check)
+[![codecov](https://codecov.io/gh/ropensci-review-tools/pkgmatch/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci-review-tools/pkgmatch)
 [![Project Status:
 WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 <!-- badges: end -->
 
-# pkgsimil
+# pkgmatch
 
 A tool to help find R packages, by matching packages either to a text
 description, or to any given package. Can find matching packages either
@@ -18,7 +18,7 @@ If the package has not yet been installed, the following line needs to
 be run:
 
 ``` r
-remotes::install_github ("ropensci-review-tools/pkgsimil")
+remotes::install_github ("ropensci-review-tools/pkgmatch")
 ```
 
 The package can then be loaded for us with:
@@ -51,7 +51,7 @@ ollama pull ordis/jina-embeddings-v2-base-code
 You’ll likely need to wait up to half an hour or more for the models to
 download before proceeding.
 
-## Using the `pkgsimil` package
+## Using the `pkgmatch` package
 
 The package has two main functions:
 
@@ -93,7 +93,7 @@ pkgsimil_similar_pkgs (".")
 ```
 
     ## $text
-    ## [1] "tokenizers"   "tarchetypes"  "goodpractice" "pkgstats"     "cld3"        
+    ## [1] "pkgstats"     "goodpractice" "tarchetypes"  "mauricer"     "srr"         
     ## 
     ## $code
     ## [1] "autotest"   "srr"        "mctq"       "cffr"       "rotemplate"
@@ -107,7 +107,8 @@ pkgsimil_similar_pkgs (".", corpus = "cran")
 ```
 
     ## $text
-    ## [1] "ngram"     "toscutil"  "rdeps"     "admisc"    "librarian"
+    ## [1] "toscutil"       "librarian"      "document"       "statnet.common"
+    ## [5] "sig"           
     ## 
     ## $code
     ## [1] "Rd2md"         "rdwd"          "ctv"           "rempsyc"      

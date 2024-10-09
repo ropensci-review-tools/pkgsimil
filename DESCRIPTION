@@ -1,16 +1,16 @@
 Package: pkgsimil
-Title: Similarity Metrics Between R Packages
-Version: 0.2.0.035
+Title:  Find R Packages Matching Either Descriptions or Other R Packages
+Version: 0.2.0.036
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2172-5265")),
     person("Davis", "Vaughan", , "davis@posit.co", role = c("ctb"))
     )
-Description: Similarity metrics between R packages, based on similarity of code and documentation.
+Description: Find R packages matching either descriptions or other R packages.
 License: MIT + file LICENSE
-URL: https://docs.ropensci.org/pkgsimil/,
-    https://github.com/ropensci-review-tools/pkgsimil
-BugReports: https://github.com/ropensci-review-tools/pkgsimil/issues
+URL: https://docs.ropensci.org/pkgmatch/,
+    https://github.com/ropensci-review-tools/pkgmatch
+BugReports: https://github.com/ropensci-review-tools/pkgmatch/issues
 Imports:
     brio,
     cli,

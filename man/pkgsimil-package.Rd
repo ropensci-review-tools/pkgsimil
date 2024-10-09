@@ -4,16 +4,16 @@
 \name{pkgsimil-package}
 \alias{pkgsimil}
 \alias{pkgsimil-package}
-\title{pkgsimil: Similarity Metrics Between R Packages}
+\title{pkgsimil: Find R Packages Matching Either Descriptions or Other R Packages}
 \description{
-Similarity metrics between R packages, based on similarity of code and documentation.
+Find R packages matching either descriptions or other R packages.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://docs.ropensci.org/pkgsimil/}
-  \item \url{https://github.com/ropensci-review-tools/pkgsimil}
-  \item Report bugs at \url{https://github.com/ropensci-review-tools/pkgsimil/issues}
+  \item \url{https://docs.ropensci.org/pkgmatch/}
+  \item \url{https://github.com/ropensci-review-tools/pkgmatch}
+  \item Report bugs at \url{https://github.com/ropensci-review-tools/pkgmatch/issues}
 }
 
 }
