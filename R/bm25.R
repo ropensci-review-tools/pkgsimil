@@ -23,12 +23,12 @@
 #' @examples
 #' \dontrun{
 #' input <- "Download open spatial data from NASA"
-#' bm25 <- pkgsimil_bm25 (input)
+#' bm25 <- pkgmatch_bm25 (input)
 #' # Or pre-load document-frequency weightings:
 #' idfs <- pkgsimil_load_data ("idfs", fns = FALSE)
-#' bm25 <- pkgsimil_bm25 (input, idfs = idfs)
+#' bm25 <- pkgmatch_bm25 (input, idfs = idfs)
 #' }
-pkgsimil_bm25 <- function (input, txt = NULL,
+pkgmatch_bm25 <- function (input, txt = NULL,
                            idfs = NULL, corpus = "ropensci") {
 
     if (is.null (txt)) {
@@ -48,12 +48,12 @@ pkgsimil_bm25 <- function (input, txt = NULL,
         tokens_idf <- bm25_idf (txt)
     }
 
-    bm25_with_fns <- pkgsimil_bm25_from_idf (
+    bm25_with_fns <- pkgmatch_bm25_from_idf (
         input,
         tokens_list$with_fns,
         tokens_idf$with_fns
     )
-    bm25_wo_fns <- pkgsimil_bm25_from_idf (
+    bm25_wo_fns <- pkgmatch_bm25_from_idf (
         input,
         tokens_list$wo_fns,
         tokens_idf$wo_fns
@@ -72,7 +72,7 @@ pkgsimil_bm25 <- function (input, txt = NULL,
 #'
 #' @family bm25
 #' @export
-pkgsimil_bm25_fn_calls <- function (path, corpus = "ropensci") {
+pkgmatch_bm25_fn_calls <- function (path, corpus = "ropensci") {
 
     tokens_idf <- pkgsimil_load_data (what = "calls", corpus = corpus, raw = FALSE)
     calls <- pkgsimil_load_data (what = "calls", corpus = corpus, raw = TRUE)
@@ -86,10 +86,10 @@ pkgsimil_bm25_fn_calls <- function (path, corpus = "ropensci") {
 
     input <- pkgmatch_treesitter_fn_tags (path)
 
-    pkgsimil_bm25_from_idf (input, tokens_list, tokens_idf)
+    pkgmatch_bm25_from_idf (input, tokens_list, tokens_idf)
 }
 
-pkgsimil_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
+pkgmatch_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
 
     n <- name <- NULL # suppress no visible binding note
 
@@ -130,7 +130,7 @@ pkgsimil_bm25_from_idf <- function (input, tokens_list, tokens_idf) {
 
 #' Convert input list of text documents into lists of tokens.
 #'
-#' @inheritParams pkgsimil_bm25
+#' @inheritParams pkgmatch_bm25
 #' @return The input list of text strings converted to tokens.
 #' @noRd
 bm25_tokens <- function (txt) {
@@ -162,7 +162,7 @@ m_bm25_tokens <- memoise::memoise (bm25_tokens_internal)
 
 #' Convert input list of raw tokens to a list of tokens and corresponding
 #' frequencies.
-#' @inheritParams pkgsimil_bm25
+#' @inheritParams pkgmatch_bm25
 #' @return A list of `data.frame` objects, one for each input item, and each
 #' including two columns of "token" and "n" holding frequencies for each token.
 #' @noRd
@@ -189,7 +189,7 @@ m_bm25_tokens_list <- memoise::memoise (bm25_tokens_list_internal)
 #' Calculate inverse document frequencies for all tokens across a list of
 #' documents.
 #'
-#' @inheritParams pkgsimil_bm25
+#' @inheritParams pkgmatch_bm25
 #' @return A list of `data.frame` objects, each containing two columns of
 #' "tokens" and "idf" for inverse document frequencies for each token.
 #' @noRd

@@ -2,11 +2,11 @@
 
 S3method(print,pkgmatch)
 export(ollama_check)
+export(pkgmatch_bm25)
+export(pkgmatch_bm25_fn_calls)
 export(pkgmatch_embeddings_from_pkgs)
 export(pkgmatch_embeddings_from_text)
 export(pkgmatch_treesitter_fn_tags)
-export(pkgsimil_bm25)
-export(pkgsimil_bm25_fn_calls)
 export(pkgsimil_load_data)
 export(pkgsimil_similar_fns)
 export(pkgsimil_similar_pkgs)

@@ -12,7 +12,7 @@
 #' pre-generated embeddings will be downloaded and stored in a local cache
 #' directory.
 #' @param idfs Inverse Document Frequency tables for all rOpenSci packages,
-#' generated from \link{pkgsimil_bm25}. If not provided, pre-generated IDF
+#' generated from \link{pkgmatch_bm25}. If not provided, pre-generated IDF
 #' tables will be downloaded and stored in a local cache directory.
 #' @param input_is_code A binary flag indicating whether `input` is code or
 #' plain text. Ignored if `input` is path to a local package; otherwise can be
@@ -74,8 +74,8 @@ pkgsimil_similar_pkgs <- function (input,
         txt_with_fns <- get_pkg_text (input)
         txt_wo_fns <- rm_fns_from_pkg_txt (txt_with_fns) [[1]]
         bm25_with_fns <-
-            pkgsimil_bm25 (txt_with_fns, idfs = idfs, corpus = corpus)
-        bm25_wo_fns <- pkgsimil_bm25 (txt_wo_fns, idfs = idfs, corpus = corpus)
+            pkgmatch_bm25 (txt_with_fns, idfs = idfs, corpus = corpus)
+        bm25_wo_fns <- pkgmatch_bm25 (txt_wo_fns, idfs = idfs, corpus = corpus)
         # bm25 fn returns measures against idfs with and without fns:
         bm25_with_fns$bm25_wo_fns <- NULL
         bm25_wo_fns$bm25_with_fns <- NULL
@@ -84,7 +84,7 @@ pkgsimil_similar_pkgs <- function (input,
             dplyr::relocate (code, .after = dplyr::last_col ())
 
         # Then combine BM25 from function calls with "code" similarities:
-        bm25_code <- pkgsimil_bm25_fn_calls (input, corpus = corpus) |>
+        bm25_code <- pkgmatch_bm25_fn_calls (input, corpus = corpus) |>
             dplyr::rename (bm25_code = "bm25")
 
         res <- dplyr::left_join (res, bm25_code, by = "package")
@@ -186,7 +186,7 @@ similar_pkgs_from_text <- function (input,
     }
 
     similarities_bm25 <-
-        pkgsimil_bm25 (input = input, idfs = idfs, corpus = corpus)
+        pkgmatch_bm25 (input = input, idfs = idfs, corpus = corpus)
 
     similarities <- dplyr::left_join (
         similarities,

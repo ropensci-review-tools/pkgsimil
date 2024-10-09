@@ -4,7 +4,7 @@
 \alias{pkgmatch_treesitter_fn_tags}
 \title{Use "treesitter" to tag all function calls made within local package, and to
 associate those calls with package namespaces. This is used as input to the
-\link{pkgsimil_bm25_fn_calls} function.}
+\link{pkgmatch_bm25_fn_calls} function.}
 \usage{
 pkgmatch_treesitter_fn_tags(path)
 }
@@ -27,6 +27,6 @@ non-exported functions.
 \description{
 Use "treesitter" to tag all function calls made within local package, and to
 associate those calls with package namespaces. This is used as input to the
-\link{pkgsimil_bm25_fn_calls} function.
+\link{pkgmatch_bm25_fn_calls} function.
 }
 \concept{treesitter}
