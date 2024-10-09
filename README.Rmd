@@ -24,15 +24,38 @@ description, or to any given package. Can find matching packages either from
 rOpenSci's [suite of packages](https://ropensci.org/packages), or from all
 packages currently on [CRAN](https://cran.r-project.org).
 
-If the package has not yet been installed, the following line needs to be run:
+## Installation
 
-```{r eval = FALSE}
-remotes::install_github ("ropensci-review-tools/pkgmatch")
+The easiest way to install this package is via the [associated
+`r-universe`](https://ropensci-review-tools.r-universe.dev/ui#builds). As
+shown there, simply enable the universe with
+
+```{r options, eval = FALSE}
+options (repos = c (
+    ropenscireviewtools = "https://ropensci-review-tools.r-universe.dev",
+    CRAN = "https://cloud.r-project.org"
+))
 ```
 
-The package can then be loaded for us with:
+And then install the usual way with,
 
-```{r library}
+```{r install, eval = FALSE}
+install.packages ("pkgmatch")
+```
+
+Alternatively, the package can be installed by first installing either the
+[remotes](https://remotes.r-lib.org) or [pak](https://pak.r-lib.org/) packages
+and running one of the following lines:
+
+
+```{r remotes, eval = FALSE}
+remotes::install_github ("ropensci-review-tools/pkgmatch")
+pak::pkg_install ("ropensci-review-tools/pkgmatch")
+```
+
+The package can then loaded for use with
+
+```{r library, eval = TRUE}
 library (pkgmatch)
 ```
 

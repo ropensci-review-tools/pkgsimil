@@ -14,14 +14,36 @@ description, or to any given package. Can find matching packages either
 from rOpenSci’s [suite of packages](https://ropensci.org/packages), or
 from all packages currently on [CRAN](https://cran.r-project.org).
 
-If the package has not yet been installed, the following line needs to
-be run:
+## Installation
+
+The easiest way to install this package is via the [associated
+`r-universe`](https://ropensci-review-tools.r-universe.dev/ui#builds).
+As shown there, simply enable the universe with
+
+``` r
+options (repos = c (
+    ropenscireviewtools = "https://ropensci-review-tools.r-universe.dev",
+    CRAN = "https://cloud.r-project.org"
+))
+```
+
+And then install the usual way with,
+
+``` r
+install.packages ("pkgmatch")
+```
+
+Alternatively, the package can be installed by first installing either
+the [remotes](https://remotes.r-lib.org) or
+[pak](https://pak.r-lib.org/) packages and running one of the following
+lines:
 
 ``` r
 remotes::install_github ("ropensci-review-tools/pkgmatch")
+pak::pkg_install ("ropensci-review-tools/pkgmatch")
 ```
 
-The package can then be loaded for us with:
+The package can then loaded for use with
 
 ``` r
 library (pkgmatch)
@@ -107,8 +129,8 @@ pkgmatch_similar_pkgs (".", corpus = "cran")
 ```
 
     ## $text
-    ## [1] "ThomasJeffersonUniv" "Require"             "htmlTable"          
-    ## [4] "ollamar"             "Iso"                
+    ## [1] "htmlTable"           "Require"             "Iso"                
+    ## [4] "ollamar"             "ThomasJeffersonUniv"
     ## 
     ## $code
     ## [1] "shinylive"   "StroupGLMM"  "box.linters" "eda4treeR"   "fs"
