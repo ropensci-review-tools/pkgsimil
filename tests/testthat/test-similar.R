@@ -23,7 +23,7 @@ test_that ("similar pkgs text input", {
             n = n
         )
     })
-    expect_s3_class (out, "pkgsimil")
+    expect_s3_class (out, "pkgmatch")
     expect_type (out, "list")
     expect_true (all (out$package %in% colnames (embeddings$text_with_fns)))
     expect_equal (attr (out, "n"), n)
@@ -66,7 +66,7 @@ test_that ("similar pkgs package input", {
     detach ("package:demo", unload = TRUE)
     fs::dir_delete (path)
 
-    expect_s3_class (out, "pkgsimil")
+    expect_s3_class (out, "pkgmatch")
     expect_s3_class (out, "data.frame")
     expect_equal (attr (out, "n"), n)
     expect_equal (ncol (out), 3L)
@@ -101,7 +101,7 @@ test_that ("similar fns", {
     out <- with_mock_dir ("sim_fns", {
         pkgsimil_similar_fns (input = input, embeddings = embeddings_fns, n = n)
     })
-    expect_s3_class (out, "pkgsimil")
+    expect_s3_class (out, "pkgmatch")
     expect_type (out, "list")
     expect_equal (nrow (out), nfns)
     expect_equal (ncol (out), 3L)
