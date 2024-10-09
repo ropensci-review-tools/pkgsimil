@@ -24,7 +24,7 @@ Must be one of "ropensci" or "cran". The function will then return the most
 similar package from the specified corpus.}
 
 \item{embeddings}{Large Language Model embeddings for all rOpenSci packages,
-generated from \link{pkgsimil_embeddings_from_pkgs}. If not provided,
+generated from \link{pkgmatch_embeddings_from_pkgs}. If not provided,
 pre-generated embeddings will be downloaded and stored in a local cache
 directory.}
 

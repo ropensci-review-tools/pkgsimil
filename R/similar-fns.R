@@ -4,7 +4,7 @@
 #' @inheritParams pkgsimil_similar_pkgs
 #' @param input A text string.
 #' @param embeddings A single matrix of embeddings produced from
-#' \link{pkgsimil_embeddings_from_pkgs} with `functions_only = TRUE`. If not
+#' \link{pkgmatch_embeddings_from_pkgs} with `functions_only = TRUE`. If not
 #' cache directory.
 #' provided, pre-generated embeddings will be downloaded and stored in a local
 #' @return A character vector of function names in the form

@@ -8,7 +8,7 @@
 #' Must be one of "ropensci" or "cran". The function will then return the most
 #' similar package from the specified corpus.
 #' @param embeddings Large Language Model embeddings for all rOpenSci packages,
-#' generated from \link{pkgsimil_embeddings_from_pkgs}. If not provided,
+#' generated from \link{pkgmatch_embeddings_from_pkgs}. If not provided,
 #' pre-generated embeddings will be downloaded and stored in a local cache
 #' directory.
 #' @param idfs Inverse Document Frequency tables for all rOpenSci packages,
@@ -118,7 +118,7 @@ similar_pkgs_from_pkg <- function (input, embeddings) {
     op <- options ()
     options (rlib_message_verbosity = "quiet")
 
-    emb <- pkgsimil_embeddings_from_pkgs (input)
+    emb <- pkgmatch_embeddings_from_pkgs (input)
 
     options (op)
 

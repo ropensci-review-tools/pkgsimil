@@ -11,7 +11,7 @@ pkgsimil_similar_fns(input, embeddings = NULL, n = 5L)
 \item{input}{A text string.}
 
 \item{embeddings}{A single matrix of embeddings produced from
-\link{pkgsimil_embeddings_from_pkgs} with \code{functions_only = TRUE}. If not
+\link{pkgmatch_embeddings_from_pkgs} with \code{functions_only = TRUE}. If not
 cache directory.
 provided, pre-generated embeddings will be downloaded and stored in a local}
 
