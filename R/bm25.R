@@ -217,7 +217,7 @@ bm25_idf <- function (txt) {
 
 bm25_idf_internal <- function (txt) {
 
-    token <- NULL # suppress no visible binding note
+    token <- n <- NULL # suppress no visible binding note
 
     n_docs <- length (txt)
 
@@ -230,10 +230,9 @@ bm25_idf_internal <- function (txt) {
         data.frame (token = unique (i$token), n = 1L)
     })) |>
         dplyr::group_by (token) |>
-        dplyr::summarise (n = dplyr::n ())
-    tokens_idf$idf <-
-        log ((n_docs - tokens_idf$n + 0.5) / (tokens_idf$n + 0.5) + 1)
-    tokens_idf$n <- NULL
+        dplyr::summarise (n = dplyr::n ()) |>
+        dplyr::mutate (idf = log ((n_docs - n + 0.5) / (n + 0.5) + 1)) |>
+        dplyr::select (-n)
 
     return (tokens_idf)
 }
