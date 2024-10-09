@@ -100,7 +100,7 @@ pkgsimil_cache_path <- function () {
         cache_dir <- fs::path_expand (fs::path (
             rappdirs::user_cache_dir (),
             "R",
-            "pkgsimil"
+            "pkgmatch"
         ))
         if (!fs::dir_exists (cache_dir)) {
             fs::dir_create (cache_dir, recurse = TRUE)
