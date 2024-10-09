@@ -33,7 +33,7 @@ remotes::install_github ("ropensci-review-tools/pkgmatch")
 The package can then be loaded for us with:
 
 ```{r library}
-library (pkgsimil)
+library (pkgmatch)
 ```
 
 The package takes input either from a text description or local path to an R
@@ -91,14 +91,14 @@ The `input` parameter can also be a local path to an entire package. The
 following code finds the most similar packages to this very package by passing
 `input = "."`:
 
-```{r pkgsimil-similar-ros}
+```{r pkgmatch-similar-ros}
 pkgsimil_similar_pkgs (".")
 ```
 
 That function defaults to finding the best-matching packages from rOpenSci.
 Packages from CRAN can be matched by specifying the `corpus` parameter:
 
-```{r pkgsimil-similar-cran}
+```{r pkgmatch-similar-cran}
 pkgsimil_similar_pkgs (".", corpus = "cran")
 ```
 

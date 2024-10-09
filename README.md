@@ -24,7 +24,7 @@ remotes::install_github ("ropensci-review-tools/pkgmatch")
 The package can then be loaded for us with:
 
 ``` r
-library (pkgsimil)
+library (pkgmatch)
 ```
 
 The package takes input either from a text description or local path to
@@ -73,16 +73,16 @@ on visualising inter-relationships among distinct trees.
 pkgsimil_similar_pkgs (input)
 ```
 
-    ## [1] "lingtypology"   "treedata.table" "treestartr"     "babette"       
-    ## [5] "canaper"
+    ## [1] "phruta"         "treebase"       "occCite"        "rinat"         
+    ## [5] "treedata.table"
 
 ``` r
 input <- "Download global-scale spatial data"
 pkgsimil_similar_pkgs (input)
 ```
 
-    ## [1] "gbifdb"            "rnaturalearth"     "nasapower"        
-    ## [4] "getCRUCLdata"      "rnaturalearthdata"
+    ## [1] "rnaturalearth"      "rnaturalearthhires" "rfema"             
+    ## [4] "helminthR"          "weatherOz"
 
 The `input` parameter can also be a local path to an entire package. The
 following code finds the most similar packages to this very package by
@@ -93,10 +93,10 @@ pkgsimil_similar_pkgs (".")
 ```
 
     ## $text
-    ## [1] "pkgstats"     "goodpractice" "tarchetypes"  "mauricer"     "srr"         
+    ## [1] "pdftools" "dittodb"  "jqr"      "auk"      "phylotaR"
     ## 
     ## $code
-    ## [1] "autotest"   "srr"        "mctq"       "cffr"       "rotemplate"
+    ## [1] "stplanr"      "fellingdater" "pkgstats"     "pangaear"     "ohun"
 
 That function defaults to finding the best-matching packages from
 rOpenSci. Packages from CRAN can be matched by specifying the `corpus`
@@ -107,12 +107,11 @@ pkgsimil_similar_pkgs (".", corpus = "cran")
 ```
 
     ## $text
-    ## [1] "toscutil"       "librarian"      "document"       "statnet.common"
-    ## [5] "sig"           
+    ## [1] "ThomasJeffersonUniv" "Require"             "htmlTable"          
+    ## [4] "ollamar"             "Iso"                
     ## 
     ## $code
-    ## [1] "Rd2md"         "rdwd"          "ctv"           "rempsyc"      
-    ## [5] "packagefinder"
+    ## [1] "shinylive"   "StroupGLMM"  "box.linters" "eda4treeR"   "fs"
 
 The `input` parameter can also be a local path to compressed `.tar.gz`
 binary object directly downloaded from CRAN.
@@ -127,18 +126,18 @@ input <- "A function to label a set of geographic coordinates"
 pkgsimil_similar_fns (input)
 ```
 
-    ## [1] "GSODR::nearest_stations"           "refsplitr::plot_addresses_points" 
-    ## [3] "quadkeyr::grid_to_polygon"         "rnoaa::meteo_nearby_stations"     
-    ## [5] "refsplitr::plot_addresses_country"
+    ## [1] "GSODR::nearest_stations"          "refsplitr::plot_addresses_points"
+    ## [3] "slopes::elevation_extract"        "quadkeyr::grid_to_polygon"       
+    ## [5] "rnoaa::meteo_nearby_stations"
 
 ``` r
 input <- "Identify genetic sequences matching a given input fragment"
 pkgsimil_similar_fns (input)
 ```
 
-    ## [1] "textreuse::align_local"       "charlatan::SequenceProvider" 
-    ## [3] "beastier::is_alignment"       "phylotaR::mk_txid_in_sq_mtrx"
-    ## [5] "traits::ncbi_byid"
+    ## [1] "charlatan::SequenceProvider" "beastier::is_alignment"     
+    ## [3] "charlatan::ch_gene_sequence" "beautier::is_phylo"         
+    ## [5] "textreuse::align_local"
 
 ## Prior Art
 
