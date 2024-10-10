@@ -86,6 +86,8 @@
 #' p <- pkgmatch_similar_pkgs (input)
 #' p # Default print method, lists 5 best matching packages
 #' head (p) # Shows first 5 rows of full `data.frame` object
+#' # This second call will be much faster than first call:
+#' p2 <- pkgmatch_similar_pkgs (input, llm_proportion = 0.25)
 #' }
 pkgmatch_similar_pkgs <- function (input,
                                    corpus = "ropensci",
