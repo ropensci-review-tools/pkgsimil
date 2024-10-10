@@ -4,7 +4,7 @@
 \alias{head.pkgmatch}
 \title{Head method for 'pkgmatch' objects}
 \usage{
-\method{head}{pkgmatch}(x, n = 6L, ...)
+\method{head}{pkgmatch}(x, n = 5L, ...)
 }
 \arguments{
 \item{x}{Object for which head is to be printed}

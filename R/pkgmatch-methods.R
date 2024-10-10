@@ -35,6 +35,6 @@ print.pkgmatch <- function (x, ...) {
 #'
 #' @family utils
 #' @export
-head.pkgmatch <- function (x, n = 6L, ...) {
+head.pkgmatch <- function (x, n = 5L, ...) {
     head (as.data.frame (x), n = n)
 }
