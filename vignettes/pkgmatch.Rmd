@@ -34,12 +34,12 @@ library (pkgmatch)
 Then match packages to an input string:
 
 ```{r match-text-1-fakey, eval = FALSE}
-input <- "Download and visualize open spatial data"
+input <- "genomics and transcriptomics sequence data"
 pkgmatch_similar_pkgs (input)
 ```
 
 ```{r redef-sim-pkgs1, eval = TRUE, echo = FALSE}
-c ("GSODR", "landscapetools", "rentrez", "onekp", "geojsonio")
+c ("onekp", "UCSCXenaTools", "biomartr", "restez", "DataPackageR")
 ```
 
 The following lines find equivalent matches against all packages currently on
@@ -50,7 +50,7 @@ pkgmatch_similar_pkgs (input, corpus = "cran")
 ```
 
 ```{r redef-sim-pkgs2, eval = TRUE, echo = FALSE}
-c ("RImageJROI", "OCSdata", "ggspatial", "ppcSpatial", "rleafmap")
+c ("seqinr", "microseq", "baseq", "coil", "fastqcr")
 ```
 
 As said, the package also accepts as input a path to a local R package. This
@@ -66,8 +66,8 @@ pkgmatch_similar_pkgs (destfile)
 
 ```{r odbc-ropensci-match, eval = TRUE, echo = FALSE}
 list (
-    text = c ("taxadb", "pdftools", "drake", "pathviewr", "baRulho"),
-    code = c ("gistr", "pkgstats", "melt", "aorsf", "postdoc")
+    text = c ("gbifdb", "virtuoso", "popler", "biomartr", "nodbi"),
+    code = c ("rangr", "weathercan", "deposits", "cyphr", "bowerbird")
 )
 ```
 
@@ -80,13 +80,12 @@ pkgmatch_similar_pkgs (destfile, corpus = "cran")
 
 ```{r odbc-cran-match, echo = FALSE, eval = TRUE}
 list (
-    text = c ("lutz", "wesanderson", "odbc", "implyr", "MM"),
-    code = c ("PointFore", "odbc", "pkgload", "phrases", "chemdeg")
+    text = c ("odbc", "rocker", "connections", "DatabaseConnector", "DBI"),
+    code = c ("odbc", "cms", "datetimeoffset", "tabxplor", "gbifdb")
 )
 ```
 
-which they indeed do, although the package is not ranked first either in terms
-of text matches or code matches. As explained in the documentation, the
+which they indeed do. As explained in the documentation, the
 `pkgmatch_similar_pkgs()` function ranks final results by combining several
 distinct results, primarily from Large Language Model (LLM) embeddings, as well
 as from [more conventional document token-frequency
@@ -99,24 +98,25 @@ pkgmatch_similar_pkgs (destfile, corpus = "cran", llm_proportion = 1)
 ```
 ```{r odbc-cran-match-llm, echo = FALSE, eval = TRUE}
 list (
-    text = c ("wesanderson", "lutz", "MM", "growthmodels", "lunar"),
-    code = c ("PointFore", "phrases", "chemdeg", "ShiftConvolvePoibin", "date")
+    text = c ("odbc", "rocker", "FormShare", "CDMConnector", "ODB"),
+    code = c ("odbc", "debar", "TGS", "TBRDist", "svars")
 )
 ```
 
-And the "odbc" package does not even appear in terms of similarity in either
-text or code. Results from other other component, comparing relative token
-frequencies with all CRAN packages, including frequencies of code tokens, are:
+Results from other other component, comparing relative token frequencies with
+all CRAN packages, including frequencies of code tokens, are:
 
 ```{r odbc-cran-match-bm25-fakey, eval = FALSE}
-pkgmatch_similar_pkgs (destfile, corpus = "cran", llm_proportion = 1)
+pkgmatch_similar_pkgs (destfile, corpus = "cran", llm_proportion = 0)
 ```
 ```{r odbc-cran-match-bm25, echo = FALSE, eval = TRUE}
 list (
     text = c ("odbc", "implyr", "DatabaseConnector", "sparklyr", "gbifdb"),
-    code = c ("odbc", "pkgload", "httr2", "gganimate", "gargle")
+    code = c ("odbc", "bayesforecast", "shiny.router", "checkpoint", "FMM")
 )
 ```
 
-And those analyses correctly identify the package as the most similar in both
-terms.
+And there are notable differences between the two sets of results. As also
+explained in the documentation for `pkgmatch_similar_pkgs()`, all internal
+function calls are locally cached, so that function can be easily and quickly
+re-run with different values of `llm_proportion`.
