@@ -25,74 +25,98 @@ CRAN](https://cran.r-project.org).
 
 ## What does the package do?
 
-What the package does is best understood by example:
+What the package does is best understood by example, starting with loading the package.
 
-```{r match-text-1}
+```{r library}
 library (pkgmatch)
-pkgmatch_similar_pkgs ("Download open spatial data from NASA")
-pkgmatch_similar_pkgs ("Efficient workflows for analyses of large scientific data sets")
+```
+
+Then match packages to an input string:
+
+```{r match-text-1-fakey, eval = FALSE}
+input <- "Download and visualize open spatial data"
+pkgmatch_similar_pkgs (input)
+```
+
+```{r redef-sim-pkgs1, eval = TRUE, echo = FALSE}
+c ("GSODR", "landscapetools", "rentrez", "onekp", "geojsonio")
 ```
 
 The following lines find equivalent matches against all packages currently on
 CRAN:
 
-```{r match-text-1-cran}
-library (pkgmatch)
-pkgmatch_similar_pkgs ("Download open spatial data from NASA", corpus = "cran")
-pkgmatch_similar_pkgs ("Efficient workflows for analyses of large scientific data sets", corpus = "cran")
+```{r match-text-2-cran-fakey, eval = FALSE}
+pkgmatch_similar_pkgs (input, corpus = "cran")
+```
+
+```{r redef-sim-pkgs2, eval = TRUE, echo = FALSE}
+c ("RImageJROI", "OCSdata", "ggspatial", "ppcSpatial", "rleafmap")
 ```
 
 As said, the package also accepts as input a path to a local R package. This
 code downloads a "tarball" (`.tar.gz` file) from CRAN and finds matching
 rOpenSci packages:
 
-```{r odbc-ropensci-match}
+```{r odbc-ropensci-match-fakey, eval = FALSE}
 u <- "https://cran.r-project.org/src/contrib/odbc_1.5.0.tar.gz"
 destfile <- file.path (tempdir (), basename (u))
 download.file (u, destfile = destfile)
 pkgmatch_similar_pkgs (destfile)
 ```
 
-We of course expect the best match against CRAN packages to be that package
-itself:
+```{r odbc-ropensci-match, eval = TRUE, echo = FALSE}
+list (
+    text = c ("taxadb", "pdftools", "drake", "pathviewr", "baRulho"),
+    code = c ("gistr", "pkgstats", "melt", "aorsf", "postdoc")
+)
+```
 
-```{r odbc-cran-match}
+We of course expect the best matches against CRAN packages to include that
+package itself:
+
+```{r odbc-cran-match-fakey, eval = FALSE}
 pkgmatch_similar_pkgs (destfile, corpus = "cran")
 ```
 
-which it indeed is (noting that the package title is "RODBC"). As explained in
-the documentation, the `pkgmatch_similar_pkgs()` function ranks final results
-by combining several distinct results, primarily from Large Language Model
-(LLM) embeddings, as well as from [more conventional document token-frequency
+```{r odbc-cran-match, echo = FALSE, eval = TRUE}
+list (
+    text = c ("lutz", "wesanderson", "odbc", "implyr", "MM"),
+    code = c ("PointFore", "odbc", "pkgload", "phrases", "chemdeg")
+)
+```
+
+which they indeed do, although the package is not ranked first either in terms
+of text matches or code matches. As explained in the documentation, the
+`pkgmatch_similar_pkgs()` function ranks final results by combining several
+distinct results, primarily from Large Language Model (LLM) embeddings, as well
+as from [more conventional document token-frequency
 analyses](https://en.wikipedia.org/wiki/Okapi_BM25). The function includes an
 additional `llm_proportion` parameter which can be used to weight the relative
 contributions of these different inputs. Results from the LLM component are:
 
-```{r odbc-cran-match-llm}
+```{r odbc-cran-match-llm-fakey, eval = FALSE}
 pkgmatch_similar_pkgs (destfile, corpus = "cran", llm_proportion = 1)
 ```
-
-While results from other other component are:
-
-```{r odbc-cran-match-bm25}
-pkgmatch_similar_pkgs (destfile, corpus = "cran", llm_proportion = 0)
+```{r odbc-cran-match-llm, echo = FALSE, eval = TRUE}
+list (
+    text = c ("wesanderson", "lutz", "MM", "growthmodels", "lunar"),
+    code = c ("PointFore", "phrases", "chemdeg", "ShiftConvolvePoibin", "date")
+)
 ```
 
-In this case, both are identical, which indicates that both approaches produce
-reliably similar and reproducible results. The input passed to both functions
-is in this case quite complex, in the form of an entire package. Results
-between the two methods can differ notable for less precise inputs:
+And the package does not even appear in terms of similarity in either text or
+code. Results from other other component, comparing relative token frequencies
+with all CRAN packages, including frequencies of code tokens, are:
 
-```{r text-match-llm}
-library (pkgmatch)
-pkgmatch_similar_pkgs ("Download open spatial data from NASA", llm_proportion = 1)
+```{r odbc-cran-match-bm25-fakey, eval = FALSE}
+pkgmatch_similar_pkgs (destfile, corpus = "cran", llm_proportion = 1)
+```
+```{r odbc-cran-match-bm25, echo = FALSE, eval = TRUE}
+list (
+    text = c ("odbc", "implyr", "DatabaseConnector", "sparklyr", "gbifdb"),
+    code = c ("odbc", "pkgload", "httr2", "gganimate", "gargle")
+)
 ```
 
-```{r text-match-bm25}
-library (pkgmatch)
-pkgmatch_similar_pkgs ("Download open spatial data from NASA", llm_proportion = 0)
-```
-
-```{r rm-odbc, echo = FALSE}
-chk <- file.remove (destfile)
-```
+And those analyses correctly identify the package as the most similar in both
+ways.
