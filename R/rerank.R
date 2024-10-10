@@ -29,7 +29,10 @@ pkgmatch_rerank <- function (s, rm_fn_data = TRUE, llm_proportion = 0.5) {
     }
 
     code_cols <- grep ("code", colnames (rank_matrix))
-    text_cols <- seq_len (ncol (rank_matrix)) [-(code_cols)]
+    text_cols <- seq_len (ncol (rank_matrix))
+    if (length (code_cols) > 0L) {
+        text_cols <- text_cols [-(code_cols)]
+    }
 
     text_rank <- rank_matrix [, text_cols]
     text_rank <- modify_by_llm_prop (text_rank, llm_proportion)
@@ -45,7 +48,8 @@ pkgmatch_rerank <- function (s, rm_fn_data = TRUE, llm_proportion = 0.5) {
         code_rank <- modify_by_llm_prop (code_rank, llm_proportion)
         out$code_rank <- order (rowSums (code_rank), decreasing = TRUE)
     } else {
-        out <- dplyr::rename (out, rank = "text_rank")
+        out <- dplyr::rename (out, rank = "text_rank") |>
+            dplyr::arrange (rank)
     }
 
     return (out)
