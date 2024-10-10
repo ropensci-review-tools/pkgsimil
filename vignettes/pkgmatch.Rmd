@@ -1,0 +1,122 @@
+---
+title: "The pkgmatch package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{pkgmatch}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set (
+    collapse = TRUE,
+    comment = "#>"
+)
+```
+
+The "pkgmatch" package is a search and matching engine for R packages. It finds
+the best-matching R packages to an input of either a text description, or a
+local path to an R package. `pkgmatch` was developed to enable rOpenSci to
+identify similar packages to each new package submitted for [our software
+peer-review scheme](https://ropensci.org/software-review/). By default, matches
+are found from [rOpenSci's own package suite](https://ropensci.org/packages/),
+but it is also possible to find matches from all [packages currently on
+CRAN](https://cran.r-project.org).
+
+## What does the package do?
+
+What the package does is best understood by example, starting with loading the package.
+
+```{r library}
+library (pkgmatch)
+```
+
+Then match packages to an input string:
+
+```{r match-text-1-fakey, eval = FALSE}
+input <- "genomics and transcriptomics sequence data"
+pkgmatch_similar_pkgs (input)
+```
+
+```{r redef-sim-pkgs1, eval = TRUE, echo = FALSE}
+c ("onekp", "UCSCXenaTools", "biomartr", "restez", "DataPackageR")
+```
+
+The following lines find equivalent matches against all packages currently on
+CRAN:
+
+```{r match-text-2-cran-fakey, eval = FALSE}
+pkgmatch_similar_pkgs (input, corpus = "cran")
+```
+
+```{r redef-sim-pkgs2, eval = TRUE, echo = FALSE}
+c ("seqinr", "microseq", "baseq", "coil", "fastqcr")
+```
+
+As said, the package also accepts as input a path to a local R package. The
+following code downloads a "tarball" (`.tar.gz` file) from CRAN and finds
+matching rOpenSci packages:
+
+```{r odbc-ropensci-match-fakey, eval = FALSE}
+u <- "https://cran.r-project.org/src/contrib/odbc_1.5.0.tar.gz"
+destfile <- file.path (tempdir (), basename (u))
+download.file (u, destfile = destfile)
+pkgmatch_similar_pkgs (destfile)
+```
+
+```{r odbc-ropensci-match, eval = TRUE, echo = FALSE}
+list (
+    text = c ("gbifdb", "virtuoso", "popler", "biomartr", "nodbi"),
+    code = c ("rangr", "weathercan", "deposits", "cyphr", "bowerbird")
+)
+```
+
+We of course expect the best matches against CRAN packages to include that
+package itself:
+
+```{r odbc-cran-match-fakey, eval = FALSE}
+pkgmatch_similar_pkgs (destfile, corpus = "cran")
+```
+
+```{r odbc-cran-match, echo = FALSE, eval = TRUE}
+list (
+    text = c ("odbc", "rocker", "connections", "DatabaseConnector", "DBI"),
+    code = c ("odbc", "cms", "datetimeoffset", "tabxplor", "gbifdb")
+)
+```
+
+which they indeed do. As explained in the documentation, the
+`pkgmatch_similar_pkgs()` function ranks final results by combining several
+distinct components, primarily from Large Language Model (LLM) embeddings, as
+well as from [more conventional document token-frequency
+analyses](https://en.wikipedia.org/wiki/Okapi_BM25). The function includes an
+additional `llm_proportion` parameter which can be used to weight the relative
+contributions of these different components. Results from the LLM component are:
+
+```{r odbc-cran-match-llm-fakey, eval = FALSE}
+pkgmatch_similar_pkgs (destfile, corpus = "cran", llm_proportion = 1)
+```
+```{r odbc-cran-match-llm, echo = FALSE, eval = TRUE}
+list (
+    text = c ("odbc", "rocker", "FormShare", "CDMConnector", "ODB"),
+    code = c ("odbc", "debar", "TGS", "TBRDist", "svars")
+)
+```
+
+Results from other other component, comparing relative token frequencies with
+all CRAN packages, including frequencies of code tokens, are:
+
+```{r odbc-cran-match-bm25-fakey, eval = FALSE}
+pkgmatch_similar_pkgs (destfile, corpus = "cran", llm_proportion = 0)
+```
+```{r odbc-cran-match-bm25, echo = FALSE, eval = TRUE}
+list (
+    text = c ("odbc", "implyr", "DatabaseConnector", "sparklyr", "gbifdb"),
+    code = c ("odbc", "bayesforecast", "shiny.router", "checkpoint", "FMM")
+)
+```
+
+And there are notable differences between the two sets of results. As also
+explained in the documentation for `pkgmatch_similar_pkgs()`, all internal
+function calls are locally cached, so that this function can be easily and
+quickly re-run with different values of `llm_proportion`.

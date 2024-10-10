@@ -9,8 +9,9 @@ pkgmatch_rerank <- function (s, rm_fn_data = TRUE, llm_proportion = 0.5) {
     new_cols <- paste0 (cols, "_rank")
     for (i in seq_along (cols)) {
         # The order of values provides the index that has to be filled with
-        # 1..N values:
-        o <- order (s [[cols [i]]], decreasing = TRUE)
+        # 1..N values.
+        decr <- grepl ("^(bm25|simil)", cols [i])
+        o <- order (s [[cols [i]]], decreasing = decr)
         index <- rep (NA_integer_, length (o))
         index [o] <- seq_along (o)
         s [[new_cols [i]]] <- index
@@ -29,23 +30,32 @@ pkgmatch_rerank <- function (s, rm_fn_data = TRUE, llm_proportion = 0.5) {
     }
 
     code_cols <- grep ("code", colnames (rank_matrix))
-    text_cols <- seq_len (ncol (rank_matrix)) [-(code_cols)]
+    text_cols <- seq_len (ncol (rank_matrix))
+    if (length (code_cols) > 0L) {
+        text_cols <- text_cols [-(code_cols)]
+    }
 
     text_rank <- rank_matrix [, text_cols]
     text_rank <- modify_by_llm_prop (text_rank, llm_proportion)
     text_index <- order (rowSums (text_rank), decreasing = TRUE)
 
     out <- data.frame (
-        package = s$package,
-        text_rank = text_index
+        package = s$package [text_index],
+        text_rank = seq_along (text_index)
     )
 
     if (length (code_cols) > 0L) {
         code_rank <- rank_matrix [, code_cols]
         code_rank <- modify_by_llm_prop (code_rank, llm_proportion)
-        out$code_rank <- order (rowSums (code_rank), decreasing = TRUE)
+        code_index <- order (rowSums (code_rank), decreasing = TRUE)
+        out_code <- data.frame (
+            package = s$package [code_index],
+            code_rank = seq_along (code_index)
+        )
+        out <- dplyr::left_join (out, out_code, by = "package")
     } else {
-        out <- dplyr::rename (out, rank = "text_rank")
+        out <- dplyr::rename (out, rank = "text_rank") |>
+            dplyr::arrange (rank)
     }
 
     return (out)
