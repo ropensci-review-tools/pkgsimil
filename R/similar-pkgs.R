@@ -7,9 +7,35 @@
 #' suite](https://ropensci.org/packages), or from
 #' [CRAN](https://cran.r-project.org).
 #'
-#' The returned object has a default `print` method which prints the best `n`
-#' matches directly to the screen, yet returns information, yet returns
-#' information on all packages within the specified corpus.
+#' The returned object has a default `print` method which prints the best 5
+#' matches directly to the screen, yet returns information on all packages
+#' within the specified corpus. This information is in the form of a
+#' `data.frame`, with one column for the package name, and one or more
+#' additional columns of integer ranks for each package. There is also a `head`
+#' method to print the first few entries of these full data (default `n = 5`).
+#' To see all data, use `as.data.frame()`.
+#'
+#' Ranks are obtained from scores derived from:
+#' \itemize{
+#' \item Cosine similarities between Large Language Model (LLM) embeddings for
+#' the `input`, and corresponding embeddings for the specified corpus.
+#' \item ["Best Match 25" (BM25)](https://en.wikipedia.org/wiki/Okapi_BM25)
+#' scores based on document token frequencies.
+#' }
+#'
+#' Ranks for text matches are generally obtained from packages both including
+#' and excluding function descriptions as part of the package text. This
+#' results in up to four scores for each input. These scores are then combined
+#' to a final ranking using the [Reciprocal Rank Fusion (RRF)
+#' algorithm](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf). The
+#' additional parameter of `llm_proportion` determines the extent to which the
+#' final ranking weights the LLM versus BM25 components.
+#'
+#' Finally, all components of this function are locally cached for each call
+#' (by the \pkg{memoise} package), so additional calls to this function with
+#' the same `input` and `corpus` should be much faster than initial calls. This
+#' means the effect of changing `llm_proportion` can easily be examined by
+#' simply repeating calls to this function.
 #'
 #' @param input Either a path to local source code of an R package, or a text
 #' string.
@@ -57,7 +83,9 @@
 #' @examples
 #' \dontrun{
 #' input <- "Download open spatial data from NASA"
-#' pkgmatch_similar_pkgs (input)
+#' p <- pkgmatch_similar_pkgs (input)
+#' p # Default print method, lists 5 best matching packages
+#' head (p) # Shows first 5 rows of full `data.frame` object
 #' }
 pkgmatch_similar_pkgs <- function (input,
                                    corpus = "ropensci",

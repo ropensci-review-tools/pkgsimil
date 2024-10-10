@@ -62,9 +62,34 @@ best match that input. Matches are found from within a specified "corpus",
 currently all packages from either \href{https://ropensci.org/packages}{rOpenSci's package suite}, or from
 \href{https://cran.r-project.org}{CRAN}.
 
-The returned object has a default \code{print} method which prints the best \code{n}
-matches directly to the screen, yet returns information, yet returns
-information on all packages within the specified corpus.
+The returned object has a default \code{print} method which prints the best 5
+matches directly to the screen, yet returns information on all packages
+within the specified corpus. This information is in the form of a
+\code{data.frame}, with one column for the package name, and one or more
+additional columns of integer ranks for each package. There is also a \code{head}
+method to print the first few entries of these full data (default \code{n = 5}).
+To see all data, use \code{as.data.frame()}.
+
+Ranks are obtained from scores derived from:
+\itemize{
+\item Cosine similarities between Large Language Model (LLM) embeddings for
+the \code{input}, and corresponding embeddings for the specified corpus.
+\item \href{https://en.wikipedia.org/wiki/Okapi_BM25}{"Best Match 25" (BM25)}
+scores based on document token frequencies.
+}
+
+Ranks for text matches are generally obtained from packages both including
+and excluding function descriptions as part of the package text. This
+results in up to four scores for each input. These scores are then combined
+to a final ranking using the \href{https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf}{Reciprocal Rank Fusion (RRF) algorithm}. The
+additional parameter of \code{llm_proportion} determines the extent to which the
+final ranking weights the LLM versus BM25 components.
+
+Finally, all components of this function are locally cached for each call
+(by the \pkg{memoise} package), so additional calls to this function with
+the same \code{input} and \code{corpus} should be much faster than initial calls. This
+means the effect of changing \code{llm_proportion} can easily be examined by
+simply repeating calls to this function.
 }
 \note{
 The first time this function is run without passing either
@@ -75,7 +100,9 @@ corpus, this downloading may take quite some time.
 \examples{
 \dontrun{
 input <- "Download open spatial data from NASA"
-pkgmatch_similar_pkgs (input)
+p <- pkgmatch_similar_pkgs (input)
+p # Default print method, lists 5 best matching packages
+head (p) # Shows first 5 rows of full `data.frame` object
 }
 }
 \seealso{
