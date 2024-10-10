@@ -1,4 +1,5 @@
-library (pkgmatch)
+devtools::load_all (".", export_all = TRUE, helpers = FALSE)
+# library (pkgmatch)
 ollama_check ()
 
 path <- "/<path>/<to>/<ropensci>/<repos>"
@@ -36,10 +37,22 @@ bm25_data <- list (idfs = fns_idfs, token_lists = fns_lists)
 saveRDS (bm25_data, "bm25-ropensci-fns.Rds")
 
 # ------------------ FN CALLS FOR ROPENSCI ------------------
+flist <- fs::dir_ls (path, recurse = FALSE)
+num_cores <- parallel::detectCores () - 2L
+cl <- parallel::makeCluster (num_cores)
+
 calls <- pbapply::pblapply (flist, function (f) {
-    res <- pkgmatch_treesitter_fn_tags (f)
+    res <- tryCatch (
+        pkgmatch::pkgmatch_treesitter_fn_tags (f),
+        error = function (e) NULL
+    )
+    if (is.null (res)) {
+        res <- data.frame (name = character (0L))
+    }
     sort (table (res$name), decreasing = TRUE)
-})
+}, cl = cl)
+
+parallel::stopCluster (cl)
 names (calls) <- basename (names (calls))
 index <- which (vapply (calls, length, integer (1L)) > 0)
 calls <- calls [index]
