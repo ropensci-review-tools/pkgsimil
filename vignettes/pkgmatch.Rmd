@@ -104,9 +104,9 @@ list (
 )
 ```
 
-And the package does not even appear in terms of similarity in either text or
-code. Results from other other component, comparing relative token frequencies
-with all CRAN packages, including frequencies of code tokens, are:
+And the "odbc" package does not even appear in terms of similarity in either
+text or code. Results from other other component, comparing relative token
+frequencies with all CRAN packages, including frequencies of code tokens, are:
 
 ```{r odbc-cran-match-bm25-fakey, eval = FALSE}
 pkgmatch_similar_pkgs (destfile, corpus = "cran", llm_proportion = 1)
@@ -119,4 +119,4 @@ list (
 ```
 
 And those analyses correctly identify the package as the most similar in both
-ways.
+terms.
