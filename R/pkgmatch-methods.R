@@ -5,6 +5,14 @@
 #'
 #' @family utils
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' input <- "Download open spatial data from NASA"
+#' p <- pkgmatch_similar_pkgs (input)
+#' p # Default print method, lists 5 best matching packages
+#' head (p) # Shows first 5 rows of full `data.frame` object
+#' }
 print.pkgmatch <- function (x, ...) {
 
     n <- attr (x, "n")
@@ -28,6 +36,14 @@ print.pkgmatch <- function (x, ...) {
 #'
 #' @family utils
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' input <- "Download open spatial data from NASA"
+#' p <- pkgmatch_similar_pkgs (input)
+#' p # Default print method, lists 5 best matching packages
+#' head (p) # Shows first 5 rows of full `data.frame` object
+#' }
 head.pkgmatch <- function (x, n = 5L, ...) {
     head (as.data.frame (x), n = n)
 }
