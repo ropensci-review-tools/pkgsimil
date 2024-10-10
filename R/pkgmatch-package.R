@@ -1,5 +1,6 @@
 #' @keywords internal
 #' @importFrom memoise memoise
+#' @importFrom utils head
 #' @aliases pkgmatch-package
 "_PACKAGE"
 

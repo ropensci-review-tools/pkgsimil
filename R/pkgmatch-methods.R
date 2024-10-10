@@ -26,3 +26,15 @@ print.pkgmatch <- function (x, ...) {
         print (x)
     }
 }
+
+#' Head method for 'pkgmatch' objects
+#'
+#' @param x Object for which head is to be printed
+#' @param n Number of rows of full `pkgmatch` object to be displayed
+#' @param ... Not used
+#'
+#' @family utils
+#' @export
+head.pkgmatch <- function (x, n = 6L, ...) {
+    head (as.data.frame (x), n = n)
+}
