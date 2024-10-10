@@ -2,18 +2,17 @@
 % Please edit documentation in R/similar-fns.R
 \name{pkgmatch_similar_fns}
 \alias{pkgmatch_similar_fns}
-\title{Identify functions best matching a given input string. Only applies to
-functions from the corpus of rOpenSci packages.}
+\title{Identify R functions best matching a given input string}
 \usage{
 pkgmatch_similar_fns(input, embeddings = NULL, n = 5L)
 }
 \arguments{
 \item{input}{A text string.}
 
-\item{embeddings}{A single matrix of embeddings produced from
-\link{pkgmatch_embeddings_from_pkgs} with \code{functions_only = TRUE}. If not
-cache directory.
-provided, pre-generated embeddings will be downloaded and stored in a local}
+\item{embeddings}{Large Language Model embeddings for all rOpenSci packages,
+generated from \link{pkgmatch_embeddings_from_pkgs}. If not provided,
+pre-generated embeddings will be downloaded and stored in a local cache
+directory.}
 
 \item{n}{When the result of this function is printed to screen, the top \code{n}
 packages will be displayed.}
@@ -23,13 +22,15 @@ A character vector of function names in the form
 "\if{html}{\out{<package>}}::\if{html}{\out{<function>}}".
 }
 \description{
-Identify functions best matching a given input string. Only applies to
+Function matching is only available for Only applies to
 functions from the corpus of rOpenSci packages.
 }
 \examples{
 \dontrun{
 input <- "Process raster satellite images"
-pkgmatch_similar_fns (input)
+p <- pkgmatch_similar_fns (input)
+p # Default print method, lists 5 best matching packages
+head (p) # Shows first 5 rows of full `data.frame` object
 }
 }
 \seealso{

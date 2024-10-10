@@ -28,8 +28,28 @@ test_that ("similar pkgs text input", {
     expect_true (all (out$package %in% colnames (embeddings$text_with_fns)))
     expect_equal (attr (out, "n"), n)
 
+    # print method:
     out_p <- strsplit (capture.output (print (out)), "\\\"\\s") [[1]]
     expect_length (out_p, n)
+
+    # head method:
+    out_h <- capture.output (head (out))
+    expect_length (out_h, 6L)
+    # names:
+    out_hdr <- strsplit (out_h [1], "[[:space:]]+") [[1]]
+    out_hdr <- out_hdr [which (nzchar (out_hdr))]
+    expect_length (out_hdr, 2)
+    expect_equal (out_hdr, c ("package", "rank"))
+    # other rows:
+    out_h <- out_h [-1]
+    row1 <- vapply (
+        out_h,
+        function (i) strsplit (i, "\\s+") [[1]] [1],
+        character (1L),
+        USE.NAMES = FALSE
+    )
+    expect_true (all (nchar (row1)) == 1L)
+    expect_equal (as.integer (row1), seq_along (row1))
 })
 
 test_that ("similar pkgs package input", {
@@ -76,6 +96,7 @@ test_that ("similar pkgs package input", {
 
     expect_true (all (out$package %in% colnames (embeddings$text_with_fns)))
 
+    # print method:
     out_p <- capture.output (print (out))
     expect_true (any (grepl ("^\\$text$", out_p)))
     expect_true (any (grepl ("^\\$code$", out_p)))
@@ -87,6 +108,25 @@ test_that ("similar pkgs package input", {
         USE.NAMES = FALSE
     )
     expect_true (all (lens == n))
+
+    # head method:
+    out_h <- capture.output (head (out))
+    expect_length (out_h, 6L)
+    # names:
+    out_hdr <- strsplit (out_h [1], "[[:space:]]+") [[1]]
+    out_hdr <- out_hdr [which (nzchar (out_hdr))]
+    expect_length (out_hdr, 3)
+    expect_equal (out_hdr, c ("package", "text_rank", "code_rank"))
+    # other rows:
+    out_h <- out_h [-1]
+    row1 <- vapply (
+        out_h,
+        function (i) strsplit (i, "\\s+") [[1]] [1],
+        character (1L),
+        USE.NAMES = FALSE
+    )
+    expect_true (all (nchar (row1)) == 1L)
+    expect_equal (as.integer (row1), seq_along (row1))
 })
 
 test_that ("similar fns", {
@@ -109,6 +149,26 @@ test_that ("similar fns", {
     expect_true (all (out$package %in% colnames (embeddings_fns)))
     expect_identical (out$rank, seq_len (nrow (out)))
 
+    # print method:
     out_p <- strsplit (capture.output (print (out)), "\\\"\\s") [[1]]
     expect_length (out_p, n)
+
+    # head method:
+    out_h <- capture.output (head (out))
+    expect_length (out_h, 6L)
+    # names:
+    out_hdr <- strsplit (out_h [1], "[[:space:]]+") [[1]]
+    out_hdr <- out_hdr [which (nzchar (out_hdr))]
+    expect_length (out_hdr, 3)
+    expect_equal (out_hdr, c ("package", "simil", "rank"))
+    # other rows:
+    out_h <- out_h [-1]
+    row1 <- vapply (
+        out_h,
+        function (i) strsplit (i, "\\s+") [[1]] [1],
+        character (1L),
+        USE.NAMES = FALSE
+    )
+    expect_true (all (nchar (row1)) == 1L)
+    expect_equal (as.integer (row1), seq_along (row1))
 })

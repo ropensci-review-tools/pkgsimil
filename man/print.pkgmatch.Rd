@@ -16,6 +16,7 @@ Print method for 'pkgmatch' objects
 }
 \seealso{
 Other utils: 
+\code{\link{head.pkgmatch}()},
 \code{\link{pkgmatch_load_data}()},
 \code{\link{text_is_code}()}
 }
