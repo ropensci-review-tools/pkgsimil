@@ -2,7 +2,7 @@
 % Please edit documentation in R/similar-pkgs.R
 \name{pkgmatch_similar_pkgs}
 \alias{pkgmatch_similar_pkgs}
-\title{Find R packages matching an input of either text or another package.}
+\title{Find R packages matching an input of either text or another package}
 \usage{
 pkgmatch_similar_pkgs(
   input,

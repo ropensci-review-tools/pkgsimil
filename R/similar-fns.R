@@ -1,4 +1,4 @@
-#' Identify R functions best matching a given input string.
+#' Identify R functions best matching a given input string
 #'
 #' @description Function matching is only available for Only applies to
 #' functions from the corpus of rOpenSci packages.

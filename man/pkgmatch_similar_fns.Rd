@@ -2,7 +2,7 @@
 % Please edit documentation in R/similar-fns.R
 \name{pkgmatch_similar_fns}
 \alias{pkgmatch_similar_fns}
-\title{Identify R functions best matching a given input string.}
+\title{Identify R functions best matching a given input string}
 \usage{
 pkgmatch_similar_fns(input, embeddings = NULL, n = 5L)
 }

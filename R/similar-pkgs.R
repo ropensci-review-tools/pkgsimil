@@ -1,4 +1,4 @@
-#' Find R packages matching an input of either text or another package.
+#' Find R packages matching an input of either text or another package
 #'
 #' @description This function accepts as `input` either a text description, or
 #' a path to a local R package, and returns information on R packages which
