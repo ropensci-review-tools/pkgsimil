@@ -2,8 +2,7 @@
 % Please edit documentation in R/similar-pkgs.R
 \name{pkgmatch_similar_pkgs}
 \alias{pkgmatch_similar_pkgs}
-\title{For an input of either a text string or local path to an R package, identify
-most similar R packages from a specified corpus.}
+\title{Find R packages matching an input of either text or another package.}
 \usage{
 pkgmatch_similar_pkgs(
   input,
@@ -57,8 +56,15 @@ similarity ("text"), and in terms of similarity of code structure ("code").
 If \code{input} is a single text string, a single \code{data.frame} object is returned
 }
 \description{
-For an input of either a text string or local path to an R package, identify
-most similar R packages from a specified corpus.
+This function accepts as \code{input} either a text description, or
+a path to a local R package, and returns information on R packages which
+best match that input. Matches are found from within a specified "corpus",
+currently all packages from either \href{https://ropensci.org/packages}{rOpenSci's package suite}, or from
+\href{https://cran.r-project.org}{CRAN}.
+
+The returned object has a default \code{print} method which prints the best \code{n}
+matches directly to the screen, yet returns information, yet returns
+information on all packages within the specified corpus.
 }
 \note{
 The first time this function is run without passing either

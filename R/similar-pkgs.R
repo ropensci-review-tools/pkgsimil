@@ -1,5 +1,15 @@
-#' For an input of either a text string or local path to an R package, identify
-#' most similar R packages from a specified corpus.
+#' Find R packages matching an input of either text or another package.
+#'
+#' @description This function accepts as `input` either a text description, or
+#' a path to a local R package, and returns information on R packages which
+#' best match that input. Matches are found from within a specified "corpus",
+#' currently all packages from either [rOpenSci's package
+#' suite](https://ropensci.org/packages), or from
+#' [CRAN](https://cran.r-project.org).
+#'
+#' The returned object has a default `print` method which prints the best `n`
+#' matches directly to the screen, yet returns information, yet returns
+#' information on all packages within the specified corpus.
 #'
 #' @param input Either a path to local source code of an R package, or a text
 #' string.
