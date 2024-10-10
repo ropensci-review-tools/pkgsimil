@@ -47,13 +47,11 @@ return results from token frequency analyses only, while
 packages will be displayed.}
 }
 \value{
-If \code{input} is a path to a local package, a list of two \code{data.frame}
-objects with data quantifying similarities in terms of descriptive textual
-similarity ("text"), and in terms of similarity of code structure ("code").
-
-vectors naming the \code{n} most similar packages in terms of descriptive textual
-similarity ("text"), and in terms of similarity of code structure ("code").
-If \code{input} is a single text string, a single \code{data.frame} object is returned
+A \code{data.frame} with a "package" column naming packages, and one or
+more columns of package ranks in terms of text similarity and, if \code{input} is
+a local path to an entire R package, of similarity in code structure. As
+described above, the default \code{print} method prints package names only. To
+see full result, use \code{as.data.frame()}.
 }
 \description{
 This function accepts as \code{input} either a text description, or
