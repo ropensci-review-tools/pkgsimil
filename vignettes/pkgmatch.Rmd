@@ -53,9 +53,9 @@ pkgmatch_similar_pkgs (input, corpus = "cran")
 c ("seqinr", "microseq", "baseq", "coil", "fastqcr")
 ```
 
-As said, the package also accepts as input a path to a local R package. This
-code downloads a "tarball" (`.tar.gz` file) from CRAN and finds matching
-rOpenSci packages:
+As said, the package also accepts as input a path to a local R package. The
+following code downloads a "tarball" (`.tar.gz` file) from CRAN and finds
+matching rOpenSci packages:
 
 ```{r odbc-ropensci-match-fakey, eval = FALSE}
 u <- "https://cran.r-project.org/src/contrib/odbc_1.5.0.tar.gz"
@@ -87,11 +87,11 @@ list (
 
 which they indeed do. As explained in the documentation, the
 `pkgmatch_similar_pkgs()` function ranks final results by combining several
-distinct results, primarily from Large Language Model (LLM) embeddings, as well
-as from [more conventional document token-frequency
+distinct components, primarily from Large Language Model (LLM) embeddings, as
+well as from [more conventional document token-frequency
 analyses](https://en.wikipedia.org/wiki/Okapi_BM25). The function includes an
 additional `llm_proportion` parameter which can be used to weight the relative
-contributions of these different inputs. Results from the LLM component are:
+contributions of these different components. Results from the LLM component are:
 
 ```{r odbc-cran-match-llm-fakey, eval = FALSE}
 pkgmatch_similar_pkgs (destfile, corpus = "cran", llm_proportion = 1)
@@ -118,5 +118,5 @@ list (
 
 And there are notable differences between the two sets of results. As also
 explained in the documentation for `pkgmatch_similar_pkgs()`, all internal
-function calls are locally cached, so that function can be easily and quickly
-re-run with different values of `llm_proportion`.
+function calls are locally cached, so that this function can be easily and
+quickly re-run with different values of `llm_proportion`.
