@@ -23,10 +23,7 @@ A character vector of function names in the form
 }
 \description{
 Function matching is only available for Only applies to
-functions from the corpus of rOpenSci packages. Calls are locally cached, as
-with \link{pkgmatch_similar_pkgs}, so subsequent calls to this function with
-different values of \code{llm_proportion} will be much faster than the initial
-call.
+functions from the corpus of rOpenSci packages.
 }
 \examples{
 \dontrun{

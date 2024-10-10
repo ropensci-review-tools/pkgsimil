@@ -1,10 +1,7 @@
 #' Identify R functions best matching a given input string.
 #'
 #' @description Function matching is only available for Only applies to
-#' functions from the corpus of rOpenSci packages. Calls are locally cached, as
-#' with \link{pkgmatch_similar_pkgs}, so subsequent calls to this function with
-#' different values of `llm_proportion` will be much faster than the initial
-#' call.
+#' functions from the corpus of rOpenSci packages.
 #'
 #' @inheritParams pkgmatch_similar_pkgs
 #' @param input A text string.
