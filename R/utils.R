@@ -30,15 +30,15 @@ text_is_code <- function (txt) {
     nw / n0 < token_threshold
 }
 
-#' Check whether 'input' parameter is a directory or not.
+#' Check whether 'input' parameter is a file or directory path
 #'
 #' This is necessary because `fs::dir_exists()` errors if the string passed is
 #' too long.
 #' @noRd
-input_is_dir <- function (input) {
+input_is_path <- function (input) {
 
     chk <- tryCatch (
-        fs::dir_exists (input),
+        fs::file_exists (input),
         error = function (e) NULL
     )
     ifelse (is.null (chk), FALSE, chk)

@@ -112,7 +112,7 @@ pkgmatch_similar_pkgs <- function (input,
     stopifnot (is.list (idfs))
     stopifnot (identical (names (idfs), c ("idfs", "token_lists")))
 
-    if (input_is_dir (input)) {
+    if (input_is_path (input)) {
 
         res <- similar_pkgs_from_pkg (input, embeddings)
         # Then add BM25 from package text:
