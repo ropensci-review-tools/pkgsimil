@@ -14,7 +14,15 @@ embeddings_fns <-
 saveRDS (embeddings_fns, "embeddings-fns.Rds")
 
 # -------------------- BM25 FOR ROPENSCI --------------------
-txt_with_fns <- lapply (packages, function (p) get_pkg_text (p))
+num_cores <- parallel::detectCores () - 2L
+cl <- parallel::makeCluster (num_cores)
+txt_with_fns <- pbapply::pblapply (
+    packages,
+    function (p) pkgmatch:::get_pkg_text (p),
+    cl = cl
+)
+parallel::stopCluster (cl)
+
 txt_wo_fns <- rm_fns_from_pkg_txt (txt_with_fns)
 idfs <- list (
     with_fns = bm25_idf (txt_with_fns),
@@ -111,7 +119,17 @@ embeddings$code <- rename_cols (embeddings$code)
 saveRDS (embeddings, "embeddings-cran.Rds")
 
 # -------------------- BM25 FOR CRAN --------------------
-txt_with_fns <- lapply (packages, function (p) get_pkg_text (p))
+cli::cli_inform ("Extract text from all CRAN packages ...")
+num_cores <- parallel::detectCores () - 2L
+cl <- parallel::makeCluster (num_cores)
+
+txt_with_fns <- pbapply::pblapply (
+    packages,
+    function (p) pkgmatch:::get_pkg_text (p),
+    cl = cl
+)
+parallel::stopCluster (cl)
+
 txt_wo_fns <- rm_fns_from_pkg_txt (txt_with_fns)
 idfs <- list (
     with_fns = bm25_idf (txt_with_fns),

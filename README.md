@@ -57,6 +57,9 @@ algorithms. The LLM embeddings require a locally-running instance of
 
 ## Setting up the LLM embeddings
 
+This package does not access LLM embeddings through external APIs, for
+reasons explained in
+[`vignette("why-local-lllms")`](https://docs.ropensci.org/pkgmatch/articles/why-local-llms.html).
 The LLM embeddings are extracted from a locally-running instance of
 [ollama](https://ollama.com). That means you need to download and
 install ollama on your own computer in order to use this package. Once
@@ -115,11 +118,11 @@ pkgmatch_similar_pkgs (".")
 ```
 
     ## $text
-    ## [1] "pdftools"        "dittodb"         "autotest"        "qualR"          
-    ## [5] "allcontributors"
+    ## [1] "dittodb"         "pdftools"        "allcontributors" "osmextract"     
+    ## [5] "dendroNetwork"  
     ## 
     ## $code
-    ## [1] "stplanr"      "fellingdater" "pkgstats"     "pangaear"     "ohun"
+    ## [1] "stplanr"      "fellingdater" "pkgstats"     "quadkeyr"     "pangaear"
 
 That function defaults to finding the best-matching packages from
 rOpenSci. Packages from CRAN can be matched by specifying the `corpus`
@@ -130,7 +133,7 @@ pkgmatch_similar_pkgs (".", corpus = "cran")
 ```
 
     ## $text
-    ## [1] "rcolors"   "Require"   "dma"       "ollamar"   "htmlTable"
+    ## [1] "Require" "truncSP" "Iso"     "ollamar" "rcolors"
     ## 
     ## $code
     ## [1] "shinylive"   "StroupGLMM"  "box.linters" "eda4treeR"   "fs"
