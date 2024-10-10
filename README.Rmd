@@ -68,6 +68,9 @@ as described in the following sub-section.
 
 ## Setting up the LLM embeddings
 
+This package does not access LLM embeddings through external APIs, for reasons
+explained in
+[`vignette("why-local-lllms")`](https://docs.ropensci.org/pkgmatch/articles/why-local-llms.html).
 The LLM embeddings are extracted from a locally-running instance of
 [ollama](https://ollama.com). That means you need to download and install
 ollama on your own computer in order to use this package. Once downloaded,
