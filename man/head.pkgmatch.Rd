@@ -16,6 +16,14 @@
 \description{
 Head method for 'pkgmatch' objects
 }
+\examples{
+\dontrun{
+input <- "Download open spatial data from NASA"
+p <- pkgmatch_similar_pkgs (input)
+p # Default print method, lists 5 best matching packages
+head (p) # Shows first 5 rows of full `data.frame` object
+}
+}
 \seealso{
 Other utils: 
 \code{\link{pkgmatch_load_data}()},
