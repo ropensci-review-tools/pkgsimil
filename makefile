@@ -1,5 +1,5 @@
 LFILE = README
-VIGNETTE = why-local-llms
+VIGNETTE = pkgmatch
 
 all: help
 
