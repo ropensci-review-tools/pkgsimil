@@ -1,5 +1,41 @@
-#' For an input of either a text string or local path to an R package, identify
-#' most similar R packages from a specified corpus.
+#' Find R packages matching an input of either text or another package
+#'
+#' @description This function accepts as `input` either a text description, or
+#' a path to a local R package, and returns information on R packages which
+#' best match that input. Matches are found from within a specified "corpus",
+#' currently all packages from either [rOpenSci's package
+#' suite](https://ropensci.org/packages), or from
+#' [CRAN](https://cran.r-project.org).
+#'
+#' The returned object has a default `print` method which prints the best 5
+#' matches directly to the screen, yet returns information on all packages
+#' within the specified corpus. This information is in the form of a
+#' `data.frame`, with one column for the package name, and one or more
+#' additional columns of integer ranks for each package. There is also a `head`
+#' method to print the first few entries of these full data (default `n = 5`).
+#' To see all data, use `as.data.frame()`.
+#'
+#' Ranks are obtained from scores derived from:
+#' \itemize{
+#' \item Cosine similarities between Large Language Model (LLM) embeddings for
+#' the `input`, and corresponding embeddings for the specified corpus.
+#' \item ["Best Match 25" (BM25)](https://en.wikipedia.org/wiki/Okapi_BM25)
+#' scores based on document token frequencies.
+#' }
+#'
+#' Ranks for text matches are generally obtained from packages both including
+#' and excluding function descriptions as part of the package text. This
+#' results in up to four scores for each input. These scores are then combined
+#' to a final ranking using the [Reciprocal Rank Fusion (RRF)
+#' algorithm](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf). The
+#' additional parameter of `llm_proportion` determines the extent to which the
+#' final ranking weights the LLM versus BM25 components.
+#'
+#' Finally, all components of this function are locally cached for each call
+#' (by the \pkg{memoise} package), so additional calls to this function with
+#' the same `input` and `corpus` should be much faster than initial calls. This
+#' means the effect of changing `llm_proportion` can easily be examined by
+#' simply repeating calls to this function.
 #'
 #' @param input Either a path to local source code of an R package, or a text
 #' string.
@@ -26,13 +62,11 @@
 #' @param n When the result of this function is printed to screen, the top `n`
 #' packages will be displayed.
 #'
-#' @return If `input` is a path to a local package, a list of two `data.frame`
-#' objects with data quantifying similarities in terms of descriptive textual
-#' similarity ("text"), and in terms of similarity of code structure ("code").
-#'
-#' vectors naming the `n` most similar packages in terms of descriptive textual
-#' similarity ("text"), and in terms of similarity of code structure ("code").
-#' If `input` is a single text string, a single `data.frame` object is returned
+#' @return A `data.frame` with a "package" column naming packages, and one or
+#' more columns of package ranks in terms of text similarity and, if `input` is
+#' a local path to an entire R package, of similarity in code structure. As
+#' described above, the default `print` method prints package names only. To
+#' see full result, use `as.data.frame()`.
 #'
 #' @note The first time this function is run without passing either
 #' `embeddings` or `idfs`, required values will be automatically downloaded and
@@ -47,7 +81,11 @@
 #' @examples
 #' \dontrun{
 #' input <- "Download open spatial data from NASA"
-#' pkgmatch_similar_pkgs (input)
+#' p <- pkgmatch_similar_pkgs (input)
+#' p # Default print method, lists 5 best matching packages
+#' head (p) # Shows first 5 rows of full `data.frame` object
+#' # This second call will be much faster than first call:
+#' p2 <- pkgmatch_similar_pkgs (input, llm_proportion = 0.25)
 #' }
 pkgmatch_similar_pkgs <- function (input,
                                    corpus = "ropensci",

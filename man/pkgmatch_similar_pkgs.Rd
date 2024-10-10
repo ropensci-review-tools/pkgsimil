@@ -2,8 +2,7 @@
 % Please edit documentation in R/similar-pkgs.R
 \name{pkgmatch_similar_pkgs}
 \alias{pkgmatch_similar_pkgs}
-\title{For an input of either a text string or local path to an R package, identify
-most similar R packages from a specified corpus.}
+\title{Find R packages matching an input of either text or another package}
 \usage{
 pkgmatch_similar_pkgs(
   input,
@@ -48,17 +47,47 @@ return results from token frequency analyses only, while
 packages will be displayed.}
 }
 \value{
-If \code{input} is a path to a local package, a list of two \code{data.frame}
-objects with data quantifying similarities in terms of descriptive textual
-similarity ("text"), and in terms of similarity of code structure ("code").
-
-vectors naming the \code{n} most similar packages in terms of descriptive textual
-similarity ("text"), and in terms of similarity of code structure ("code").
-If \code{input} is a single text string, a single \code{data.frame} object is returned
+A \code{data.frame} with a "package" column naming packages, and one or
+more columns of package ranks in terms of text similarity and, if \code{input} is
+a local path to an entire R package, of similarity in code structure. As
+described above, the default \code{print} method prints package names only. To
+see full result, use \code{as.data.frame()}.
 }
 \description{
-For an input of either a text string or local path to an R package, identify
-most similar R packages from a specified corpus.
+This function accepts as \code{input} either a text description, or
+a path to a local R package, and returns information on R packages which
+best match that input. Matches are found from within a specified "corpus",
+currently all packages from either \href{https://ropensci.org/packages}{rOpenSci's package suite}, or from
+\href{https://cran.r-project.org}{CRAN}.
+
+The returned object has a default \code{print} method which prints the best 5
+matches directly to the screen, yet returns information on all packages
+within the specified corpus. This information is in the form of a
+\code{data.frame}, with one column for the package name, and one or more
+additional columns of integer ranks for each package. There is also a \code{head}
+method to print the first few entries of these full data (default \code{n = 5}).
+To see all data, use \code{as.data.frame()}.
+
+Ranks are obtained from scores derived from:
+\itemize{
+\item Cosine similarities between Large Language Model (LLM) embeddings for
+the \code{input}, and corresponding embeddings for the specified corpus.
+\item \href{https://en.wikipedia.org/wiki/Okapi_BM25}{"Best Match 25" (BM25)}
+scores based on document token frequencies.
+}
+
+Ranks for text matches are generally obtained from packages both including
+and excluding function descriptions as part of the package text. This
+results in up to four scores for each input. These scores are then combined
+to a final ranking using the \href{https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf}{Reciprocal Rank Fusion (RRF) algorithm}. The
+additional parameter of \code{llm_proportion} determines the extent to which the
+final ranking weights the LLM versus BM25 components.
+
+Finally, all components of this function are locally cached for each call
+(by the \pkg{memoise} package), so additional calls to this function with
+the same \code{input} and \code{corpus} should be much faster than initial calls. This
+means the effect of changing \code{llm_proportion} can easily be examined by
+simply repeating calls to this function.
 }
 \note{
 The first time this function is run without passing either
@@ -69,7 +98,11 @@ corpus, this downloading may take quite some time.
 \examples{
 \dontrun{
 input <- "Download open spatial data from NASA"
-pkgmatch_similar_pkgs (input)
+p <- pkgmatch_similar_pkgs (input)
+p # Default print method, lists 5 best matching packages
+head (p) # Shows first 5 rows of full `data.frame` object
+# This second call will be much faster than first call:
+p2 <- pkgmatch_similar_pkgs (input, llm_proportion = 0.25)
 }
 }
 \seealso{
