@@ -1,12 +1,13 @@
-#' Identify functions best matching a given input string. Only applies to
-#' functions from the corpus of rOpenSci packages.
+#' Identify R functions best matching a given input string.
+#'
+#' @description Function matching is only available for Only applies to
+#' functions from the corpus of rOpenSci packages. Calls are locally cached, as
+#' with \link{pkgmatch_similar_pkgs}, so subsequent calls to this function with
+#' different values of `llm_proportion` will be much faster than the initial
+#' call.
 #'
 #' @inheritParams pkgmatch_similar_pkgs
 #' @param input A text string.
-#' @param embeddings A single matrix of embeddings produced from
-#' \link{pkgmatch_embeddings_from_pkgs} with `functions_only = TRUE`. If not
-#' cache directory.
-#' provided, pre-generated embeddings will be downloaded and stored in a local
 #' @return A character vector of function names in the form
 #' "<package>::<function>".
 #'
@@ -16,7 +17,9 @@
 #' @examples
 #' \dontrun{
 #' input <- "Process raster satellite images"
-#' pkgmatch_similar_fns (input)
+#' p <- pkgmatch_similar_fns (input)
+#' p # Default print method, lists 5 best matching packages
+#' head (p) # Shows first 5 rows of full `data.frame` object
 #' }
 pkgmatch_similar_fns <- function (input, embeddings = NULL, n = 5L) {
 
